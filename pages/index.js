@@ -2,14 +2,14 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import WriteToCloudFirestore from '@/components/cloudFirestore/Write'
 import ReadDataFromCloudFirestore from '@/components/cloudFirestore/Read'
-import { useUser } from '@/lib/firebase/useUser'
+import {useUser} from '@/lib/firebase/useUser'
 import Counter from '@/components/realtimeDatabase/Counter'
-import UploadFile from '@/components/storage/UploadFile'
+// import UploadFile from '@/components/storage/UploadFile'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
 export default function Home() {
-  const { user, logout } = useUser()
+  const {user, logout} = useUser()
 
   if (user) {
     return (
@@ -26,12 +26,12 @@ export default function Home() {
             <hr />
             <Counter id={user.id} />
             <hr />
-            <UploadFile />
+            {/* <UploadFile /> */}
             <hr />
-            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-              <Button onClick={() => logout()} style={{ width: '100px' }}>Log Out</Button>
+            <div style={{display: 'flex', justifyContent: 'space-around'}}>
+              <Button onClick={() => logout()} style={{width: '100px'}}>Log Out</Button>
               <a href="https://github.com/bjcarlson42/nextjs-with-firebase" target="_blank">
-                <Button variant="outline-secondary" style={{ width: '100px' }}>Code</Button>
+                <Button variant="outline-secondary" style={{width: '100px'}}>Code</Button>
               </a>
             </div>
           </Card.Body>
@@ -64,6 +64,8 @@ export default function Home() {
             <h3>Documentation &rarr;</h3>
             <p>Find in-depth information about Next.js features and API.</p>
           </a>
+
+          <WriteToCloudFirestore />
 
           <a href="https://nextjs.org/learn" className={styles.card}>
             <h3>Learn &rarr;</h3>
