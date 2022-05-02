@@ -42,7 +42,7 @@ export default function Home() {
 
   else return (
     <div className={styles.container}>
-      <p><a href="/auth">Log In!</a></p>
+      <p><a href="/auth">Log in or signup</a></p>
 
       <Head>
         <title>Create Next App</title>
