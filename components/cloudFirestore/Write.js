@@ -7,7 +7,7 @@ const WriteToCloudFirestore = () => {
     const {user} = useUser()
     const sendData = async () => {
         try {
-            const userDoc = doc(db, "myCollection", user.id)
+            const userDoc = doc(db, "users", user.id)
             await setDoc(userDoc, {
                 string_data: 'Benjamin Carlson',
                 number_data: 2,
