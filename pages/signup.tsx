@@ -4,6 +4,8 @@ import {getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithP
 import {useState} from 'react'
 import {useAuth} from '../lib/authContext'
 import React from 'react';
+import {doc, setDoc, Timestamp, GeoPoint} from "firebase/firestore"
+import {db} from '../lib/firebase/initFirebase'
 
 const Home: NextPage = () => {
     const {user, loading} = useAuth()
@@ -14,6 +16,23 @@ const Home: NextPage = () => {
 
     if (user) return <h1>U already logged</h1>
 
+    const createUser = async (user: any) => {
+        const {uid, email, xa, displayName, photoUrl} = user
+
+        // create user in db
+        try {
+            const userDoc = doc(db, "users", uid)
+            await setDoc(userDoc, {
+                name: displayName,
+                email: email,
+                id: uid,
+            })
+
+        } catch (error) {
+            console.log(error)
+            alert(error)
+        }
+    }
 
     const auth = getAuth()
 
@@ -24,6 +43,11 @@ const Home: NextPage = () => {
                 const user = userCredential.user;
                 // ...
                 console.log('success', user)
+
+                // create user in db
+                createUser(user)
+
+
             })
             .catch((error) => {
                 const errorCode = error.code;

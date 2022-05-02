@@ -61,9 +61,9 @@ export default function AuthContextProvider({children}: Props) {
 
 export const useAuth = () => useContext(authContext);
 
-// export const signOut = async () => {
-//     const auth = getAuth()
-//     destroyCookie(null, 'idToken')
-//     await signout(auth)
+export const signOut = async () => {
+    const auth = getAuth()
+    destroyCookie(null, 'idToken')
+    await signout(auth)
 
-// } 
+} 
