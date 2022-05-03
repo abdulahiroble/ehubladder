@@ -11,6 +11,11 @@ const Home: NextPage = () => {
     const {user, loading} = useAuth()
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [firstName, setFirstname] = useState<string>('')
+    const [lastName, setLastname] = useState<string>('')
+    const [gamerTag, setGamerTag] = useState<string>('')
+    const [steamId, setSteamId] = useState<string>('')
+
 
     if (loading) return null
 
@@ -23,7 +28,10 @@ const Home: NextPage = () => {
         try {
             const userDoc = doc(db, "users", uid)
             await setDoc(userDoc, {
-                name: displayName,
+                name: firstName,
+                lastName: lastName,
+                gamerTag: gamerTag,
+                steamId: steamId,
                 email: email,
                 id: uid,
             })
@@ -91,8 +99,12 @@ const Home: NextPage = () => {
 
             <div className="m-auto my-24 w-1/3 h-1/3 divide-y-4 space-y-1">
                 <div className="space-y-1">
-                    <input type="email" onChange={(e) => setEmail(e.target.value)} className="border border-current	" /><br />
-                    <input type="password" onChange={(e) => setPassword(e.target.value)} className="border border-current	" /><br />
+                    <input type="email" placeholder='email' onChange={(e) => setEmail(e.target.value)} className="border border-current	" /><br />
+                    <input type="password" placeholder='password' onChange={(e) => setPassword(e.target.value)} className="border border-current	" /><br />
+                    <input type="text" placeholder='first name' onChange={(e) => setFirstname(e.target.value)} className="border border-current	" /><br />
+                    <input type="text" placeholder='last name' onChange={(e) => setLastname(e.target.value)} className="border border-current	" /><br />
+                    <input type="text" placeholder='gamer tag' onChange={(e) => setGamerTag(e.target.value)} className="border border-current	" /><br />
+                    <input type="text" placeholder='steam id' onChange={(e) => setSteamId(e.target.value)} className="border border-current	" /><br />
                     <button onClick={createUserCredentials}>Signup</button>
                 </div>
                 <div>
