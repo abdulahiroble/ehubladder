@@ -1,4 +1,4 @@
-import {initFirebase} from '@/lib/firebase/initFirebase'
+import {initFirebase} from '../../lib/firebase/initFirebase'
 import {useEffect, useState} from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import {
@@ -8,8 +8,8 @@ import {
     GithubAuthProvider,
     EmailAuthProvider
 } from "firebase/auth";
-import {setUserCookie} from '@/lib/firebase/userCookies'
-import {mapUserData} from '@/lib/firebase/mapUserData'
+import {setUserCookie} from '../../lib/firebase/userCookies'
+import {mapUserData} from '../../lib/firebase/mapUserData'
 
 initFirebase() // initialize firebase
 
