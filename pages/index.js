@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import WriteToCloudFirestore from '@/components/cloudFirestore/Write'
-import ReadDataFromCloudFirestore from '@/components/cloudFirestore/Read'
-import {useUser} from '@/lib/firebase/useUser'
-import Counter from '@/components/realtimeDatabase/Counter'
-// import UploadFile from '@/components/storage/UploadFile'
+import WriteToCloudFirestore from '../components/cloudFirestore/Write'
+import ReadDataFromCloudFirestore from '../components/cloudFirestore/Read'
+import {useUser} from '../lib/firebase/useUser'
+import Counter from '../components/realtimeDatabase/Counter'
+// import UploadFile from '../components/storage/UploadFile'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 
@@ -21,10 +21,10 @@ export default function Home() {
             <hr />
             {user.profilePic ? <image src={user.profilePic} height={100} width={100}></image> : <p>No profile pic</p>}
             <hr />
-            <WriteToCloudFirestore />
-            <ReadDataFromCloudFirestore />
+            {/* <WriteToCloudFirestore />
+            <ReadDataFromCloudFirestore /> */}
             <hr />
-            <Counter id={user.id} />
+            {/* <Counter id={user.id} /> */}
             <hr />
             {/* <UploadFile /> */}
             <hr />
@@ -65,7 +65,7 @@ export default function Home() {
             <p>Find in-depth information about Next.js features and API.</p>
           </a>
 
-          <WriteToCloudFirestore />
+          {/* <WriteToCloudFirestore /> */}
 
           <a href="https://nextjs.org/learn" className={styles.card}>
             <h3>Learn &rarr;</h3>
