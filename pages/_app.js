@@ -6,6 +6,7 @@ import '../lib/firebase/initFirebase'
 import React from 'react'
 import '../styles/globals.css'
 import '../styles/profile.css'
+import '../styles/login.css'
 
 
 function MyApp({Component, pageProps}) {

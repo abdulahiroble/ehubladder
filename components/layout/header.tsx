@@ -47,11 +47,11 @@ const Header = (props: any) => {
                             : null}
                         {user ? <>
 
-                            <Link href='/privatessr'>
+                            {/* <Link href='/privatessr'>
                                 <a>
                                     <Image src="./icons/faceit10.png"/>
                                 </a>
-                            </Link>
+                            </Link> */}
 
                             <Link href='/profile/myProfile'><a> USERNAME </a></Link>
 

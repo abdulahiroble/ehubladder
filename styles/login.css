@@ -1,0 +1,9 @@
+.loginbackground {
+    background: url('../public/images/loginimage.jpg');
+    background-size: cover;
+    background-position: center center;
+}
+
+.loginform {
+    height: 500px;
+}
