@@ -14,7 +14,7 @@ import {db} from '../../lib/firebase/initFirebase'
 const myProfile = ({hej}) => {
     const {user, logout} = useUser()
 
-    console.log(hej.firstName)
+    console.log(hej)
 
     if (user) {
 
