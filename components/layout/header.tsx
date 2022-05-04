@@ -53,7 +53,7 @@ const Header = (props: any) => {
                                 </a>
                             </Link> */}
 
-                            <Link href='/profile/myProfile'><a> USERNAME </a></Link>
+                            <Link href='/profile/myProfile'><a> Username </a></Link>
 
                             <button onClick={signOut}> Signout</button>
 
