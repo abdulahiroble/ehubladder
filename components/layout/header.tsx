@@ -1,12 +1,12 @@
-import { useAuth, signOut } from '../../lib/authContext'
+import {useAuth, signOut} from '../../lib/authContext'
 import Link from 'next/link'
-import React, { useState } from 'react'
-import { Transition } from "@headlessui/react"
+import React, {useState} from 'react'
+import {Transition} from "@headlessui/react"
 import Image from 'next/image'
 
 const Header = (props: any) => {
     const [isOpen, setIsOpen] = useState(false)
-    const { user, loading } = useAuth()
+    const {user, loading} = useAuth()
     return (
         <nav className="lg:bg-opacity-50 bg-black p-2 lg:p-3 text-white lg:fixed w-full z-10 lg:h-20">
             {/* Desktop Navigation */}

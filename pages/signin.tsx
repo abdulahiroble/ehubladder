@@ -1,17 +1,34 @@
-import type { NextPage } from 'next'
+import type {NextPage} from 'next'
 import Head from 'next/head'
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useState } from 'react'
-import { useAuth } from '../lib/authContext'
+import {getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import {useState} from 'react'
+import {useAuth} from '../lib/authContext'
+import ReadDataFromCloudFirestore from '../components/cloudFirestore/Read';
+import {useUser} from '../lib/firebase/useUser';
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const { user, loading } = useAuth()
+  const {user, loading} = useAuth()
+  const {singleUser, logout} = useUser()
 
   if (loading) return null
 
-  if (user) return <h1>U already logged</h1>
+  if (user) {
+    return (
+      <div className='p-64'>
+        <ReadDataFromCloudFirestore />
+      </div>
+    )
+  }
+
+  // if (users) {
+  //   return (
+  //     <div className='p-64'>
+  //       <ReadDataFromCloudFirestore />
+  //     </div>
+  //   )
+  // }
 
   const auth = getAuth()
 
@@ -94,7 +111,14 @@ const Home: NextPage = () => {
             <div className="hidden md:block md:w-1/2 rounded-r-lg loginbackground"></div>
           </div>
         </div>
-      </div>
+<<<<<<< HEAD
+  {/* <div>
+          <button onClick={() => loginWithGoogle()}>Login with Google</button>
+        </div> */}
+
+=======
+>>>>>>> 262caefafcbf15ce0999900f8d4934065ca4ed0b
+      </div >
 
 
 

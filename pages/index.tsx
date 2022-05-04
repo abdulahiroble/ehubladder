@@ -10,13 +10,13 @@ import type {NextPage} from 'next'
 
 const Home: NextPage = () => {
 
-  return (
-    <>
-      <Head>
-        <title>Home</title>
-      </Head>
+    return (
+        <>
+            <Head>
+                <title>Home</title>
+            </Head>
 
-      <div className='hidden md:block '>
+            <div className='hidden md:block '>
                 <video
                     className='heroVideo'
                     autoPlay
@@ -63,8 +63,8 @@ const Home: NextPage = () => {
 
                 </video>
             </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default Home
