@@ -6,6 +6,7 @@ import {useAuth} from '../lib/authContext'
 import React from 'react';
 import {doc, setDoc, Timestamp, GeoPoint} from "firebase/firestore"
 import {db} from '../lib/firebase/initFirebase'
+import ReadDataFromCloudFirestore from '../components/cloudFirestore/Read';
 
 const Home: NextPage = () => {
     const {user, loading} = useAuth()
@@ -19,16 +20,19 @@ const Home: NextPage = () => {
 
     if (loading) return null
 
-    if (user) return <h1>U already logged</h1>
+    if (user) return <>
+        <div>U already logged</div>
+        <ReadDataFromCloudFirestore />
+    </>
 
     const createUser = async (user: any) => {
-        const {uid, email, xa, displayName, photoUrl} = user
+        const {uid, email} = user
 
         // create user in db
         try {
             const userDoc = doc(db, "users", uid)
             await setDoc(userDoc, {
-                name: firstName,
+                firstName: firstName,
                 lastName: lastName,
                 gamerTag: gamerTag,
                 steamId: steamId,

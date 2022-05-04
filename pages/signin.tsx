@@ -3,15 +3,32 @@ import Head from 'next/head'
 import {getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import {useState} from 'react'
 import {useAuth} from '../lib/authContext'
+import ReadDataFromCloudFirestore from '../components/cloudFirestore/Read';
+import {useUser} from '../lib/firebase/useUser';
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const {user, loading} = useAuth()
+  const {singleUser, logout} = useUser()
 
   if (loading) return null
 
-  if (user) return <h1>U already logged</h1>
+  if (user) {
+    return (
+      <div className='p-64'>
+        <ReadDataFromCloudFirestore />
+      </div>
+    )
+  }
+
+  // if (users) {
+  //   return (
+  //     <div className='p-64'>
+  //       <ReadDataFromCloudFirestore />
+  //     </div>
+  //   )
+  // }
 
   const auth = getAuth()
 
@@ -68,8 +85,9 @@ const Home: NextPage = () => {
           <button onClick={() => login()}>Login</button>
         </div>
         {/* <div>
-              <button onClick={()=>loginWithGoogle()}>Login with Google</button>
-          </div> */}
+          <button onClick={() => loginWithGoogle()}>Login with Google</button>
+        </div> */}
+
       </div>
     </>
   )
