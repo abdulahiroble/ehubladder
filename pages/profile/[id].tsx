@@ -1,30 +1,31 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { GetStaticProps, GetStaticPaths } from 'next'
+import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {GetStaticProps, GetStaticPaths} from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, {useEffect} from 'react'
 import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
-import { useUser } from '../../lib/firebase/useUser'
+import {useUser} from '../../lib/firebase/useUser'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import * as firebase from 'firebase/app'
-import { db } from '../../lib/firebase/initFirebase'
+import {db} from '../../lib/firebase/initFirebase'
 
 
 
 
 
-const myProfile = ({ userDetail }) => {
-    const { user, logout } = useUser()
+const myProfile = ({userDetail}) => {
+    const {user, logout} = useUser()
     // const firestore = firebase.firestore()
     // const colRef = collection(db, "users")
     // console.log(colRef)
 
-
+    // useEffect(() => {
+    //     console.log(userDetail)
+    // }, [])
 
     return (
-
         <>
             <Head>{userDetail.gamerTag}</Head>
 
@@ -120,7 +121,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const querySnapshot = await getDocs(collection(db, "users"));
 
     const paths = querySnapshot.docs.map((user) => {
-        
+
         return {
             params: {
                 id: user.id.toString()
@@ -137,8 +138,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     };
 };
 
+
 export const getStaticProps: GetStaticProps = async (context) => {
-    const userDoc = doc(db, "users", "zfurlNRT0jcj4FDXZsDNKNKFu1U2")
+
+    const userDoc = doc(db, "users", context.params.id)
     const userDetail = await getDoc(userDoc).then((doc) => {
         if (doc.exists()) {
 
