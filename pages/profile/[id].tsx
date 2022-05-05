@@ -1,4 +1,4 @@
-import { doc, getDoc, collection } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { GetStaticProps, GetStaticPaths } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -117,65 +117,23 @@ export default myProfile;
 
 export const getStaticPaths: GetStaticPaths = async () => {
 
-    const snapshot = await db.collection('users').get();
-    snapshot.forEach((doc) => {
-        console.log(doc.id, '=>', doc.data());
+    const querySnapshot = await getDocs(collection(db, "users"));
+
+    const paths = querySnapshot.forEach((user) => {
+        const userid = [user.id]
+        
+        Object.values(user.data())
+        return {
+            params: {
+                id: userid.toString()
+            },
+        };
     });
-
-    // const userCollection = collection(db, 'users')
-
-    // const snapshot = await userCollection.get();
-
-    // snapshot.forEach(doc => {
-    //     console.log(doc.id, '=>', doc.data());
-    // });
-
-    // const getUsers = async () => {
-
-    //     const usersQuery(userCollection, where("id IS NOT NULL"));
-    //     const querySnapshot = await getDoc(usersQuery);
-    // }
-
-    // const users = await userRef.get()
-    // if (users.empty) {
-
-    //     console.log("no matching documents")
-
-    //     return
-    // }
-
-
-
-
-    // const users = await firebase.firestore().collection('users').get()
-
-
-    // if (!users.exists) {
-    //     console.log('No such document!');
-    // } else {
-    //     console.log('Document data:', users.data());
-    // }
-
-
-    // const userDoc = doc(db, "users")
-
-    // const userDetail = await get(userDoc).then((doc) => {
-    //     if (doc.exists()) {
-
-    //         const data = doc.data()
-
-    //         return data
-    //     }
-
-    // })
-
-    const paths = snapshot.map((user) => ({
-        params: { id: user.id },
-    }))
 
     return {
         paths,
-        fallback: 'blocking',
+        fallback: "blocking",
+
     };
 };
 
