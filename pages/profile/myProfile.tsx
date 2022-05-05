@@ -14,20 +14,16 @@ import {db} from '../../lib/firebase/initFirebase'
 const myProfile = ({hej}) => {
     const {user, logout} = useUser()
 
-    console.log(hej)
+    // console.log(hej)
 
     if (user) {
-
-
         return (
             <div className='p-64'>
-                {/* <Card>
+                <Card>
                     <Card.Body>
                         <ReadDataFromCloudFirestore />
                     </Card.Body>
-                </Card> */}
-
-
+                </Card>
             </div>
         )
     }
@@ -139,24 +135,24 @@ const myProfile = ({hej}) => {
 export default myProfile;
 
 
-export async function getServerSideProps(context) {
+// export async function getServerSideProps(context) {
 
-    const userDoc = doc(db, "users", "49AGSFEbMxOgzDoy0CWaNKimNhx2")
+//     const {user} = await useUser()
 
+//     const userDoc = doc(db, "users", "49AGSFEbMxOgzDoy0CWaNKimNhx2")
 
+//     const hej = await getDoc(userDoc).then((doc) => {
+//         if (doc.exists()) {
+//             console.log(doc.data())
 
-    const hej = await getDoc(userDoc).then((doc) => {
-        if (doc.exists()) {
-            console.log(doc.data())
+//             const data = doc.data()
 
-            const data = doc.data()
+//             return data
+//         }
 
-            return data
-        }
+//     })
 
-    })
-
-    return {
-        props: {hej}, // will be passed to the page component as props
-    }
-}
+//     return {
+//         props: {hej}, // will be passed to the page component as props
+//     }
+// }

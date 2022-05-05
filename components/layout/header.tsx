@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 const Header = (props: any) => {
     const [isOpen, setIsOpen] = useState(false)
-    const {user, loading} = useAuth()
+    // const {user, loading} = useAuth()
     return (
         <nav className="lg:bg-opacity-50 bg-black p-2 lg:p-3 text-white lg:fixed w-full z-10 lg:h-20">
             {/* Desktop Navigation */}
@@ -37,27 +37,7 @@ const Header = (props: any) => {
                         </Link>
                     </div>
                     <div>
-                        {!user && !loading ?
-                            <>
-                                <Link href="/signin" passHref>
-                                    <a
-                                        className="inline-block text-sm px-8 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white mt-0 font-bold">Sign in</a>
-                                </Link>
-                            </>
-                            : null}
-                        {user ? <>
 
-                            {/* <Link href='/privatessr'>
-                                <a>
-                                    <Image src="./icons/faceit10.png"/>
-                                </a>
-                            </Link> */}
-
-                            <Link href='/profile/myProfile'><a> Username </a></Link>
-
-                            <button onClick={signOut}> Signout</button>
-
-                        </> : null}
                     </div>
                 </div>
             </div>

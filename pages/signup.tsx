@@ -26,18 +26,18 @@ const Home: NextPage = () => {
     </>
 
     const createUser = async (user: any) => {
-        const {uid, email} = user
+        // const {uid, email} = user
 
         // create user in db
         try {
-            const userDoc = doc(db, "users", uid)
+            const userDoc = doc(db, "users", user.uid)
             await setDoc(userDoc, {
                 firstName: firstName,
                 lastName: lastName,
                 gamerTag: gamerTag,
                 steamId: steamId,
                 email: email,
-                id: uid,
+                id: user.uid,
             })
 
         } catch (error) {

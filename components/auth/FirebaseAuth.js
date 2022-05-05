@@ -25,17 +25,16 @@ const firebaseAuthConfig = {
             requireDisplayName: true,
         },
         // add additional auth flows below
-        // GoogleAuthProvider.PROVIDER_ID,
-        // TwitterAuthProvider.PROVIDER_ID,
-        // GithubAuthProvider.PROVIDER_ID,
+        GoogleAuthProvider.PROVIDER_ID,
+        TwitterAuthProvider.PROVIDER_ID,
+        GithubAuthProvider.PROVIDER_ID,
     ],
-    signInSuccessUrl: '/profile/myProfile',
+    signInSuccessUrl: '/',
     credentialHelper: 'none',
     callbacks: {
         signInSuccessWithAuthResult: async ({user}, redirectUrl) => {
             const userData = mapUserData(user)
             setUserCookie(userData)
-
         },
     },
 }

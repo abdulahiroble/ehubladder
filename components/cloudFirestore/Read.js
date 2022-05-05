@@ -7,17 +7,12 @@ const ReadDataFromCloudFirestore = () => {
     const {user} = useUser()
     const readData = async () => {
         try {
-            const userDoc = doc(db, "users", "49AGSFEbMxOgzDoy0CWaNKimNhx2")
+            const userDoc = doc(db, "users", user.id)
             await getDoc(userDoc).then((doc) => {
                 if (doc.exists()) {
-                    console.log(doc.data())
-
-
+                    console.log(user)
                 }
-
             })
-
-
             alert('Data was successfully fetched from cloud firestore! Close this alert and check console for output.')
         } catch (error) {
             console.log(error)
