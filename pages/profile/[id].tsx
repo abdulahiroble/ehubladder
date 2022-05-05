@@ -16,9 +16,7 @@ import { db } from '../../lib/firebase/initFirebase'
 
 
 const myProfile = ({ userDetail }) => {
-
     const { user, logout } = useUser()
-
     // const firestore = firebase.firestore()
     // const colRef = collection(db, "users")
     // console.log(colRef)
@@ -140,7 +138,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const userDoc = doc(db, "users", user.id)
+    const userDoc = doc(db, "users", "zfurlNRT0jcj4FDXZsDNKNKFu1U2")
     const userDetail = await getDoc(userDoc).then((doc) => {
         if (doc.exists()) {
 
