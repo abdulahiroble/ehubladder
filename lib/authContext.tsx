@@ -41,7 +41,7 @@ export default function AuthContextProvider({children}: Props) {
                 // Save token for backend calls
                 user.getIdToken().then((token) => setCookie(null, 'idToken', token, {
                     maxAge: 30 * 24 * 60 * 60,
-                    path: '/',
+                    path: '/profile/myProfile',
                 }))
 
                 // Save decoded token on the state

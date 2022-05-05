@@ -15,5 +15,9 @@ function MyApp({Component, pageProps}) {
       <Component {...pageProps} />
     </Layout>
   </FirebaseProvider>
+
+  // return (<Layout>
+  //   <Component {...pageProps} />
+  // </Layout>)
 }
 export default MyApp
