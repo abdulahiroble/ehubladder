@@ -1,29 +1,61 @@
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
-import {GetStaticProps, GetStaticPaths} from 'next'
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { GetStaticProps, GetStaticPaths } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
-import {useUser} from '../../lib/firebase/useUser'
+import { useUser } from '../../lib/firebase/useUser'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import * as firebase from 'firebase/app'
-import {db} from '../../lib/firebase/initFirebase'
+import { db } from '../../lib/firebase/initFirebase'
 
 
 
 
 
-const myProfile = ({userDetail}) => {
-    const {user, logout} = useUser()
-    // const firestore = firebase.firestore()
-    // const colRef = collection(db, "users")
-    // console.log(colRef)
+const myProfile = ({ userDetail }) => {
+    const { user, logout } = useUser()
+    // if (user) {
+    //     console.log(user.id) 
+    // }
 
-    // useEffect(() => {
-    //     console.log(userDetail)
-    // }, [])
+    const ShowEditProfile = () => {
+        if (user) {
+            if (user.id == userDetail.id) {
+                return (
+                    <Link href="/editprofile" passHref>
+                        <a className="inline-block text-sm px-8 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white font-bold">Edit profile</a>
+                    </Link>
+                )
+            }
+        }
+
+        return null;
+
+    }
+
+
+    const ShowAddTeam = () => {
+        if (user) {
+            if (user.id == userDetail.id) {
+                return (
+                    <div className='pt-1 cursor-pointer'>
+                        <Link href="/">
+                            <Image
+                                src={"/icons/redplus.png"}
+                                height={20}
+                                width={20} />
+                        </Link>
+                    </div>
+                )
+            }
+        }
+
+        return null;
+
+    }
 
     return (
         <>
@@ -43,11 +75,9 @@ const myProfile = ({userDetail}) => {
                         <div className='col-span-4 bg-gray-800 pb-5'>
                             <div className='flex justify-between mx-14 py-5'>
                                 <h2 className='text-3xl'>Overview</h2>
-                                <Link href="/editprofile" passHref>
-                                    <a
-                                        className="inline-block text-sm px-8 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white font-bold">Edit profile</a>
-                                </Link>
+                                <ShowEditProfile />
                             </div>
+
 
                             <div className='grid grid-cols-2 mt-5 text-xl text-center'>
                                 <p className='pt-4'>Firstname</p>
@@ -73,14 +103,8 @@ const myProfile = ({userDetail}) => {
                                 <div>
                                     <h3>Team Manager</h3>
                                 </div>
-                                <div className='pt-1 cursor-pointer'>
-                                    <Link href="/">
-                                        <Image
-                                            src={"/icons/redplus.png"}
-                                            height={20}
-                                            width={20} />
-                                    </Link>
-                                </div>
+                                <ShowAddTeam />
+
 
 
                             </div>
@@ -106,11 +130,8 @@ const myProfile = ({userDetail}) => {
 
                 </div>
             </div>
-
-
         </>
-
-    );
+    )
 }
 
 export default myProfile;
@@ -128,8 +149,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
             },
         };
     });
-
-    console.log(paths)
 
     return {
         paths,
