@@ -29,7 +29,7 @@ const firebaseAuthConfig = {
         TwitterAuthProvider.PROVIDER_ID,
         GithubAuthProvider.PROVIDER_ID,
     ],
-    signInSuccessUrl: '/',
+    signInSuccessUrl: '/profile/myProfile',
     credentialHelper: 'none',
     callbacks: {
         signInSuccessWithAuthResult: async ({user}, redirectUrl) => {

@@ -22,6 +22,9 @@ const Home: NextPage = () => {
         const user = userCredential.user;
         console.log('success', user)
         // ...
+
+        // navigate to profile
+        window.location.href = '/profile/myProfile'
       })
       .catch((error) => {
         const errorCode = error.code;

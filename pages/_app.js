@@ -10,14 +10,14 @@ import '../styles/login.css'
 
 
 function MyApp({Component, pageProps}) {
-  // return <FirebaseProvider>
-  //   <Layout>
-  //     <Component {...pageProps} />
-  //   </Layout>
-  // </FirebaseProvider>
+  return <FirebaseProvider>
+    <Layout>
+      <Component {...pageProps} />
+    </Layout>
+  </FirebaseProvider>
 
-  return (<Layout>
-    <Component {...pageProps} />
-  </Layout>)
+  // return (<Layout>
+  //   <Component {...pageProps} />
+  // </Layout>)
 }
 export default MyApp
