@@ -10,14 +10,7 @@ const ReadDataFromCloudFirestore = () => {
             const userDoc = doc(db, "users", user.id)
             await getDoc(userDoc).then((doc) => {
                 if (doc.exists()) {
-                    console.log(doc.data())
-
-                    const snapshot = await db.collection('users').get();
-                    snapshot.forEach((doc) => {
-                        console.log(doc.id, '=>', doc.data());
-                    });
-
-
+                    console.log(user)
                 }
             })
             alert('Data was successfully fetched from cloud firestore! Close this alert and check console for output.')
