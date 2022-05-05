@@ -22,7 +22,6 @@ const Home: NextPage = () => {
 
     if (user) return <>
         <div>U already logged</div>
-        <ReadDataFromCloudFirestore />
     </>
 
     const createUser = async (user: any) => {
