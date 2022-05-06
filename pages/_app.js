@@ -7,12 +7,14 @@ import React from 'react'
 import '../styles/globals.css'
 import '../styles/profile.css'
 import '../styles/login.css'
-
+import {ChakraProvider} from '@chakra-ui/react'
 
 function MyApp({Component, pageProps}) {
   return <FirebaseProvider>
     <Layout>
-      <Component {...pageProps} />
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
     </Layout>
   </FirebaseProvider>
 
