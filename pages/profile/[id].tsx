@@ -1,22 +1,22 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { GetStaticProps, GetStaticPaths } from 'next'
+import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {GetStaticProps, GetStaticPaths} from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
-import { useUser } from '../../lib/firebase/useUser'
+import {useUser} from '../../lib/firebase/useUser'
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import * as firebase from 'firebase/app'
-import { db } from '../../lib/firebase/initFirebase'
+import {db} from '../../lib/firebase/initFirebase'
 
 
 
 
 
-const myProfile = ({ userDetail }) => {
-    const { user, logout } = useUser()
+const myProfile = ({userDetail}) => {
+    const {user, logout} = useUser()
     // if (user) {
     //     console.log(user.id) 
     // }
@@ -42,7 +42,7 @@ const myProfile = ({ userDetail }) => {
             if (user.id == userDetail.id) {
                 return (
                     <div className='pt-1 cursor-pointer'>
-                        <Link href="/">
+                        <Link href="/team/team">
                             <Image
                                 src={"/icons/redplus.png"}
                                 height={20}
