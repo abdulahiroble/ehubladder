@@ -7,12 +7,23 @@ import React, {useEffect} from 'react'
 import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
 import {useUser} from '../../lib/firebase/useUser'
 import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
 import * as firebase from 'firebase/app'
 import {db} from '../../lib/firebase/initFirebase'
-
-
-
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Button,
+    useDisclosure,
+    FormControl,
+    FormLabel,
+    Input,
+} from '@chakra-ui/react'
+import CreateTeam from "../../components/CreateTeam";
 
 
 const myProfile = ({userDetail}) => {
@@ -38,17 +49,66 @@ const myProfile = ({userDetail}) => {
 
 
     const ShowAddTeam = () => {
+        const {isOpen, onOpen, onClose} = useDisclosure()
+        const initialRef = React.useRef()
+        const finalRef = React.useRef()
+
         if (user) {
             if (user.id == userDetail.id) {
                 return (
-                    <div className='pt-1 cursor-pointer'>
-                        <Link href="/team/team">
-                            <Image
-                                src={"/icons/redplus.png"}
-                                height={20}
-                                width={20} />
-                        </Link>
-                    </div>
+                    <CreateTeam />
+                    // <><Button
+                    //     onClick={onOpen}
+                    //     backgroundColor="gray.900"
+                    //     color="white"
+                    //     fontWeight="medium"
+                    //     _hover={{bg: 'gray.700'}}
+                    //     _active={{
+                    //         bg: 'gray.800',
+                    //         transform: 'scale(0.95)'
+                    //     }}
+                    // >
+                    //     +
+                    // </Button><Modal
+                    //     initialFocusRef={initialRef}
+                    //     isOpen={isOpen}
+                    //     onClose={onClose}
+                    // >
+                    //         <ModalOverlay />
+                    //         <ModalContent as="form" onSubmit="#">
+                    //             <ModalHeader fontWeight="bold">Create Team</ModalHeader>
+                    //             <ModalCloseButton />
+
+                    //             <ModalBody pb={6}>
+                    //                 <FormControl>
+                    //                     <FormLabel>Team Name</FormLabel>
+                    //                     <Input ref={initialRef} placeholder="Team Name" name="name" />
+                    //                 </FormControl>
+
+                    //                 <FormControl mt={4}>
+                    //                     <FormLabel>Country</FormLabel>
+                    //                     <Input placeholder="Country" name="url" />
+                    //                 </FormControl>
+
+                    //                 <FormControl mt={4}>
+                    //                     <FormLabel>Game</FormLabel>
+                    //                     <Input placeholder="Game" name="url" />
+                    //                 </FormControl>
+
+                    //                 <FormControl mt={4}>
+                    //                     <FormLabel>Lowrank</FormLabel>
+                    //                     <Input placeholder="Lowrank" name="url" />
+                    //                 </FormControl>
+                    //             </ModalBody>
+
+                    //             <ModalFooter>
+                    //                 <Button onClick={onClose} mr={3}>Annuller</Button>
+                    //                 <Button backgroundColor="#99FFFE" fontWeight="medium" type="submit">
+                    //                     Skab
+                    //                 </Button>
+                    //             </ModalFooter>
+                    //         </ModalContent>
+                    //     </Modal></>
                 )
             }
         }

@@ -52,6 +52,7 @@ function BasicUsage() {
                     transform: 'scale(0.95)'
                 }}
             >
+                +
             </Button>
 
             <Modal
