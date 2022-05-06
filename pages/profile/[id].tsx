@@ -7,12 +7,23 @@ import React, {useEffect} from 'react'
 import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
 import {useUser} from '../../lib/firebase/useUser'
 import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
 import * as firebase from 'firebase/app'
 import {db} from '../../lib/firebase/initFirebase'
-
-
-
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+    Button,
+    useDisclosure,
+    FormControl,
+    FormLabel,
+    Input,
+} from '@chakra-ui/react'
+import CreateTeam from "../../components/CreateTeam";
 
 
 const myProfile = ({userDetail}) => {
@@ -38,17 +49,14 @@ const myProfile = ({userDetail}) => {
 
 
     const ShowAddTeam = () => {
+        const {isOpen, onOpen, onClose} = useDisclosure()
+        const initialRef = React.useRef()
+        const finalRef = React.useRef()
+
         if (user) {
             if (user.id == userDetail.id) {
                 return (
-                    <div className='pt-1 cursor-pointer'>
-                        <Link href="/team/team">
-                            <Image
-                                src={"/icons/redplus.png"}
-                                height={20}
-                                width={20} />
-                        </Link>
-                    </div>
+                    <CreateTeam />
                 )
             }
         }
