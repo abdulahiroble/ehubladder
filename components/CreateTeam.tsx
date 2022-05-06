@@ -19,11 +19,10 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import {useAuth} from '../lib/authContext'
-// import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 
 const CreateTeam = () => {
   const auth = getAuth()
-  const {user, logout} = useUser()
   const [teamName, setTeamName] = useState<string>('')
   const [country, setCountry] = useState<string>('')
   const [game, setGame] = useState<string>('')
@@ -33,6 +32,48 @@ const CreateTeam = () => {
   const toast = useToast()
   const initialRef = useRef()
   const {register, handleSubmit} = useForm();
+
+  const createTeam = async (url) => {
+
+    try {
+      const teamDoc = doc(db, "teams", auth.currentUser.uid)
+      await setDoc(teamDoc, {
+        teamName: teamName,
+        country: country,
+        game: game,
+        lowRank: lowRank,
+        owner: auth.currentUser.uid
+      })
+
+      toast({
+        title: "Success!",
+        description: "Your team has been created!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      })
+
+      onClose()
+
+    } catch (error) {
+      console.log(error)
+
+      toast({
+        title: "Error!",
+        description: "Something went wrong :(",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
+
+      onClose()
+
+
+    }
+
+
+
+  }
 
   return (
     <><Button
@@ -47,42 +88,43 @@ const CreateTeam = () => {
       }}
     >
       +
-    </Button><Modal
-      initialFocusRef={initialRef}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    </Button>
+      <Modal
+        initialFocusRef={initialRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
         <ModalOverlay />
-        <ModalContent as="form" onSubmit="#">
+        <ModalContent as="form" onSubmit={handleSubmit(createTeam)}>
           <ModalHeader fontWeight="bold">Create Team</ModalHeader>
           <ModalCloseButton />
 
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>Team Name</FormLabel>
-              <Input ref={initialRef} placeholder="Team Name" name="name" />
+              <Input placeholder="Team Name" name="teamName" onChange={(e) => setTeamName(e.target.value)} />
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel>Country</FormLabel>
-              <Input placeholder="Country" name="url" />
+              <Input ref={initialRef} placeholder="Country" name="country" onChange={(e) => setCountry(e.target.value)} />
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel>Game</FormLabel>
-              <Input placeholder="Game" name="url" />
+              <Input ref={initialRef} placeholder="Game" name="game" onChange={(e) => setGame(e.target.value)} />
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel>Lowrank</FormLabel>
-              <Input placeholder="Lowrank" name="url" />
+              <Input ref={initialRef} placeholder="Lowrank" name="lowrank" onChange={(e) => setLowRank(e.target.value)} />
             </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={onClose} mr={3}>Annuller</Button>
+            <Button onClick={onClose} mr={3}>Cancel</Button>
             <Button backgroundColor="#99FFFE" fontWeight="medium" type="submit">
-              Skab
+              Create
             </Button>
           </ModalFooter>
         </ModalContent>
