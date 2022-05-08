@@ -121,12 +121,21 @@ const myProfile = ({userDetail}) => {
             <div className='bg-black text-white'>
                 <div className='profile-background'>
                     <div className='pt-32 flex justify-start mx-96'>
-                        <Image
+                        <div>
+                            <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
+                            <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
+                            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
+                        </div>
+
+
+                        {/* <Image
                             src={"/images/user-profile.png"}
                             height={178}
-                            width={178} />
-                        <h1 className='text-white text-3xl pt-20 pl-10'>{userDetail.gamerTag}</h1>
+                            width={178} /> */}
+                        <h1 className='text-white text-3xl pt-20'>{userDetail.gamerTag}</h1>
                     </div>
+
+
 
                     <div className='grid grid-cols-6 mx-32 mt-20'>
                         <div className='col-span-4 bg-gray-800 pb-5'>
@@ -135,66 +144,63 @@ const myProfile = ({userDetail}) => {
                                 <ShowEditProfile />
                             </div>
 
-                            <img id="myimg" />
 
 
-                            <div className='grid grid-cols-2 mt-5 text-xl text-center'>
-                                {/* <UploadProfilePic /> */}
 
-                                <div className="col-span-2">
-                                    <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
-                                    <button onClick={handleUpload}>Upload </button>
-                                </div>
-                                <p className='pt-4'>Firstname</p>
-                                <p className='pt-4'>{userDetail.firstName}</p>
-                                <p className='pt-4'>Lastname</p>
-                                <p className='pt-4'>{userDetail.lastName}</p>
-                                <p className='pt-4'>GamerTag</p>
-                                <p className='pt-4'>{userDetail.gamerTag}</p>
-                                <p className='pt-4'>SteamID</p>
-                                <p className='pt-4'>{userDetail.steamID}</p>
-                                <p className='pt-4'>Rank</p>
-                                <div className='pt-2'>
-                                    <Image
-                                        src={"/icons/faceit10.png"}
-                                        height={50}
-                                        width={50} />
-                                </div>
+                            <div className="col-span-2">
+                                <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
+                                <button onClick={handleUpload}>Upload </button>
+                            </div>
+                            <p className='pt-4'>Firstname</p>
+                            <p className='pt-4'>{userDetail.firstName}</p>
+                            <p className='pt-4'>Lastname</p>
+                            <p className='pt-4'>{userDetail.lastName}</p>
+                            <p className='pt-4'>GamerTag</p>
+                            <p className='pt-4'>{userDetail.gamerTag}</p>
+                            <p className='pt-4'>SteamID</p>
+                            <p className='pt-4'>{userDetail.steamID}</p>
+                            <p className='pt-4'>Rank</p>
+                            <div className='pt-2'>
+                                <Image
+                                    src={"/icons/faceit10.png"}
+                                    height={50}
+                                    width={50} />
                             </div>
                         </div>
+                    </div>
 
-                        <div className='col-span-2 bg-gray-800 mx-10 '>
-                            <div className='flex spaxe-x-10 space-x-4 mx-5 py-5'>
-                                <div>
-                                    <h3>Team Manager</h3>
-                                </div>
-                                <ShowAddTeam />
-
-
-
+                    <div className='col-span-2 bg-gray-800 mx-10 '>
+                        <div className='flex spaxe-x-10 space-x-4 mx-5 py-5'>
+                            <div>
+                                <h3>Team Manager</h3>
                             </div>
-                            <div className='flex space-x-7 mx-20'>
-                                <div>
-                                    <Image
-                                        src={"/icons/faceit10.png"}
-                                        height={50}
-                                        width={50} />
-                                </div>
-                                <div className='pt-4'>
-                                    <Link href="/">
-                                        <a className='hover:underline'>Confectors</a>
-                                    </Link>
-                                </div>
+                            <ShowAddTeam />
 
+
+
+                        </div>
+                        <div className='flex space-x-7 mx-20'>
+                            <div>
+                                <Image
+                                    src={"/icons/faceit10.png"}
+                                    height={50}
+                                    width={50} />
+                            </div>
+                            <div className='pt-4'>
+                                <Link href="/">
+                                    <a className='hover:underline'>Confectors</a>
+                                </Link>
                             </div>
 
                         </div>
 
                     </div>
 
-
                 </div>
+
+
             </div>
+        </div>
         </>
     )
 }
