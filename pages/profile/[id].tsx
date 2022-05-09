@@ -121,10 +121,12 @@ const myProfile = ({userDetail}) => {
             <div className='bg-black text-white'>
                 <div className='profile-background'>
                     <div className='pt-32 flex justify-start mx-96'>
-                        <div>
+                        <div className="wrapper">
+
+
                             <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
-                            <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
-                            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
+                            <input className="form-label inline-block mb-2 text-white" type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
+                            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
                         </div>
 
 
