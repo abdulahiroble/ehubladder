@@ -3,12 +3,11 @@ import {GetStaticProps, GetStaticPaths} from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
 import {useUser} from '../../lib/firebase/useUser'
 import Card from 'react-bootstrap/Card'
 import * as firebase from 'firebase/app'
-import {db} from '../../lib/firebase/initFirebase'
 import {
     Modal,
     ModalOverlay,
@@ -24,10 +23,23 @@ import {
     Input,
 } from '@chakra-ui/react'
 import CreateTeam from "../../components/CreateTeam";
+import {db} from '../../lib/firebase/initFirebase'
+import "firebase/storage";
+import {storage} from "../../lib/firebase/initFirebase";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {v4} from "uuid";
 
 
 const myProfile = ({userDetail}) => {
     const {user, logout} = useUser()
+    const [imageUpload, setImageUpload] = useState(null);
+    const [userImageUrls, setUserImageUrls] = useState([])
+
+    const profilePicRef = getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`))
+    // const [imageList, setImageList] = useEffect([])
+    // const imageDownloadUrl = getDownloadURL(ref(storage, `/images/profilepic/aa80fbf7-951b-4ee3-a0a5-7d0ab8f5c6f3`));
+
+
     // if (user) {
     //     console.log(user.id) 
     // }
@@ -65,6 +77,43 @@ const myProfile = ({userDetail}) => {
 
     }
 
+    const handleUpload = () => {
+
+        if (imageUpload == null) return;
+
+        const imageRef = ref(storage, `images/profilepic/${userDetail.id}`);
+        uploadBytes(imageRef, imageUpload).then(() => {
+            alert("image uploaded")
+
+        })
+    };
+
+    const UploadProfilePic = () => {
+        if (user) {
+            if (user.id === userDetail.id) {
+                // return (
+
+
+                // )
+            }
+        }
+        return null;
+    }
+
+
+    getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then((url) => {
+        const img = document.getElementById('myimg');
+        img.setAttribute('src', url);
+    })
+
+
+
+
+    useEffect(() => {
+        const imageRef = getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`));
+    });
+
+
     return (
         <>
             <Head>{userDetail.gamerTag}</Head>
@@ -86,8 +135,16 @@ const myProfile = ({userDetail}) => {
                                 <ShowEditProfile />
                             </div>
 
+                            <img id="myimg" />
+
 
                             <div className='grid grid-cols-2 mt-5 text-xl text-center'>
+                                {/* <UploadProfilePic /> */}
+
+                                <div className="col-span-2">
+                                    <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
+                                    <button onClick={handleUpload}>Upload </button>
+                                </div>
                                 <p className='pt-4'>Firstname</p>
                                 <p className='pt-4'>{userDetail.firstName}</p>
                                 <p className='pt-4'>Lastname</p>
