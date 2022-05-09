@@ -33,16 +33,6 @@ import {v4} from "uuid";
 const myProfile = ({userDetail}) => {
     const {user, logout} = useUser()
     const [imageUpload, setImageUpload] = useState(null);
-    const [userImageUrls, setUserImageUrls] = useState([])
-
-    const profilePicRef = getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`))
-    // const [imageList, setImageList] = useEffect([])
-    // const imageDownloadUrl = getDownloadURL(ref(storage, `/images/profilepic/aa80fbf7-951b-4ee3-a0a5-7d0ab8f5c6f3`));
-
-
-    // if (user) {
-    //     console.log(user.id) 
-    // }
 
     const ShowEditProfile = () => {
         if (user) {
@@ -61,9 +51,6 @@ const myProfile = ({userDetail}) => {
 
 
     const ShowAddTeam = () => {
-        const {isOpen, onOpen, onClose} = useDisclosure()
-        const initialRef = React.useRef()
-        const finalRef = React.useRef()
 
         if (user) {
             if (user.id == userDetail.id) {
@@ -91,27 +78,35 @@ const myProfile = ({userDetail}) => {
     const UploadProfilePic = () => {
         if (user) {
             if (user.id === userDetail.id) {
-                // return (
+                return (
+                    <>
+                        <input className="form-label inline-block mb-2 text-white" type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
+                        <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
+                    </>
 
-
-                // )
+                )
             }
         }
         return null;
     }
 
+    getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
 
-    getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then((url) => {
+    function onResolve(url) {
         const img = document.getElementById('myimg');
         img.setAttribute('src', url);
-    })
+    }
+
+    function onReject(error) {
+        console.log(error.code);
+
+        getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
+            const img = document.getElementById('myimg');
+            img.setAttribute('src', url);
+        });
 
 
-
-
-    useEffect(() => {
-        const imageRef = getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`));
-    });
+    }
 
 
     return (
@@ -122,18 +117,11 @@ const myProfile = ({userDetail}) => {
                 <div className='profile-background'>
                     <div className='pt-32 flex justify-start mx-96'>
                         <div className="wrapper">
+                            {<img className="rounded-full h-52 w-52 pb-5" id="myimg" />}
 
-
-                            <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
-                            <input className="form-label inline-block mb-2 text-white" type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
-                            <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
+                            <UploadProfilePic />
                         </div>
 
-
-                        {/* <Image
-                        src={"/images/user-profile.png"}
-                        height={178}
-                        width={178} /> */}
                         <h1 className='text-white text-3xl pt-20'>{userDetail.gamerTag}</h1>
                     </div>
 
