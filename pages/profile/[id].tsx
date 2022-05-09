@@ -131,9 +131,9 @@ const myProfile = ({userDetail}) => {
 
 
                         {/* <Image
-                            src={"/images/user-profile.png"}
-                            height={178}
-                            width={178} /> */}
+                        src={"/images/user-profile.png"}
+                        height={178}
+                        width={178} /> */}
                         <h1 className='text-white text-3xl pt-20'>{userDetail.gamerTag}</h1>
                     </div>
 
@@ -149,60 +149,57 @@ const myProfile = ({userDetail}) => {
 
 
 
-                            <div className="col-span-2">
-                                <input type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
-                                <button onClick={handleUpload}>Upload </button>
-                            </div>
-                            <p className='pt-4'>Firstname</p>
-                            <p className='pt-4'>{userDetail.firstName}</p>
-                            <p className='pt-4'>Lastname</p>
-                            <p className='pt-4'>{userDetail.lastName}</p>
-                            <p className='pt-4'>GamerTag</p>
-                            <p className='pt-4'>{userDetail.gamerTag}</p>
-                            <p className='pt-4'>SteamID</p>
-                            <p className='pt-4'>{userDetail.steamID}</p>
-                            <p className='pt-4'>Rank</p>
-                            <div className='pt-2'>
-                                <Image
-                                    src={"/icons/faceit10.png"}
-                                    height={50}
-                                    width={50} />
+                            <div className='grid grid-cols-2 mt-5 text-xl text-center'>
+                                <p className='pt-4'>Firstname</p>
+                                <p className='pt-4'>{userDetail.firstName}</p>
+                                <p className='pt-4'>Lastname</p>
+                                <p className='pt-4'>{userDetail.lastName}</p>
+                                <p className='pt-4'>GamerTag</p>
+                                <p className='pt-4'>{userDetail.gamerTag}</p>
+                                <p className='pt-4'>SteamID</p>
+                                <p className='pt-4'>{userDetail.steamID}</p>
+                                <p className='pt-4'>Rank</p>
+                                <div className='pt-2'>
+                                    <Image
+                                        src={"/icons/faceit10.png"}
+                                        height={50}
+                                        width={50} />
+                                </div>
                             </div>
                         </div>
+
+                        <div className='col-span-2 bg-gray-800 mx-10 '>
+                            <div className='flex spaxe-x-10 space-x-4 mx-5 py-5'>
+                                <div>
+                                    <h3>Team Manager</h3>
+                                </div>
+                                <ShowAddTeam />
+
+
+
+                            </div>
+                            <div className='flex space-x-7 mx-20'>
+                                <div>
+                                    <Image
+                                        src={"/icons/faceit10.png"}
+                                        height={50}
+                                        width={50} />
+                                </div>
+                                <div className='pt-4'>
+                                    <Link href="/">
+                                        <a className='hover:underline'>Confectors</a>
+                                    </Link>
+                                </div>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
-                    <div className='col-span-2 bg-gray-800 mx-10 '>
-                        <div className='flex spaxe-x-10 space-x-4 mx-5 py-5'>
-                            <div>
-                                <h3>Team Manager</h3>
-                            </div>
-                            <ShowAddTeam />
-
-
-
-                        </div>
-                        <div className='flex space-x-7 mx-20'>
-                            <div>
-                                <Image
-                                    src={"/icons/faceit10.png"}
-                                    height={50}
-                                    width={50} />
-                            </div>
-                            <div className='pt-4'>
-                                <Link href="/">
-                                    <a className='hover:underline'>Confectors</a>
-                                </Link>
-                            </div>
-
-                        </div>
-
-                    </div>
 
                 </div>
-
-
             </div>
-        </div>
         </>
     )
 }

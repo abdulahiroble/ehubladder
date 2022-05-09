@@ -24,11 +24,8 @@
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^5.0.3",
     "react-firebaseui": "^6.0.0",
-<<<<<<< HEAD
-    "react-hook-form": "^7.30.0"
-=======
+    "react-hook-form": "^7.30.0",
     "uuid": "^8.3.2"
->>>>>>> fda1749 (upload image to firebase)
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
