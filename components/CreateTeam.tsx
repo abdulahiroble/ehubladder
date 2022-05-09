@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react'
 import {useUser} from './../lib/firebase/useUser'
 import {db} from './../lib/firebase/initFirebase'
-import {doc, setDoc} from 'firebase/firestore'
+import {doc, setDoc, collection, documentId} from 'firebase/firestore'
 import {getAuth} from '@firebase/auth'
 import {
   Modal,
@@ -36,14 +36,16 @@ const CreateTeam = () => {
   const createTeam = async (url) => {
 
     try {
-      const teamDoc = doc(db, "teams", auth.currentUser.uid)
-      await setDoc(teamDoc, {
+      const myCollRef = collection(db, "teams");
+      const myDocRef = doc(myCollRef);
+
+      await setDoc(myDocRef, {
         teamName: teamName,
         country: country,
         game: game,
         lowRank: lowRank,
         owner: auth.currentUser.uid
-      })
+      });
 
       toast({
         title: "Success!",
