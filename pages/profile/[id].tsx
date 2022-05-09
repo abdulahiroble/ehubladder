@@ -3,12 +3,11 @@ import {GetStaticProps, GetStaticPaths} from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
 import {useUser} from '../../lib/firebase/useUser'
 import Card from 'react-bootstrap/Card'
 import * as firebase from 'firebase/app'
-import {db} from '../../lib/firebase/initFirebase'
 import {
     Modal,
     ModalOverlay,
@@ -24,13 +23,16 @@ import {
     Input,
 } from '@chakra-ui/react'
 import CreateTeam from "../../components/CreateTeam";
+import {db} from '../../lib/firebase/initFirebase'
+import "firebase/storage";
+import {storage} from "../../lib/firebase/initFirebase";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {v4} from "uuid";
 
 
 const myProfile = ({userDetail}) => {
     const {user, logout} = useUser()
-    // if (user) {
-    //     console.log(user.id) 
-    // }
+    const [imageUpload, setImageUpload] = useState(null);
 
     const ShowEditProfile = () => {
         if (user) {
@@ -49,9 +51,6 @@ const myProfile = ({userDetail}) => {
 
 
     const ShowAddTeam = () => {
-        const {isOpen, onOpen, onClose} = useDisclosure()
-        const initialRef = React.useRef()
-        const finalRef = React.useRef()
 
         if (user) {
             if (user.id == userDetail.id) {
@@ -65,6 +64,51 @@ const myProfile = ({userDetail}) => {
 
     }
 
+    const handleUpload = () => {
+
+        if (imageUpload == null) return;
+
+        const imageRef = ref(storage, `images/profilepic/${userDetail.id}`);
+        uploadBytes(imageRef, imageUpload).then(() => {
+            alert("image uploaded")
+
+        })
+    };
+
+    const UploadProfilePic = () => {
+        if (user) {
+            if (user.id === userDetail.id) {
+                return (
+                    <>
+                        <input className="form-label inline-block mb-2 text-white" type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
+                        <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
+                    </>
+
+                )
+            }
+        }
+        return null;
+    }
+
+    getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
+
+    function onResolve(url) {
+        const img = document.getElementById('myimg');
+        img.setAttribute('src', url);
+    }
+
+    function onReject(error) {
+        console.log(error.code);
+
+        getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
+            const img = document.getElementById('myimg');
+            img.setAttribute('src', url);
+        });
+
+
+    }
+
+
     return (
         <>
             <Head>{userDetail.gamerTag}</Head>
@@ -72,12 +116,16 @@ const myProfile = ({userDetail}) => {
             <div className='bg-black text-white'>
                 <div className='profile-background'>
                     <div className='pt-32 flex justify-start mx-96'>
-                        <Image
-                            src={"/images/user-profile.png"}
-                            height={178}
-                            width={178} />
-                        <h1 className='text-white text-3xl pt-20 pl-10'>{userDetail.gamerTag}</h1>
+                        <div className="wrapper">
+                            {<img className="rounded-full h-52 w-52 pb-5" id="myimg" />}
+
+                            <UploadProfilePic />
+                        </div>
+
+                        <h1 className='text-white text-3xl pt-20'>{userDetail.gamerTag}</h1>
                     </div>
+
+
 
                     <div className='grid grid-cols-6 mx-32 mt-20'>
                         <div className='col-span-4 bg-gray-800 pb-5'>
@@ -85,6 +133,8 @@ const myProfile = ({userDetail}) => {
                                 <h2 className='text-3xl'>Overview</h2>
                                 <ShowEditProfile />
                             </div>
+
+
 
 
                             <div className='grid grid-cols-2 mt-5 text-xl text-center'>
