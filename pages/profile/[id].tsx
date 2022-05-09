@@ -113,11 +113,11 @@ const myProfile = ({userDetail}) => {
         <>
             <Head>{userDetail.gamerTag}</Head>
 
-            <div className='bg-black text-white'>
+            <div className='text-white bg-black'>
                 <div className='profile-background'>
                     <div className='pt-32 flex justify-start mx-96'>
                         <div className="wrapper">
-                            {<img className="rounded-full h-52 w-52 pb-5" id="myimg" />}
+                            <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
 
                             <UploadProfilePic />
                         </div>
@@ -133,9 +133,6 @@ const myProfile = ({userDetail}) => {
                                 <h2 className='text-3xl'>Overview</h2>
                                 <ShowEditProfile />
                             </div>
-
-
-
 
                             <div className='grid grid-cols-2 mt-5 text-xl text-center'>
                                 <p className='pt-4'>Firstname</p>
