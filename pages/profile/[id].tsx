@@ -6,22 +6,6 @@ import Link from 'next/link'
 import React, {useEffect, useState} from 'react'
 import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
 import {useUser} from '../../lib/firebase/useUser'
-import Card from 'react-bootstrap/Card'
-import * as firebase from 'firebase/app'
-import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button,
-    useDisclosure,
-    FormControl,
-    FormLabel,
-    Input,
-} from '@chakra-ui/react'
 import CreateTeam from "../../components/CreateTeam";
 import {db} from '../../lib/firebase/initFirebase'
 import "firebase/storage";
@@ -38,7 +22,7 @@ const myProfile = ({userDetail}) => {
         if (user) {
             if (user.id == userDetail.id) {
                 return (
-                    <Link href="/editprofile" passHref>
+                    <Link href={`/profile/${userDetail.id}/edit`} passHref>
                         <a className="inline-block text-sm px-8 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white font-bold">Edit profile</a>
                     </Link>
                 )
@@ -64,31 +48,8 @@ const myProfile = ({userDetail}) => {
 
     }
 
-    const handleUpload = () => {
 
-        if (imageUpload == null) return;
 
-        const imageRef = ref(storage, `images/profilepic/${userDetail.id}`);
-        uploadBytes(imageRef, imageUpload).then(() => {
-            alert("image uploaded")
-
-        })
-    };
-
-    const UploadProfilePic = () => {
-        if (user) {
-            if (user.id === userDetail.id) {
-                return (
-                    <>
-                        <input className="form-label inline-block mb-2 text-white" type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
-                        <button className="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
-                    </>
-
-                )
-            }
-        }
-        return null;
-    }
 
     getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
 
@@ -118,11 +79,9 @@ const myProfile = ({userDetail}) => {
                     <div className='pt-32 flex justify-start mx-96'>
                         <div className="wrapper">
                             <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
-
-                            <UploadProfilePic />
                         </div>
 
-                        <h1 className='text-white text-3xl pt-20'>{userDetail.gamerTag}</h1>
+                        <h1 className='text-white text-3xl pt-20 px-10'>{userDetail.gamerTag}</h1>
                     </div>
 
 

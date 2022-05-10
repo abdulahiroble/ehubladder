@@ -1,15 +1,54 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useUser } from '../../../lib/firebase/useUser'
 import { db, storage } from "../../../lib/firebase/initFirebase";
-import Image from "next/image";
 import "firebase/storage";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import EditUserProfile from "../../../components/EditUserProfile";
 import { useState } from "react";
+import EditUserInformation from "../../../components/EditUserInformation";
+
+
+
 
 const editProfile = (userDetail) => {
     const { user, logout } = useUser()
     const [imageUpload, setImageUpload] = useState(null);
+
+
+    const ShowEditLogin = () => {
+
+        if (user) {
+            if (user.id == userDetail.userDetail.id) {
+                return (
+                    <EditUserProfile
+                        key={userDetail.userDetail.id}
+                        userDetail={userDetail.userDetail} />
+                )
+            }
+        }
+
+        return null;
+
+    }
+
+    const ShowProfileInfo = () => {
+
+        if (user) {
+            if (user.id == userDetail.userDetail.id) {
+                return (
+                    <EditUserInformation
+                        key={userDetail.userDetail.id}
+                        userDetail={userDetail.userDetail} />
+                )
+            }
+        }
+
+        return null;
+
+    }
+
+
 
     const handleUpload = () => {
 
@@ -41,104 +80,71 @@ const editProfile = (userDetail) => {
         });
     }
 
-    return (
-        <>
-            <div className="text-white">
-                <div className="background">
-                    <div className='grid grid-cols-6 mx-48 pt-20'>
-                        <div className='col-span-2 bg-gray-800 pb-5 mb-10'>
-                            <div className='text-center mx-14 py-5'>
-                                <h2 className='text-3xl pb-3'>Profile Picture</h2>
-                            </div>
-                            <div className="flex justify-center">
-                                <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
-                            </div>
-                            <div className="grid grid-cols-3 mx-8">
-                                <p className="col-span-3 pb-2 text-sm">User image:</p>
-                                <input className="col-span-2 form-label inline-block mb-2 text-white" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} />
-                                <button className="col-span-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
-                            </div>
-                        </div>
 
-                        <div className="col-span-4 bg-gray-800 pb-5 mb-10 mx-10">
-                            <div className='text-center mx-14 py-5'>
-                                <h2 className='text-3xl'>Login information</h2>
-                                <div className='mt-5 text-xl text-center'>
-                                    <form className="w-full ">
-                                        <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
-                                            <label className="col-span-2 text-left">Email:</label>
-                                            <input className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder={userDetail.userDetail.email} aria-label="Full name" />
-                                        </div>
-                                        <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
-                                            <label className="col-span-2 text-left">Password:</label>
-                                            <input className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none" type="password" placeholder="********" aria-label="Full name" />
-                                        </div>
-                                        <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
-                                            <label className="col-span-2 text-left">Retype password:</label>
-                                            <input className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none" type="password" placeholder="********" aria-label="Full name" />
-                                        </div>
-                                    </form>
-                                    <div className="flex flex-row-reverse mx-10 py-10">
-                                        <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-2 px-10 rounded" type="button">
-                                            Update login info
-                                        </button>
+    if (user) {
+        if (user.id == userDetail.userDetail.id) {
+            return (
+                <>
+                    <div className="text-white">
+                        <div className="background">
+                            <div className='grid grid-cols-6 mx-48 pt-20'>
+                                <div className='col-span-2 bg-gray-800 pb-5 mb-10'>
+                                    <div className='text-center mx-14 py-5'>
+                                        <h2 className='text-3xl pb-3'>Profile Picture</h2>
                                     </div>
-
-
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-span-2 pb-5 mb-10 mx-10">
-                        </div>
-
-                        <div className="col-span-4 bg-gray-800 pb-5 mb-10 mx-10">
-                            <div className='text-center mx-14 py-5'>
-                                <h2 className='text-3xl'>User Info</h2>
-
-
-                                <div className='mt-5 text-xl text-center'>
-
-                                    <form className="w-full ">
-                                        <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
-                                            <label className="col-span-2 text-left">Firstname:</label>
-                                            <input className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder={userDetail.userDetail.firstName} aria-label="Full name" />
-                                        </div>
-                                        <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
-                                            <label className="col-span-2 text-left">Lastname:</label>
-                                            <input className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder={userDetail.userDetail.lastName} aria-label="Full name" />
-                                        </div>
-                                        <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
-                                            <label className="col-span-2 text-left">GamerTag:</label>
-                                            <input className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder={userDetail.userDetail.gamerTag} aria-label="Full name" />
-                                        </div>
-                                        <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
-                                            <label className="col-span-2 text-left">SteamID:</label>
-                                            <input className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder={userDetail.userDetail.steamId} aria-label="Full name" />
-                                        </div>
-                                        <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
-                                            <label className="col-span-2 text-left">Rank:</label>
-                                            <input className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder={userDetail.userDetail.firstName} aria-label="Full name" />
-                                        </div>
-                                    </form>
-                                    <div className="flex flex-row-reverse mx-10 py-10">
-                                        <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-2 px-10 rounded" type="button">
-                                            Update user info
-                                        </button>
+                                    <div className="flex justify-center">
+                                        <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
+                                    </div>
+                                    <div className="grid grid-cols-3 mx-8">
+                                        <p className="col-span-3 pb-2 text-sm">User image:</p>
+                                        <input className="col-span-2 form-label inline-block mb-2 text-white" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} />
+                                        <button className="col-span-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
                                     </div>
                                 </div>
+
+                                <div className="col-span-4 bg-gray-800 pb-5 mb-10 mx-10">
+                                    <div className='text-center mx-14 py-5'>
+                                        <h2 className='text-3xl'>Login information</h2>
+                                        <ShowEditLogin />
+                                    </div>
+                                </div>
+                                <div className="col-span-2 pb-5 mb-10 mx-10">
+                                </div>
+
+                                <div className="col-span-4 bg-gray-800 pb-5 mb-10 mx-10">
+                                    <div className='text-center mx-14 py-5'>
+                                        <h2 className='text-3xl'>User Info</h2>
+                                        <ShowProfileInfo />
+                                    </div>
+                                </div>
+
+
                             </div>
 
-
-
                         </div>
-
-
                     </div>
+                </>
+            )
 
+
+        }
+        else return (
+            <>
+                <div>
+                    <h1>Permission denied</h1>
                 </div>
+            </>
+        )
+    }
+    else return (
+        <>
+            <div>
+                <h1>Permission denied</h1>
             </div>
         </>
     )
+
+
 }
 
 export default editProfile;
