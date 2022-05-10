@@ -53,8 +53,10 @@ const myProfile = ({userDetail}) => {
     getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
 
     function onResolve(url) {
-        const img = document.getElementById('myimg');
-        img.setAttribute('src', url);
+        if (typeof window !== "undefined") {
+            const img = document.getElementById('myimg');
+            img.setAttribute('src', url);
+        }
     }
 
     function onReject(error) {

@@ -17,12 +17,14 @@ import {
   FormLabel,
   Input,
   useToast,
-  Select,
 } from '@chakra-ui/react'
 import {useAuth} from '../lib/authContext'
 import {useForm} from "react-hook-form";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {storage} from "../lib/firebase/initFirebase";
+import AsyncSelect from 'react-select/async';
+import Select from 'react-select';
+
 
 const CreateTeam = () => {
   const auth = getAuth()
@@ -76,13 +78,26 @@ const CreateTeam = () => {
 
     }
 
+
+  }
+
+  if (auth.currentUser) {
     getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
       const img = document.getElementById('myimg');
       img.setAttribute('src', url);
     });
+  }
 
 
+  const countries = [
+    {value: "cat", label: "Cat", image: "https://placekitten.com/200/300"},
+    {value: "cat2", label: "Dog", image: "https://placekitten.com/200/400"},
+  ];
 
+
+  const handler = (event) => {
+    const value = event.value
+    setLowRank(value)
   }
 
   return (
@@ -127,11 +142,13 @@ const CreateTeam = () => {
 
             <FormControl mt={4}>
               <FormLabel>Lowrank</FormLabel>
-              <Select placeholder='Select Rank' onChange={((e) => setLowRank(e.target.value))}>
-                <option value="hello">Option 1</option>
-                <option value="Option 2">Option 2</option>
-                <option value="Option 3">Option 3</option>
-              </Select>
+              <Select options={countries} onChange={handler}
+                formatOptionLabel={country => (
+                  <div className="country-option">
+                    <img src={country.image} alt="country-image" />
+                  </div>
+                )}
+              />
               {/* <Input placeholder="Lowrank" name="lowrank" onChange={(e) => setLowRank(e.target.value)} /> */}
             </FormControl>
           </ModalBody>
