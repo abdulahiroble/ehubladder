@@ -4,7 +4,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, {useEffect, useState} from 'react'
-import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
 import {useUser} from '../../lib/firebase/useUser'
 import CreateTeam from "../../components/CreateTeam";
 import {db} from '../../lib/firebase/initFirebase'

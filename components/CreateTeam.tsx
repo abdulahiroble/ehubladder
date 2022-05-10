@@ -17,16 +17,19 @@ import {
   FormLabel,
   Input,
   useToast,
+  Select,
 } from '@chakra-ui/react'
 import {useAuth} from '../lib/authContext'
 import {useForm} from "react-hook-form";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {storage} from "../lib/firebase/initFirebase";
 
 const CreateTeam = () => {
   const auth = getAuth()
   const [teamName, setTeamName] = useState<string>('')
   const [country, setCountry] = useState<string>('')
   const [game, setGame] = useState<string>('')
-  const [lowRank, setLowRank] = useState<string>('')
+  const [lowRank, setLowRank] = useState<string>("")
 
   const {isOpen, onOpen, onClose} = useDisclosure()
   const toast = useToast()
@@ -73,6 +76,11 @@ const CreateTeam = () => {
 
     }
 
+    getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
+      const img = document.getElementById('myimg');
+      img.setAttribute('src', url);
+    });
+
 
 
   }
@@ -109,17 +117,22 @@ const CreateTeam = () => {
 
             <FormControl mt={4}>
               <FormLabel>Country</FormLabel>
-              <Input ref={initialRef} placeholder="Country" name="country" onChange={(e) => setCountry(e.target.value)} />
+              <Input placeholder="Country" name="country" onChange={(e) => setCountry(e.target.value)} />
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel>Game</FormLabel>
-              <Input ref={initialRef} placeholder="Game" name="game" onChange={(e) => setGame(e.target.value)} />
+              <Input placeholder="Game" name="game" onChange={(e) => setGame(e.target.value)} />
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel>Lowrank</FormLabel>
-              <Input ref={initialRef} placeholder="Lowrank" name="lowrank" onChange={(e) => setLowRank(e.target.value)} />
+              <Select placeholder='Select Rank' onChange={((e) => setLowRank(e.target.value))}>
+                <option value="hello">Option 1</option>
+                <option value="Option 2">Option 2</option>
+                <option value="Option 3">Option 3</option>
+              </Select>
+              {/* <Input placeholder="Lowrank" name="lowrank" onChange={(e) => setLowRank(e.target.value)} /> */}
             </FormControl>
           </ModalBody>
 
