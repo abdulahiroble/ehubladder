@@ -10,12 +10,14 @@ import ReadDataFromCloudFirestore from '../components/cloudFirestore/Read';
 
 const Home: NextPage = () => {
     const {user, loading} = useAuth()
+    const auth = getAuth();
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [firstName, setFirstname] = useState<string>('')
     const [lastName, setLastname] = useState<string>('')
     const [gamerTag, setGamerTag] = useState<string>('')
     const [steamId, setSteamId] = useState<string>('')
+    
 
 
     if (loading) return null
@@ -38,6 +40,7 @@ const Home: NextPage = () => {
                 email: email,
                 id: user.uid,
             })
+            console.log('success', user)
 
         } catch (error) {
             console.log(error)
@@ -45,7 +48,7 @@ const Home: NextPage = () => {
         }
     }
 
-    const auth = getAuth()
+
 
     function createUserCredentials() {
         createUserWithEmailAndPassword(auth, email, password)
