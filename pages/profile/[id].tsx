@@ -4,7 +4,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, {useEffect, useState} from 'react'
-import ReadDataFromCloudFirestore from '../../components/cloudFirestore/Read'
 import {useUser} from '../../lib/firebase/useUser'
 import CreateTeam from "../../components/CreateTeam";
 import {db} from '../../lib/firebase/initFirebase'
@@ -54,8 +53,10 @@ const myProfile = ({userDetail}) => {
     getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
 
     function onResolve(url) {
-        const img = document.getElementById('myimg');
-        img.setAttribute('src', url);
+        if (typeof window !== "undefined") {
+            const img = document.getElementById('myimg');
+            img.setAttribute('src', url);
+        }
     }
 
     function onReject(error) {
