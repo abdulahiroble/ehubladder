@@ -32,6 +32,7 @@ const CreateTeam = () => {
   const [country, setCountry] = useState<string>('')
   const [game, setGame] = useState<string>('')
   const [lowRank, setLowRank] = useState<string>("")
+  const [highRank, setHighRank] = useState<string>("")
 
   const {isOpen, onOpen, onClose} = useDisclosure()
   const toast = useToast()
@@ -49,6 +50,7 @@ const CreateTeam = () => {
         country: country,
         game: game,
         lowRank: lowRank,
+        highRank: highRank,
         owner: auth.currentUser.uid
       });
 
@@ -102,9 +104,14 @@ const CreateTeam = () => {
 
   ];
 
-  const handler = (event) => {
+  const lowRankHandler = (event) => {
     const value = event.value
     setLowRank(value)
+  }
+
+  const highRankHandler = (event) => {
+    const value = event.value
+    setHighRank(value)
   }
 
   return (
@@ -150,7 +157,7 @@ const CreateTeam = () => {
 
             <FormControl mt={4}>
               <FormLabel>Lowrank</FormLabel>
-              <Select options={ranks} onChange={handler}
+              <Select options={ranks} onChange={lowRankHandler}
                 formatOptionLabel={rank => (
                   <div>
                     <img src={rank.image} className="w-20 mx-auto" />
@@ -158,6 +165,18 @@ const CreateTeam = () => {
                 )}
               />
             </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Highrank</FormLabel>
+              <Select options={ranks} onChange={highRankHandler}
+                formatOptionLabel={rank => (
+                  <div>
+                    <img src={rank.image} className="w-20 mx-auto" />
+                  </div>
+                )}
+              />
+            </FormControl>
+
           </ModalBody>
 
           <ModalFooter>
