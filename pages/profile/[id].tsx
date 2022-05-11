@@ -1,20 +1,20 @@
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
-import {GetStaticProps, GetStaticPaths} from 'next'
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { GetStaticProps, GetStaticPaths } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, {useEffect, useState} from 'react'
-import {useUser} from '../../lib/firebase/useUser'
+import React, { useEffect, useState } from 'react'
+import { useUser } from '../../lib/firebase/useUser'
 import CreateTeam from "../../components/CreateTeam";
-import {db} from '../../lib/firebase/initFirebase'
+import { db } from '../../lib/firebase/initFirebase'
 import "firebase/storage";
-import {storage} from "../../lib/firebase/initFirebase";
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {v4} from "uuid";
+import { storage } from "../../lib/firebase/initFirebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 
 
-const myProfile = ({userDetail, teamDetail}) => {
-    const {user, logout} = useUser()
+const myProfile = ({ userDetail, teamDetail2 }) => {
+    const { user, logout } = useUser()
     const [imageUpload, setImageUpload] = useState(null);
 
     const ShowEditProfile = () => {
@@ -156,7 +156,7 @@ export default myProfile;
 export const getStaticPaths: GetStaticPaths = async () => {
 
     const querySnapshot = await getDocs(collection(db, "users"));
-    
+
     const paths = querySnapshot.docs.map((user) => {
 
         return {
@@ -187,18 +187,36 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     })
 
+    const q = query(collection(db, "teams"), where("owner", "==", context.params.id));
 
+    const teamDetail = await getDocs(q);
 
-    const teamDoc = doc(db, "teams", "GLwJo5YQxrI0erBFOw4N")
-    const teamDetail = await getDoc(teamDoc).then((doc) => {
+    teamDetail.docs.map((doc) => {
+        // console.log(doc.data());
         if (doc.exists()) {
 
             const data = doc.data()
+            console.log(data)
+            // const test = data.json()
+            const parse = JSON.stringify(data)
+            console.log(parse)
 
-            return data
+            return parse
+
+
         }
-
     })
+
+    // const teamDoc = doc(db, "teams", "GLwJo5YQxrI0erBFOw4N")
+    // const teamDetail = await getDoc(teamDoc).then((doc) => {
+    //     if (doc.exists()) {
+
+    //         const data = doc.data()
+
+    //         return data
+    //     }
+
+    // })
 
     return {
         props: {
