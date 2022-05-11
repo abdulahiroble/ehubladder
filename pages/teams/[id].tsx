@@ -23,9 +23,20 @@ const TeamPage = (teamDetail) => {
             const img = document.getElementById('myimg');
             img.setAttribute('src', url);
         });
-
-
     }
+
+    getDownloadURL(ref(storage, `/images/ranks/${teamDetail.teamDetail.lowRank}`)).then(url => {
+        const lowRankImg = document.getElementById('lowfaceit')
+        lowRankImg.setAttribute('src', url)
+
+    })
+
+    getDownloadURL(ref(storage, `/images/ranks/${teamDetail.teamDetail.highRank}`)).then(url => {
+        const highRankImg = document.getElementById('highfaceit')
+        highRankImg.setAttribute('src', url)
+
+    })
+
 
 
     const ShowEditTeam = () => {
@@ -49,14 +60,23 @@ const TeamPage = (teamDetail) => {
     return (
         <>
 
-            <div className='text-white bg-black'>
+            <div className='text-white bg-black w-full'>
                 <div className='team-background'>
-                    <div className='pt-32 flex justify-start mx-96'>
-                        <div className="wrapper">
-                            <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
-                        </div>
-                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.teamDetail.teamName}</h1>
+                    <div className='pt-32 flex px-96 w-full'>
+                        <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
+                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.teamDetail.teamName} -</h1>
+                        <h1 className='text-white text-3xl pt-20'>{teamDetail.teamDetail.country}</h1>
+                        
                     </div>
+                    
+                    <div className="flex space-x-9 px-96">
+                        <img className="rounded-full h-16 w-12 pb-5" id="lowfaceit" />
+                        <p className="py-3">-</p>
+                        <img className="rounded-full h-16 w-12 pb-5" id="highfaceit" />
+                    </div>
+
+
+
                     <ShowEditTeam />
 
                     <div className="grid grid-cols-8 my-14">
@@ -97,10 +117,10 @@ const TeamPage = (teamDetail) => {
                                 <p>Invite Link: </p>
                                 <p>https://www.canva.com/design/DAE-4VAKBis/6urkslpL1GV7ccxs_fxUDw/edit</p>
                                 <div className="grid grid-cols-4">
-                                        <img className="mt-10 rounded-full h-16 w-16 pb-5" src="../images/user-profile.png" />
-                                        <p className="mt-10">Thomas West</p>
-                                        <p className="mt-10">Owner</p>
-                                        <p className="mt-10">Options</p>
+                                    <img className="mt-10 rounded-full h-16 w-16 pb-5" src="../images/user-profile.png" />
+                                    <p className="mt-10">Thomas West</p>
+                                    <p className="mt-10">Owner</p>
+                                    <p className="mt-10">Options</p>
 
 
 
@@ -178,7 +198,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
-    const teamDoc = doc(db, "teams", context.params.id)
+    const id = context.params.id;
+
+    const teamDoc = doc(db, "teams", id);
+
 
 
     const teamDetail = await getDoc(teamDoc).then((doc) => {

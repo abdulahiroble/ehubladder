@@ -14,7 +14,7 @@ import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {v4} from "uuid";
 
 
-const myProfile = ({userDetail}) => {
+const myProfile = ({userDetail, teamDetail}) => {
     const {user, logout} = useUser()
     const [imageUpload, setImageUpload] = useState(null);
 
@@ -82,6 +82,7 @@ const myProfile = ({userDetail}) => {
                         </div>
 
                         <h1 className='text-white text-3xl pt-20 px-10'>{userDetail.gamerTag}</h1>
+                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.teamName}</h1>
                     </div>
 
 
@@ -154,7 +155,7 @@ export default myProfile;
 export const getStaticPaths: GetStaticPaths = async () => {
 
     const querySnapshot = await getDocs(collection(db, "users"));
-
+    
     const paths = querySnapshot.docs.map((user) => {
 
         return {
@@ -185,9 +186,23 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     })
 
+
+
+    const teamDoc = doc(db, "teams", "GLwJo5YQxrI0erBFOw4N")
+    const teamDetail = await getDoc(teamDoc).then((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+        }
+
+    })
+
     return {
         props: {
             userDetail,
+            teamDetail,
         },
         revalidate: 60,
     }
