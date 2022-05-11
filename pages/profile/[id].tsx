@@ -82,7 +82,7 @@ const myProfile = ({userDetail, teamDetail}) => {
                             <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
                         </div>
 
-                        <h1 className='text-white text-3xl pt-20 px-10'>{userDetail.gamerTag}</h1>
+                        <h1 className='text-white text-3xl pt-20 px-10 '>{userDetail.gamerTag}</h1>
                     </div>
 
 
@@ -197,28 +197,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const teamDocs = await getDocs(q);
 
     const teamDetail = teamDocs.docs.map((doc) => {
-        // console.log(doc.data());
         if (doc.exists()) {
-
+            
             const data = doc.data()
-
-            // console.log(data)
 
             return data
 
         }
     })
 
-    // const teamDoc = doc(db, "teams", "GLwJo5YQxrI0erBFOw4N")
-    // const teamDetail = await getDoc(teamDoc).then((doc) => {
-    //     if (doc.exists()) {
 
-    //         const data = doc.data()
-
-    //         return data
-    //     }
-
-    // })
 
     return {
         props: {

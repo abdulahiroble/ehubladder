@@ -1,4 +1,4 @@
-import { getDocs, collection, doc, getDoc } from "firebase/firestore";
+import { getDocs, collection, doc, getDoc, query, where } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Head } from "next/document";
@@ -6,32 +6,36 @@ import Link from "next/link";
 import { db, storage } from "../../lib/firebase/initFirebase";
 import { useUser } from "../../lib/firebase/useUser";
 
-const TeamPage = (teamDetail) => {
+const TeamPage = ({ teamDetail, userDetail }) => {
     const { user, logout } = useUser()
 
-    getDownloadURL(ref(storage, `/images/profilepic/placeholder`)).then(onResolve, onReject);
 
-    function onResolve(url) {
-        const img = document.getElementById('myimg');
-        img.setAttribute('src', url);
-    }
+    // getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
 
-    function onReject(error) {
-        console.log(error.code);
+    // function onResolve(url) {
+    //     const img = document.getElementById('profilepic');
+    //     img.setAttribute('src', url);
+    // }
 
-        getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
-            const img = document.getElementById('myimg');
-            img.setAttribute('src', url);
-        });
-    }
+    // function onReject(error) {
+    //     console.log(error.code);
 
-    getDownloadURL(ref(storage, `/images/ranks/${teamDetail.teamDetail.lowRank}`)).then(url => {
+    //     getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
+    //         const img = document.getElementById('profilepic');
+    //         img.setAttribute('src', url);
+    //     });
+    // }
+
+
+
+
+    getDownloadURL(ref(storage, `/images/ranks/${teamDetail.lowRank}`)).then(url => {
         const lowRankImg = document.getElementById('lowfaceit')
         lowRankImg.setAttribute('src', url)
 
     })
 
-    getDownloadURL(ref(storage, `/images/ranks/${teamDetail.teamDetail.highRank}`)).then(url => {
+    getDownloadURL(ref(storage, `/images/ranks/${teamDetail.highRank}`)).then(url => {
         const highRankImg = document.getElementById('highfaceit')
         highRankImg.setAttribute('src', url)
 
@@ -41,7 +45,7 @@ const TeamPage = (teamDetail) => {
 
     const ShowEditTeam = () => {
         if (user) {
-            if (user.id == teamDetail.teamDetail.owner) {
+            if (user.id == teamDetail.owner) {
                 return (
                     <div className="flex justify-end mx-48 -my-28">
                         <Link href={`/profile/edit`} passHref>
@@ -59,16 +63,15 @@ const TeamPage = (teamDetail) => {
 
     return (
         <>
-
             <div className='text-white bg-black w-full'>
                 <div className='team-background'>
-                    <div className='pt-32 flex px-96 w-full'>
+                    <div className='py-32 flex px-96 w-full'>
                         <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
-                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.teamDetail.teamName} -</h1>
-                        <h1 className='text-white text-3xl pt-20'>{teamDetail.teamDetail.country}</h1>
-                        
+                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.teamName} -</h1>
+                        <h1 className='text-white text-3xl pt-20'>{teamDetail.country}</h1>
+
                     </div>
-                    
+
                     <div className="flex space-x-9 px-96">
                         <img className="rounded-full h-16 w-12 pb-5" id="lowfaceit" />
                         <p className="py-3">-</p>
@@ -117,11 +120,43 @@ const TeamPage = (teamDetail) => {
                                 <p>Invite Link: </p>
                                 <p>https://www.canva.com/design/DAE-4VAKBis/6urkslpL1GV7ccxs_fxUDw/edit</p>
                                 <div className="grid grid-cols-4">
-                                    <img className="mt-10 rounded-full h-16 w-16 pb-5" src="../images/user-profile.png" />
-                                    <p className="mt-10">Thomas West</p>
-                                    <p className="mt-10">Owner</p>
-                                    <p className="mt-10">Options</p>
 
+                                    <div className="py-5">
+                                        {userDetail.map((user) => {
+
+                                            getDownloadURL(ref(storage, `/images/profilepic/${user.id}`)).then(onResolve, onReject);
+
+                                            function onResolve(url) {
+                                                if (typeof window !== "undefined") {
+                                                    const profileImg = document.getElementById('profileimg');
+                                                    profileImg.setAttribute('src', url);
+                                                }
+                                            }
+
+                                            function onReject(error) {
+                                                console.log(error.code);
+
+                                                getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
+                                                    const profileImg = document.getElementById('profileimg');
+                                                    profileImg.setAttribute('src', url);
+                                                });
+
+
+                                            }
+
+
+
+
+                                            return (
+                                                <div className="flex space-x-2 py-2">
+                                                    <img className="rounded-full h-16 w-16" id="profileimg" />
+                                                    <Link href={`/profile/${user.id}`}>
+                                                        <a className="pt-5 px-4">{user.gamerTag}</a>
+                                                    </Link>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
 
 
                                 </div>
@@ -215,9 +250,26 @@ export const getStaticProps: GetStaticProps = async (context) => {
     })
 
 
+    const q = query(collection(db, "users"), where("team", "==", context.params.id));
+
+    const userDocs = await getDocs(q);
+
+    const userDetail = userDocs.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+
+            return data
+
+        }
+    })
+
+
     return {
         props: {
             teamDetail,
+            userDetail,
         },
         revalidate: 60,
     }
