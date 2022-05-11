@@ -7,6 +7,7 @@ import React from 'react'
 import '../styles/globals.css'
 import '../styles/profile.css'
 import '../styles/login.css'
+import '../styles/team.css'
 import {ChakraProvider} from '@chakra-ui/react'
 
 function MyApp({Component, pageProps}) {
