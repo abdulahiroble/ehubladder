@@ -51,7 +51,8 @@ const CreateTeam = () => {
         game: game,
         lowRank: lowRank,
         highRank: highRank,
-        owner: auth.currentUser.uid
+        owner: auth.currentUser.uid,
+        id: myDocRef.id
       });
 
       toast({

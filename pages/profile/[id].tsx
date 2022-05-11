@@ -1,4 +1,4 @@
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
 import {GetStaticProps, GetStaticPaths} from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
@@ -83,7 +83,6 @@ const myProfile = ({userDetail, teamDetail}) => {
                         </div>
 
                         <h1 className='text-white text-3xl pt-20 px-10'>{userDetail.gamerTag}</h1>
-                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.teamName}</h1>
                     </div>
 
 
@@ -132,9 +131,15 @@ const myProfile = ({userDetail, teamDetail}) => {
                                         width={50} />
                                 </div>
                                 <div className='pt-4'>
-                                    <Link href="/">
-                                        <a className='hover:underline'>Confectors</a>
-                                    </Link>
+                                    <div>
+                                        {teamDetail.map((team) => {
+                                            return (
+                                                <div>
+                                                    <Link href={`/teams/${team.id}`}><a>{team.teamName}</a></Link>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
                                 </div>
 
                             </div>
@@ -156,7 +161,7 @@ export default myProfile;
 export const getStaticPaths: GetStaticPaths = async () => {
 
     const querySnapshot = await getDocs(collection(db, "users"));
-    
+
     const paths = querySnapshot.docs.map((user) => {
 
         return {
@@ -187,18 +192,33 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     })
 
+    const q = query(collection(db, "teams"), where("owner", "==", context.params.id));
 
+    const teamDocs = await getDocs(q);
 
-    const teamDoc = doc(db, "teams", "GLwJo5YQxrI0erBFOw4N")
-    const teamDetail = await getDoc(teamDoc).then((doc) => {
+    const teamDetail = teamDocs.docs.map((doc) => {
+        // console.log(doc.data());
         if (doc.exists()) {
 
             const data = doc.data()
 
-            return data
-        }
+            // console.log(data)
 
+            return data
+
+        }
     })
+
+    // const teamDoc = doc(db, "teams", "GLwJo5YQxrI0erBFOw4N")
+    // const teamDetail = await getDoc(teamDoc).then((doc) => {
+    //     if (doc.exists()) {
+
+    //         const data = doc.data()
+
+    //         return data
+    //     }
+
+    // })
 
     return {
         props: {
