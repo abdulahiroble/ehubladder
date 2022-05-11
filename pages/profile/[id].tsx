@@ -1,20 +1,20 @@
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
-import { GetStaticProps, GetStaticPaths } from 'next'
+import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
+import {GetStaticProps, GetStaticPaths} from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { useUser } from '../../lib/firebase/useUser'
+import React, {useEffect, useState} from 'react'
+import {useUser} from '../../lib/firebase/useUser'
 import CreateTeam from "../../components/CreateTeam";
-import { db } from '../../lib/firebase/initFirebase'
+import {db} from '../../lib/firebase/initFirebase'
 import "firebase/storage";
-import { storage } from "../../lib/firebase/initFirebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { v4 } from "uuid";
+import {storage} from "../../lib/firebase/initFirebase";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {v4} from "uuid";
 
 
-const myProfile = ({ userDetail, teamDetail }) => {
-    const { user, logout } = useUser()
+const myProfile = ({userDetail, teamDetail}) => {
+    const {user, logout} = useUser()
     const [imageUpload, setImageUpload] = useState(null);
 
     const ShowEditProfile = () => {
@@ -83,7 +83,6 @@ const myProfile = ({ userDetail, teamDetail }) => {
                         </div>
 
                         <h1 className='text-white text-3xl pt-20 px-10'>{userDetail.gamerTag}</h1>
-                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.country}</h1>
                     </div>
 
 
@@ -104,7 +103,7 @@ const myProfile = ({ userDetail, teamDetail }) => {
                                 <p className='pt-4'>{userDetail.gamerTag}</p>
                                 <p className='pt-4'>SteamID</p>
                                 <p className='pt-4'>{userDetail.steamID}</p>
-                                <p className='pt-4'>{teamDetail.country}</p>
+                                <p className='pt-4'>Rank</p>
                                 <div className='pt-2'>
                                     <Image
                                         src={"/icons/faceit10.png"}
@@ -132,9 +131,15 @@ const myProfile = ({ userDetail, teamDetail }) => {
                                         width={50} />
                                 </div>
                                 <div className='pt-4'>
-                                    <Link href="/">
-                                        <a className='hover:underline'>Confectors</a>
-                                    </Link>
+                                    <div>
+                                        {teamDetail.map((team) => {
+                                            return (
+                                                <div>
+                                                    <Link href={`/teams/${team.id}`}><a>{team.teamName}</a></Link>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
                                 </div>
 
                             </div>
@@ -197,7 +202,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
             const data = doc.data()
 
-            console.log(data)
+            // console.log(data)
 
             return data
 
