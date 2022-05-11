@@ -13,7 +13,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 
 
-const myProfile = ({ userDetail, teamDetail2 }) => {
+const myProfile = ({ userDetail, teamDetail }) => {
     const { user, logout } = useUser()
     const [imageUpload, setImageUpload] = useState(null);
 
@@ -83,7 +83,7 @@ const myProfile = ({ userDetail, teamDetail2 }) => {
                         </div>
 
                         <h1 className='text-white text-3xl pt-20 px-10'>{userDetail.gamerTag}</h1>
-                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.teamName}</h1>
+                        <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.country}</h1>
                     </div>
 
 
@@ -104,7 +104,7 @@ const myProfile = ({ userDetail, teamDetail2 }) => {
                                 <p className='pt-4'>{userDetail.gamerTag}</p>
                                 <p className='pt-4'>SteamID</p>
                                 <p className='pt-4'>{userDetail.steamID}</p>
-                                <p className='pt-4'>Rank</p>
+                                <p className='pt-4'>{teamDetail.country}</p>
                                 <div className='pt-2'>
                                     <Image
                                         src={"/icons/faceit10.png"}
@@ -189,20 +189,17 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const q = query(collection(db, "teams"), where("owner", "==", context.params.id));
 
-    const teamDetail = await getDocs(q);
+    const teamDocs = await getDocs(q);
 
-    teamDetail.docs.map((doc) => {
+    const teamDetail = teamDocs.docs.map((doc) => {
         // console.log(doc.data());
         if (doc.exists()) {
 
             const data = doc.data()
+
             console.log(data)
-            // const test = data.json()
-            const parse = JSON.stringify(data)
-            console.log(parse)
 
-            return parse
-
+            return data
 
         }
     })
