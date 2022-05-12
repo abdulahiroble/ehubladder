@@ -22,7 +22,7 @@ import {useForm} from "react-hook-form";
 import Select from 'react-select';
 import {GetStaticProps} from 'next'
 
-const AddMembers = ({userDetailAll}) => {
+const AddMembers = ({userDetailAll, id}) => {
     const auth = getAuth()
     const [player, setPlayer] = useState<string>('')
 
@@ -35,7 +35,7 @@ const AddMembers = ({userDetailAll}) => {
     const addTeamMember = async () => {
 
         try {
-            const myCollRefTeams = doc(db, "teams", "XpVs0rVyRf9QltlSv62J");
+            const myCollRefTeams = doc(db, "teams", id);
 
             const myUserRef = doc(db, 'users', auth.currentUser.uid)
 
@@ -75,13 +75,13 @@ const AddMembers = ({userDetailAll}) => {
 
     }
 
-    console.log(userDetailAll)
+    console.log(id)
 
 
     const members = userDetailAll.map((user) => {
         return {
             value: user.gamerTag,
-            label: user.gamerTag
+            label: user.steamId
         }
     }
     )
