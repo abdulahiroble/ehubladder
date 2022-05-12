@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react'
 import {useUser} from './../lib/firebase/useUser'
 import {db} from './../lib/firebase/initFirebase'
-import {doc, setDoc, collection, documentId, getDoc} from 'firebase/firestore'
+import {doc, setDoc, collection, documentId, getDoc, getDocs, query, where} from 'firebase/firestore'
 import {getAuth} from '@firebase/auth'
 import {
     Modal,
@@ -20,8 +20,9 @@ import {
 } from '@chakra-ui/react'
 import {useForm} from "react-hook-form";
 import Select from 'react-select';
+import {GetStaticProps} from 'next'
 
-const AddMembers = () => {
+const AddMembers = ({userDetailAll}) => {
     const auth = getAuth()
     const [player, setPlayer] = useState<string>('')
 
@@ -31,7 +32,7 @@ const AddMembers = () => {
     const {register, handleSubmit} = useForm();
     const [member, setMember] = useState<string>("")
 
-    const addTeamMember = async (url) => {
+    const addTeamMember = async () => {
 
         try {
             const myCollRefTeams = doc(db, "teams", "UBCX9SaWbslZDMlSLnlI");
@@ -39,7 +40,7 @@ const AddMembers = () => {
             const myUserRef = doc(db, 'users', auth.currentUser.uid)
 
             await setDoc(myCollRefTeams, {
-                player1: "STEAM:1:1.223.123",
+                player1: member,
             }, {merge: true});
 
             await setDoc(myUserRef, {
@@ -74,8 +75,10 @@ const AddMembers = () => {
 
     }
 
+    console.log(userDetailAll)
+
     const members = [
-        {gamerTag: "SpAnKz", steamId: "STEAM:1:1.223.123"},
+        {value: "SpAnKz", steamId: "STEAM:1:1.223.123"},
     ];
 
     const memberHandler = (event) => {
@@ -114,7 +117,7 @@ const AddMembers = () => {
                             <Select options={members} onChange={memberHandler}
                                 formatOptionLabel={member => (
                                     <div>
-                                        <div className="w-20 mx-auto">{member.gamerTag}</div>
+                                        <div className="w-20 mx-auto">{member.value}</div>
                                     </div>
                                 )}
                             />
@@ -135,3 +138,29 @@ const AddMembers = () => {
 }
 
 export default AddMembers
+
+export const getStaticProps: GetStaticProps = async () => {
+
+    const teamDetail = await doc(db, "teams", "UBCX9SaWbslZDMlSLnlI")
+
+    // const teamDetail = await getDoc(userDoc).then((doc) => {
+    //     if (doc.exists()) {
+
+    //         const data = doc.data()
+
+    //         return data
+    //     }
+
+    // })
+
+    // const teamDetail = await userDoc.get().then((doc) => {if (doc.exists()) {return doc.data()} })
+
+
+    return {
+        props: {
+            teamDetail
+        },
+        revalidate: 60,
+    }
+
+}

@@ -7,7 +7,7 @@ import AddMembers from "../../components/AddMembers";
 import {db, storage} from "../../lib/firebase/initFirebase";
 import {useUser} from "../../lib/firebase/useUser";
 
-const TeamPage = ({teamDetail, userDetail}) => {
+const TeamPage = ({teamDetail, userDetail, userDetailAll}) => {
     const {user, logout} = useUser()
 
 
@@ -118,7 +118,7 @@ const TeamPage = ({teamDetail, userDetail}) => {
                         <div className="col-span-3 bg-gray-800 mx-10">
                             <div className="mx-10">
                                 <h2 className="text-3xl my-5">Members</h2>
-                                <AddMembers />
+                                <AddMembers userDetailAll={userDetailAll} />
                                 <div className="grid grid-cols-4">
 
                                     <div className="py-5">
@@ -265,11 +265,27 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
+    const userQ = query(collection(db, "users"), where("team", "!=", context.params.id));
+
+    const userDocsAll = await getDocs(userQ);
+
+    const userDetailAll = userDocsAll.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+
+            return data
+
+        }
+    })
+
 
     return {
         props: {
             teamDetail,
             userDetail,
+            userDetailAll
         },
         revalidate: 60,
     }
