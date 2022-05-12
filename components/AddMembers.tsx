@@ -35,7 +35,7 @@ const AddMembers = ({userDetailAll}) => {
     const addTeamMember = async () => {
 
         try {
-            const myCollRefTeams = doc(db, "teams", "UBCX9SaWbslZDMlSLnlI");
+            const myCollRefTeams = doc(db, "teams", "XpVs0rVyRf9QltlSv62J");
 
             const myUserRef = doc(db, 'users', auth.currentUser.uid)
 
@@ -77,9 +77,14 @@ const AddMembers = ({userDetailAll}) => {
 
     console.log(userDetailAll)
 
-    const members = [
-        {value: "SpAnKz", steamId: "STEAM:1:1.223.123"},
-    ];
+
+    const members = userDetailAll.map((user) => {
+        return {
+            value: user.gamerTag,
+            label: user.gamerTag
+        }
+    }
+    )
 
     const memberHandler = (event) => {
         const value = event.value
@@ -116,9 +121,7 @@ const AddMembers = ({userDetailAll}) => {
                             <FormLabel>Members</FormLabel>
                             <Select options={members} onChange={memberHandler}
                                 formatOptionLabel={member => (
-                                    <div>
-                                        <div className="w-20 mx-auto">{member.value}</div>
-                                    </div>
+                                    <div>{member.value}</div>
                                 )}
                             />
                         </FormControl>
@@ -138,29 +141,3 @@ const AddMembers = ({userDetailAll}) => {
 }
 
 export default AddMembers
-
-export const getStaticProps: GetStaticProps = async () => {
-
-    const teamDetail = await doc(db, "teams", "UBCX9SaWbslZDMlSLnlI")
-
-    // const teamDetail = await getDoc(userDoc).then((doc) => {
-    //     if (doc.exists()) {
-
-    //         const data = doc.data()
-
-    //         return data
-    //     }
-
-    // })
-
-    // const teamDetail = await userDoc.get().then((doc) => {if (doc.exists()) {return doc.data()} })
-
-
-    return {
-        props: {
-            teamDetail
-        },
-        revalidate: 60,
-    }
-
-}
