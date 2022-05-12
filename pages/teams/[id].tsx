@@ -1,13 +1,14 @@
-import { getDocs, collection, doc, getDoc, query, where } from "firebase/firestore";
-import { getDownloadURL, ref } from "firebase/storage";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { Head } from "next/document";
+import {getDocs, collection, doc, getDoc, query, where} from "firebase/firestore";
+import {getDownloadURL, ref} from "firebase/storage";
+import {GetStaticPaths, GetStaticProps} from "next";
+import {Head} from "next/document";
 import Link from "next/link";
-import { db, storage } from "../../lib/firebase/initFirebase";
-import { useUser } from "../../lib/firebase/useUser";
+import AddMembers from "../../components/AddMembers";
+import {db, storage} from "../../lib/firebase/initFirebase";
+import {useUser} from "../../lib/firebase/useUser";
 
-const TeamPage = ({ teamDetail, userDetail }) => {
-    const { user, logout } = useUser()
+const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
+    const {user, logout} = useUser()
 
 
     // getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
@@ -117,8 +118,7 @@ const TeamPage = ({ teamDetail, userDetail }) => {
                         <div className="col-span-3 bg-gray-800 mx-10">
                             <div className="mx-10">
                                 <h2 className="text-3xl my-5">Members</h2>
-                                <p>Invite Link: </p>
-                                <p>https://www.canva.com/design/DAE-4VAKBis/6urkslpL1GV7ccxs_fxUDw/edit</p>
+                                <AddMembers userDetailAll={userDetailAll} id={id} />
                                 <div className="grid grid-cols-4">
 
                                     <div className="py-5">
@@ -265,11 +265,30 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
+    // const userQ = query(collection(db, "users"), where("team", "!=", context.params.id));
+
+    const userQ = query(collection(db, "users"), where("team", "!=", context.params.id));
+
+    const userDocsAll = await getDocs(userQ);
+
+    const userDetailAll = userDocsAll.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+
+            return data
+
+        }
+    })
+
 
     return {
         props: {
             teamDetail,
             userDetail,
+            userDetailAll,
+            id
         },
         revalidate: 60,
     }
