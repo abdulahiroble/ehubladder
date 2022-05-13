@@ -1,13 +1,13 @@
-import {getDocs, collection, doc, getDoc, query, where} from "firebase/firestore";
-import {GetStaticPaths, GetStaticProps} from "next";
-import {getDownloadURL, listAll, ref} from "firebase/storage";
+import { getDocs, collection, doc, getDoc, query, where } from "firebase/firestore";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { getDownloadURL, listAll, ref } from "firebase/storage";
 import Link from "next/link";
 import AddMembers from "../../components/AddMembers";
-import {db, storage} from "../../lib/firebase/initFirebase";
-import {useUser} from "../../lib/firebase/useUser";
+import { db, storage } from "../../lib/firebase/initFirebase";
+import { useUser } from "../../lib/firebase/useUser";
 
-const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
-    const {user, logout} = useUser()
+const TeamPage = ({ teamDetail, userDetail, userDetailAll, id }) => {
+    const { user, logout } = useUser()
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
 
@@ -52,6 +52,20 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
                                 Edit team
                             </a>
                         </Link>
+                    </div>
+                )
+            }
+        }
+        return null
+
+    }
+
+    const ShowInviteMembers = () => {
+        if (user) {
+            if (user.id == teamDetail.owner) {
+                return (
+                    <div className="pt-4">
+                        <AddMembers userDetailAll={userDetailAll} id={id} />
                     </div>
                 )
             }
@@ -115,8 +129,10 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
 
                         <div className="col-span-3 bg-gray-800 mx-10">
                             <div className="mx-10">
-                                <h2 className="text-3xl my-5">Members</h2>
-                                <AddMembers userDetailAll={userDetailAll} id={id} />
+                                <div className="flex space-x-6">
+                                    <h2 className="text-3xl my-5">Members</h2>
+                                    <ShowInviteMembers />
+                                </div>
                                 <div className="grid grid-cols-4">
 
                                     <div className="py-5">
@@ -201,6 +217,22 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
                                 </div>
 
                             </div>
+
+                        </div>
+
+                        <div className="col-span-3 bg-gray-800 mx-10 my-20">
+                            <div className="mx-10 flex space-x-10">
+                                <h2 className="text-3xl my-5 mt-5 mb-3">Ladders</h2>
+                                <ShowInviteMembers />
+
+                            </div>
+                            <div className="border-b-4 border-white mb-2" />
+                            <div className="flex space-x-4 py-2">
+                                <Link href={`/ladders`}>
+                                    <a className="pt-5 px-4">Faceit Level 1-3</a>
+                                </Link>
+                            </div>
+                            <div className="border-b border-white mt-2 mb-2" />
 
                         </div>
 
