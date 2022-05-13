@@ -1,7 +1,6 @@
 import {getDocs, collection, doc, getDoc, query, where} from "firebase/firestore";
-import {getDownloadURL, ref} from "firebase/storage";
 import {GetStaticPaths, GetStaticProps} from "next";
-import {Head} from "next/document";
+import {getDownloadURL, listAll, ref} from "firebase/storage";
 import Link from "next/link";
 import AddMembers from "../../components/AddMembers";
 import {db, storage} from "../../lib/firebase/initFirebase";
@@ -10,22 +9,21 @@ import {useUser} from "../../lib/firebase/useUser";
 const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
     const {user, logout} = useUser()
 
+    getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
 
-    // getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
+    function onResolve(url) {
+        const img = document.getElementById('teamlogo');
+        img.setAttribute('src', url);
+    }
 
-    // function onResolve(url) {
-    //     const img = document.getElementById('profilepic');
-    //     img.setAttribute('src', url);
-    // }
+    function onReject(error) {
+        console.log(error.code);
 
-    // function onReject(error) {
-    //     console.log(error.code);
-
-    //     getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
-    //         const img = document.getElementById('profilepic');
-    //         img.setAttribute('src', url);
-    //     });
-    // }
+        getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
+            const img = document.getElementById('teamlogo');
+            img.setAttribute('src', url);
+        });
+    }
 
 
 
@@ -48,8 +46,8 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
         if (user) {
             if (user.id == teamDetail.owner) {
                 return (
-                    <div className="flex justify-end mx-48 -my-28">
-                        <Link href={`/profile/edit`} passHref>
+                    <div className="flex justify-end mx-48 -mt-14">
+                        <Link href={`/teams/${teamDetail.id}/edit`} passHref>
                             <a className="inline-block text-sm px-8 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white font-bold">
                                 Edit team
                             </a>
@@ -66,14 +64,14 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
         <>
             <div className='text-white bg-black w-full'>
                 <div className='team-background'>
-                    <div className='py-32 flex px-96 w-full'>
-                        <img className="rounded-full h-52 w-52 pb-5" id="myimg" />
+                    <div className='pt-32 pb-10 flex px-96 w-full'>
+                        <img className="rounded-full h-52 w-52 pb-5" id="teamlogo" />
                         <h1 className='text-white text-3xl pt-20 px-10'>{teamDetail.teamName} -</h1>
                         <h1 className='text-white text-3xl pt-20'>{teamDetail.country}</h1>
 
                     </div>
 
-                    <div className="flex space-x-9 px-96">
+                    <div className="flex space-x-9 px-96 ml-3">
                         <img className="rounded-full h-16 w-12 pb-5" id="lowfaceit" />
                         <p className="py-3">-</p>
                         <img className="rounded-full h-16 w-12 pb-5" id="highfaceit" />
@@ -143,6 +141,16 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
 
 
                                             }
+
+                                            // const userRef = ref(storage, 'images/profilepic');
+                                            // const imgRef = ref(userRef.parent, userDetail.id);
+
+                                            // listAll(userRef).then((res) => {
+                                            //     res.items.forEach((itemRef) => {
+                                            //         const profileImg = document.getElementById('profileimg');
+                                            //         profileImg.setAttribute('src', url)
+                                            //     })
+                                            // })
 
 
 

@@ -75,7 +75,7 @@ const AddMembers = ({userDetailAll, id}) => {
 
     }
 
-    console.log(id)
+    // console.log(userDetailAll)
 
 
     const members = userDetailAll.map((user) => {
