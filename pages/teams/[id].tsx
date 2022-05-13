@@ -9,7 +9,6 @@ import {useUser} from "../../lib/firebase/useUser";
 const TeamPage = ({teamDetail, userDetail, userDetailAll, id}) => {
     const {user, logout} = useUser()
 
-
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
 
     function onResolve(url) {

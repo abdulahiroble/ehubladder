@@ -17,7 +17,7 @@ const Home: NextPage = () => {
     const [lastName, setLastname] = useState<string>('')
     const [gamerTag, setGamerTag] = useState<string>('')
     const [steamId, setSteamId] = useState<string>('')
-    
+
 
 
     if (loading) return null
@@ -38,6 +38,7 @@ const Home: NextPage = () => {
                 gamerTag: gamerTag,
                 steamId: steamId,
                 email: email,
+                team: "",
                 id: user.uid,
             })
             console.log('success', user)
