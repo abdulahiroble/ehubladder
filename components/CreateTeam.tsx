@@ -163,7 +163,7 @@ const CreateTeam = () => {
             </FormControl>
 
             <FormControl mt={4}>
-              <FormLabel>Lowrank</FormLabel>
+              <FormLabel>Lowest Rank</FormLabel>
               <Select options={ranks} onChange={lowRankHandler}
                 formatOptionLabel={rank => (
                   <div>
@@ -174,7 +174,7 @@ const CreateTeam = () => {
             </FormControl>
 
             <FormControl mt={4}>
-              <FormLabel>Highrank</FormLabel>
+              <FormLabel>Highest Rank</FormLabel>
               <Select options={ranks} onChange={highRankHandler}
                 formatOptionLabel={rank => (
                   <div>

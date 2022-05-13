@@ -120,7 +120,7 @@ const Home: NextPage = () => {
 
 
             <div className="flex items-center min-h-screen background">
-                <div className="flex-1 h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
+                <div className="flex-1 h-full max-w-7xl mx-auto bg-white rounded-lg shadow-xl">
                     <div className="flex flex-col md:flex-row">
                         <div className="h-32 md:h-auto md:w-1/2">
                             <img className="object-cover w-full h-full" src="./images/signupimg.png"

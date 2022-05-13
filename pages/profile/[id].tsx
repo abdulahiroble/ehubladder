@@ -1,20 +1,20 @@
-import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
-import {GetStaticProps, GetStaticPaths} from 'next'
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { GetStaticProps, GetStaticPaths } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, {useEffect, useState} from 'react'
-import {useUser} from '../../lib/firebase/useUser'
+import React, { useEffect, useState } from 'react'
+import { useUser } from '../../lib/firebase/useUser'
 import CreateTeam from "../../components/CreateTeam";
-import {db} from '../../lib/firebase/initFirebase'
+import { db } from '../../lib/firebase/initFirebase'
 import "firebase/storage";
-import {storage} from "../../lib/firebase/initFirebase";
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {v4} from "uuid";
+import { storage } from "../../lib/firebase/initFirebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 
 
-const myProfile = ({userDetail, teamDetail}) => {
-    const {user, logout} = useUser()
+const myProfile = ({ userDetail, teamDetail }) => {
+    const { user, logout } = useUser()
     const [imageUpload, setImageUpload] = useState(null);
 
     const ShowEditProfile = () => {
@@ -124,18 +124,36 @@ const myProfile = ({userDetail, teamDetail}) => {
 
                             </div>
                             <div className='flex space-x-7 mx-20'>
-                                <div>
-                                    <Image
-                                        src={"/icons/faceit10.png"}
-                                        height={50}
-                                        width={50} />
-                                </div>
                                 <div className='pt-4'>
                                     <div>
                                         {teamDetail.map((team) => {
+
+
+                                            getDownloadURL(ref(storage, `/images/teams/logo/${team.id}`)).then(onResolve, onReject);
+
+                                            function onResolve(url) {
+                                                if (typeof window !== "undefined") {
+                                                    const teamImg = document.getElementById('teamlogo');
+                                                    teamImg.setAttribute('src', url);
+                                                }
+                                            }
+
+                                            function onReject(error) {
+                                                console.log(error.code);
+
+                                                getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
+                                                    const teamImg = document.getElementById('teamlogo');
+                                                    teamImg.setAttribute('src', url);
+                                                });
+
+
+                                            }
                                             return (
-                                                <div>
-                                                    <Link href={`/teams/${team.id}`}><a>{team.teamName}</a></Link>
+                                                <div className="flex space-x-5 py-2">
+                                                    <img className="rounded-full h-16 w-16" id="teamlogo" />
+                                                    <Link href={`/teams/${team.id}`}>
+                                                        <a className="pt-5">{team.teamName}</a>
+                                                        </Link>
                                                 </div>
                                             )
                                         })}
@@ -198,7 +216,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const teamDetail = teamDocs.docs.map((doc) => {
         if (doc.exists()) {
-            
+
             const data = doc.data()
 
             return data
