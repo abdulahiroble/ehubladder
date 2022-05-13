@@ -1,12 +1,16 @@
-import {useAuth, signOut} from '../../lib/authContext'
+import { useAuth, signOut } from '../../lib/authContext'
 import Link from 'next/link'
-import React, {useState} from 'react'
-import {Transition} from "@headlessui/react"
+import React, { useState } from 'react'
+import { Transition } from "@headlessui/react"
 import Image from 'next/image'
+import { getAuth } from 'firebase/auth'
 
 const Header = (props: any) => {
     const [isOpen, setIsOpen] = useState(false)
-    const {user, loading} = useAuth()
+    const { user, loading } = useAuth()
+    const auth = getAuth()
+
+
     return (
         <nav className="lg:bg-opacity-50 bg-black p-2 lg:p-3 text-white lg:fixed w-full z-10 lg:h-20">
             {/* Desktop Navigation */}
@@ -32,9 +36,12 @@ const Header = (props: any) => {
                         <Link href="/academy" passHref>
                             <a className="inline-block mt-0 hover:text-white mr-10 font-bold">Cups</a>
                         </Link>
-                        <Link href="/academy" passHref>
-                            <a className="inline-block mt-0 hover:text-white font-bold">Profile</a>
-                        </Link>
+                        {user ? <>
+                            <Link href={`/profile/${auth.currentUser.uid}`} passHref>
+                                <a className="inline-block mt-0 hover:text-white font-bold">Profile</a>
+                            </Link>
+                        </> : null}
+
                     </div>
                     <div>
                         {!user && !loading ?
@@ -53,8 +60,9 @@ const Header = (props: any) => {
                                 </a>
                             </Link> */}
 
-                            <Link href='/profile/myProfile'><a> Username </a></Link>
-
+                            <Link href={`/profile/${auth.currentUser.uid}`}>
+                                <a> Username </a>
+                            </Link>
                             <button onClick={signOut}> Signout</button>
 
                         </> : null}
