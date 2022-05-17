@@ -45,6 +45,7 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
             label: user.steamId
         }
     }
+
     )
 
     const memberHandler = (event) => {
@@ -89,18 +90,94 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
         }
     }
 
+    const addParticipant = async ({tournament, member, teamDetail}) => {
+
+        // const post_array = [];
+
+        // post_array.push({
+        //     "name": `hej`,
+        // });
+
+        // axios({
+        //     method: 'POST',
+        //     url: 'https://us-central1-ehubladder.cloudfunctions.net/addParticipant',
+        //     data: post_array,
+        //     headers: {
+        //         'content-type': 'application/json',
+        //         "Access-Control-Allow-Origin": "*"
+        //     }
+        // }).then(function (response) {
+
+        //     // var result = response
+        //     // Result data
+        //     console.log(response);
+
+        // }).catch(function (error) {
+        //     console.log(error);
+        // });
+
+        // axios POST request
+        try {
+
+            const options = {
+                url: 'https://us-central1-ehubladder.cloudfunctions.net/addParticipant',
+                method: 'POST',
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                data: {
+                    name: 'David',
+                }
+            };
+
+            axios(options)
+                .then(response => {
+                    console.log(response.status);
+                });
+
+            toast({
+                title: "Success!",
+                description: "Member has been added!",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            })
+
+            onClose()
+
+            return
+        } catch (error) {
+
+            toast({
+                title: "Error!",
+                description: "Something went wrong :(",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            })
+
+            onClose()
+        }
+
+    }
 
 
-    const tourneys = tournaments.map(tournament => (
-        [
-            {value: teamDetail.teamName, label: tournament.tournament.name},
+    const tourneys = tournaments.map((tournament) => {
+        return {
+            value: tournament.tournament.id,
+            label: tournament.tournament.name
+        }
+    }
 
-        ]));
+    )
+
 
 
     const tournamentHandler = (event) => {
         const value = event.value
-        setTeamName(value)
+        setTournamentName(value)
     }
 
 
@@ -125,26 +202,20 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
                 onClose={onClose}
             >
                 <ModalOverlay />
-                <ModalContent as="form" onSubmit={handleSubmit(joinLadder)}>
+                <ModalContent as="form" onSubmit={handleSubmit(addParticipant)}>
                     <ModalHeader fontWeight="bold">Join Ladder</ModalHeader>
                     <ModalCloseButton />
 
                     <ModalBody pb={6}>
 
                         <FormControl mt={4}>
-                            <FormLabel>Choose Member</FormLabel>
-                            <Select options={members} onChange={memberHandler}
-                                formatOptionLabel={member => (
-                                    <div>{member.value}</div>
-                                )}
-                            />
-                        </FormControl>
-
-                        <FormControl mt={4}>
                             <FormLabel>Choose Ladder</FormLabel>
-                            <Select
+                            <Select name="tournament"
                                 options={tourneys}
                                 onChange={tournamentHandler}
+                                formatOptionLabel={tourney => (
+                                    <div>{tourney.label}</div>
+                                )}
                             />
                         </FormControl>
 
