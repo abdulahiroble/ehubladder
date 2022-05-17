@@ -1,15 +1,15 @@
-import { getDocs, collection, doc, getDoc, query, where } from "firebase/firestore";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
+import {getDocs, collection, doc, getDoc, query, where} from "firebase/firestore";
+import {GetStaticPaths, GetStaticProps} from "next";
+import {getDownloadURL, listAll, ref} from "firebase/storage";
 import Link from "next/link";
 import AddMembers from "../../components/AddMembers";
-import { db, storage } from "../../lib/firebase/initFirebase";
-import { useUser } from "../../lib/firebase/useUser";
+import {db, storage} from "../../lib/firebase/initFirebase";
+import {useUser} from "../../lib/firebase/useUser";
 import JoinLadder from "../../components/JoinLadder";
 import axios from "axios";
 
-const TeamPage = ({ teamDetail, userDetail, userDetailAll, id, tournaments }) => {
-    const { user, logout } = useUser()
+const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
+    const {user, logout} = useUser()
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
 
@@ -225,11 +225,12 @@ const TeamPage = ({ teamDetail, userDetail, userDetailAll, id, tournaments }) =>
                         <div className="col-span-3 bg-gray-800 mx-10 my-20">
                             <div className="mx-10 flex space-x-10">
                                 <h2 className="text-3xl my-5 mt-5 mb-3">Ladders</h2>
-                                
+
                                 <JoinLadder
                                     tournaments={tournaments}
                                     teamDetail={teamDetail}
-                        
+                                    userDetailAll={userDetailAll}
+                                    id={id}
                                 />
 
                                 {/* {tournaments.map((tournament) => {
