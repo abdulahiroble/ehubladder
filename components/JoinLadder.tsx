@@ -39,126 +39,51 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
     const {register, handleSubmit} = useForm();
     const [member, setMember] = useState<string>("")
 
-    const members = userDetailAll.map((user) => {
-        return {
-            value: user.gamerTag,
-            label: user.steamId
-        }
-    }
+    // console.log(teamDetail.teamName)
 
-    )
-
-    const memberHandler = (event) => {
-        const value = event.value
-        setMember(value)
-    }
-
-    const joinLadder = async (teamDetail, tournaments) => {
+    const addParticipant = async () => { 
 
         try {
-            const myCollRef = collection(db, "tournaments");
-            const myDocRef = doc(myCollRef);
 
-            await setDoc(myDocRef, {
-                teamName: teamName,
-                tournamentName: tournamentName,
-                id: tournamentId
-            });
+            const myDocRef = doc(db, "tournaments", tournamentName.toString());
+
+            axios.post('https://us-central1-ehubladder.cloudfunctions.net/addParticipant', {
+                name: `addsdda`,
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+
+              await setDoc(myDocRef, {
+                teamName: teamDetail.teamName,
+                tournamentId: tournamentName,
+                tournamentName: tournamentId,
+            }, {merge: true});
 
             toast({
                 title: "Success!",
-                description: "Your team has been created!",
+                description: "You successfully joined the tournament",
                 status: "success",
-                duration: 3000,
+                duration: 5000,
                 isClosable: true,
             })
 
             onClose()
 
         } catch (error) {
+
             console.log(error)
 
             toast({
                 title: "Error!",
                 description: "Something went wrong :(",
                 status: "error",
-                duration: 3000,
-                isClosable: true,
-            })
-
-            onClose()
-        }
-    }
-
-    const addParticipant = async ({tournament, member, teamDetail}) => {
-
-        // const post_array = [];
-
-        // post_array.push({
-        //     "name": `hej`,
-        // });
-
-        // axios({
-        //     method: 'POST',
-        //     url: 'https://us-central1-ehubladder.cloudfunctions.net/addParticipant',
-        //     data: post_array,
-        //     headers: {
-        //         'content-type': 'application/json',
-        //         "Access-Control-Allow-Origin": "*"
-        //     }
-        // }).then(function (response) {
-
-        //     // var result = response
-        //     // Result data
-        //     console.log(response);
-
-        // }).catch(function (error) {
-        //     console.log(error);
-        // });
-
-        // axios POST request
-        try {
-
-            const options = {
-                url: 'https://us-central1-ehubladder.cloudfunctions.net/addParticipant',
-                method: 'POST',
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                data: {
-                    name: 'David',
-                }
-            };
-
-            axios(options)
-                .then(response => {
-                    console.log(response.status);
-                });
-
-            toast({
-                title: "Success!",
-                description: "Member has been added!",
-                status: "success",
                 duration: 5000,
                 isClosable: true,
             })
 
             onClose()
 
-            return
-        } catch (error) {
-
-            toast({
-                title: "Error!",
-                description: "Something went wrong :(",
-                status: "error",
-                duration: 5000,
-                isClosable: true,
-            })
-
-            onClose()
         }
 
     }
@@ -177,7 +102,9 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
 
     const tournamentHandler = (event) => {
         const value = event.value
+        const value2 = event.label
         setTournamentName(value)
+        setTournamentId(value2)
     }
 
 
