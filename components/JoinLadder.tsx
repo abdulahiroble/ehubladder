@@ -39,88 +39,26 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
     const {register, handleSubmit} = useForm();
     const [member, setMember] = useState<string>("")
 
-    const members = userDetailAll.map((user) => {
-        return {
-            value: user.gamerTag,
-            label: user.steamId
-        }
-    }
+    // console.log(teamDetail.teamName)
 
-    )
-
-    const memberHandler = (event) => {
-        const value = event.value
-        setMember(value)
-    }
-
-    const joinLadder = async (teamDetail, tournaments) => {
-
-        try {
-            const myCollRef = collection(db, "tournaments");
-            const myDocRef = doc(myCollRef);
-
-            await setDoc(myDocRef, {
-                teamName: teamName,
-                tournamentName: tournamentName,
-                id: tournamentId
-            });
-
-            toast({
-                title: "Success!",
-                description: "You successfully joined the tournament",
-                status: "success",
-                duration: 3000,
-                isClosable: true,
-            })
-
-            onClose()
-
-        } catch (error) {
-            console.log(error)
-
-            toast({
-                title: "Error!",
-                description: "Something went wrong :(",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-            })
-
-            onClose()
-        }
-    }
-
-    // Add participant to tournament and bypass cors
-    const addParticipant = async (tournament, member, teamDetail) => { 
+    const addParticipant = async () => { 
 
         try {
 
-            // const options = {
-            //     url: 'https://us-central1-ehubladder.cloudfunctions.net/addParticipant',
-            //     method: 'POST',
-            //     headers: {
-            //         "Access-Control-Allow-Origin": "*",
-            //         'Accept': 'application/json',
-            //         "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
-            //         "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-            //         'Content-Type': 'multipart/form-data'
-            //     },
-            //     data: {
-            //         name: 'David',
-            //     }
-            // };
-
-
-            // const response = await axios(options)
-
-            // console.log(response)
+            const myDocRef = doc(db, "tournaments", tournamentName.toString());
 
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/addParticipant', {
-                name: 'mo',
+                name: `addsdda`,
               })
               .then(function (response) {
                 console.log(response);
               })
+
+              await setDoc(myDocRef, {
+                teamName: teamDetail.teamName,
+                tournamentId: tournamentName,
+                tournamentName: tournamentId,
+            }, {merge: true});
 
             toast({
                 title: "Success!",
@@ -164,7 +102,9 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
 
     const tournamentHandler = (event) => {
         const value = event.value
+        const value2 = event.label
         setTournamentName(value)
+        setTournamentId(value2)
     }
 
 

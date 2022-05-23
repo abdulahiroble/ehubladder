@@ -6,7 +6,7 @@ const Test = () => {
     // click button to make post request
     const handleClick = () => {
         axios.post('https://us-central1-ehubladder.cloudfunctions.net/addParticipant', {
-            name: 'David',
+            name: 'hello',
           })
           .then(function (response) {
             console.log(response);
