@@ -7,6 +7,7 @@ import {db, storage} from "../../lib/firebase/initFirebase";
 import {useUser} from "../../lib/firebase/useUser";
 import JoinLadder from "../../components/JoinLadder";
 import axios from "axios";
+import Test from "../../components/Test";
 
 const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
     const {user, logout} = useUser()
@@ -232,6 +233,8 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
                                     userDetailAll={userDetailAll}
                                     id={id}
                                 />
+
+                                <Test />
 
                                 {/* {tournaments.map((tournament) => {
 

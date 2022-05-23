@@ -67,7 +67,7 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
 
             toast({
                 title: "Success!",
-                description: "Your team has been created!",
+                description: "You successfully joined the tournament",
                 status: "success",
                 duration: 3000,
                 isClosable: true,
@@ -90,56 +90,41 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
         }
     }
 
-    const addParticipant = async ({tournament, member, teamDetail}) => {
+    // Add participant to tournament and bypass cors
+    const addParticipant = async (tournament, member, teamDetail) => { 
 
-        // const post_array = [];
-
-        // post_array.push({
-        //     "name": `hej`,
-        // });
-
-        // axios({
-        //     method: 'POST',
-        //     url: 'https://us-central1-ehubladder.cloudfunctions.net/addParticipant',
-        //     data: post_array,
-        //     headers: {
-        //         'content-type': 'application/json',
-        //         "Access-Control-Allow-Origin": "*"
-        //     }
-        // }).then(function (response) {
-
-        //     // var result = response
-        //     // Result data
-        //     console.log(response);
-
-        // }).catch(function (error) {
-        //     console.log(error);
-        // });
-
-        // axios POST request
         try {
 
-            const options = {
-                url: 'https://us-central1-ehubladder.cloudfunctions.net/addParticipant',
-                method: 'POST',
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json;charset=UTF-8'
-                },
-                data: {
-                    name: 'David',
-                }
-            };
+            // const options = {
+            //     url: 'https://us-central1-ehubladder.cloudfunctions.net/addParticipant',
+            //     method: 'POST',
+            //     headers: {
+            //         "Access-Control-Allow-Origin": "*",
+            //         'Accept': 'application/json',
+            //         "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+            //         "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+            //         'Content-Type': 'multipart/form-data'
+            //     },
+            //     data: {
+            //         name: 'David',
+            //     }
+            // };
 
-            axios(options)
-                .then(response => {
-                    console.log(response.status);
-                });
+
+            // const response = await axios(options)
+
+            // console.log(response)
+
+            axios.post('https://us-central1-ehubladder.cloudfunctions.net/addParticipant', {
+                name: 'mo',
+              })
+              .then(function (response) {
+                console.log(response);
+              })
 
             toast({
                 title: "Success!",
-                description: "Member has been added!",
+                description: "You successfully joined the tournament",
                 status: "success",
                 duration: 5000,
                 isClosable: true,
@@ -147,8 +132,9 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
 
             onClose()
 
-            return
         } catch (error) {
+
+            console.log(error)
 
             toast({
                 title: "Error!",
@@ -159,6 +145,7 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
             })
 
             onClose()
+
         }
 
     }
