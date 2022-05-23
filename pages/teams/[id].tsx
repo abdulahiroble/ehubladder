@@ -171,15 +171,26 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
                                             //     })
                                             // })
 
+                                            // console.log(teamDetail)
+
 
 
 
                                             return (
                                                 <div className="flex space-x-2 py-2">
                                                     <img className="rounded-full h-16 w-16" id="profileimg" />
-                                                    <Link href={`/profile/${user.id}`}>
-                                                        <a className="pt-5 px-4">{user.gamerTag}</a>
-                                                    </Link>
+                                                    <ul className="list-outside hover:list-inside">
+                                                        <li>
+                                                            <Link href={`/profile/${user.id}`}>
+                                                                <a className="pt-5 px-4">{user.gamerTag}</a>
+                                                            </Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link href={`/profile/${teamDetail.owner}`}>
+                                                                <a className="pt-5 px-4">{teamDetail.player1}</a>
+                                                            </Link>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             )
                                         })}
