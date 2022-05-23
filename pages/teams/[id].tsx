@@ -1,13 +1,15 @@
-import { getDocs, collection, doc, getDoc, query, where } from "firebase/firestore";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
+import {getDocs, collection, doc, getDoc, query, where} from "firebase/firestore";
+import {GetStaticPaths, GetStaticProps} from "next";
+import {getDownloadURL, listAll, ref} from "firebase/storage";
 import Link from "next/link";
 import AddMembers from "../../components/AddMembers";
-import { db, storage } from "../../lib/firebase/initFirebase";
-import { useUser } from "../../lib/firebase/useUser";
+import {db, storage} from "../../lib/firebase/initFirebase";
+import {useUser} from "../../lib/firebase/useUser";
+import JoinLadder from "../../components/JoinLadder";
+import axios from "axios";
 
-const TeamPage = ({ teamDetail, userDetail, userDetailAll, id }) => {
-    const { user, logout } = useUser()
+const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
+    const {user, logout} = useUser()
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
 
@@ -223,7 +225,41 @@ const TeamPage = ({ teamDetail, userDetail, userDetailAll, id }) => {
                         <div className="col-span-3 bg-gray-800 mx-10 my-20">
                             <div className="mx-10 flex space-x-10">
                                 <h2 className="text-3xl my-5 mt-5 mb-3">Ladders</h2>
-                                <ShowInviteMembers />
+
+                                <JoinLadder
+                                    tournaments={tournaments}
+                                    teamDetail={teamDetail}
+                                    userDetailAll={userDetailAll}
+                                    id={id}
+                                />
+
+                                {/* {tournaments.map((tournament) => {
+
+                                    console.log(tournaments)
+
+                                    return (
+                                     
+                                    )
+
+
+                                    // if (tournament) {
+
+
+                                    //     return (
+                                    //         <JoinLadder
+                                    //             tournament={tournament}
+                                    //             key={tournament.id}
+                                    //             name={tournament.name}
+                                    //         />
+                                    //     )
+                                    // } else {
+                                    //     return (
+                                    //         <p>No tournaments found</p>
+                                    //     )
+                                    // }
+
+                                })} */}
+
 
                             </div>
                             <div className="border-b-4 border-white mb-2" />
@@ -322,13 +358,18 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
+    const tourneyRes = await fetch(`https://us-central1-ehubladder.cloudfunctions.net/getAllTournaments`);
+    const tournaments = await tourneyRes.json();
+
+
 
     return {
         props: {
             teamDetail,
             userDetail,
             userDetailAll,
-            id
+            id,
+            tournaments
         },
         revalidate: 60,
     }
