@@ -39,26 +39,27 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
     const {register, handleSubmit} = useForm();
     const [member, setMember] = useState<string>("")
 
-    const addParticipant = async () => { 
+    const addParticipant = async () => {
 
         try {
 
-            const myCollRef = collection(db, "tournaments");
+            const myCollRef = collection(db, "participants");
 
             const myDocRef = doc(myCollRef);
 
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/addParticipant', {
-                name: `${tournamentName}`,
-              })
-              .then(function (response) {
-                console.log(response);
-              })
+                name: `hejmebjbjddig`,
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
 
-              await setDoc(myDocRef, {
+            await setDoc(myDocRef, {
                 teamName: teamDetail.teamName,
                 tournamentId: tournamentName,
                 tournamentName: tournamentId,
-                id: myDocRef.id
+                id: myDocRef.id,
+                teamId: teamDetail.id,
             }, {merge: true});
 
             toast({

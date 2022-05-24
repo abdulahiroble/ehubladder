@@ -38,37 +38,14 @@ export const getAllTournaments = functions.https.onRequest(async (req, res) => {
   }
 });
 
-
 export const addParticipant = functions.https.onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-
   try {
-      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-      res.set('Access-Control-Allow-Origin', '*');
-      
-          const response = await axios(
-      `https://api.challonge.com/v1/tournaments/11154801/participants.json`,
-      {
-        params: { api_key: process.env.CHALLONGE_API_KEY },
-        method: 'POST',
-        headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*"},
-        data: {
-          participant: {
-            name: req.body.name,
-          },
-        },
-      }
-    );
-    
-    res.status(200).json(response.data);
-
-
-    // cors()(req, res, async () => {
     //   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     //   res.set('Access-Control-Allow-Origin', '*');
-      
+
     //       const response = await axios(
     //   `https://api.challonge.com/v1/tournaments/11154801/participants.json`,
     //   {
@@ -82,11 +59,32 @@ export const addParticipant = functions.https.onRequest(async (req, res) => {
     //     },
     //   }
     // );
-    
+
     // res.status(200).json(response.data);
 
-    // });
+    cors()(req, res, async () => {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+      res.set('Access-Control-Allow-Origin', '*');
 
+      const response = await axios(
+        `https://api.challonge.com/v1/tournaments/11154801/participants.json`,
+        {
+          params: { api_key: process.env.CHALLONGE_API_KEY },
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+          data: {
+            participant: {
+              name: req.body.name,
+            },
+          },
+        }
+      );
+
+      res.status(200).json(response.data);
+    });
   } catch (err) {
     res.status(500).json({ message: err });
   }
