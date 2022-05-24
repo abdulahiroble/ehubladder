@@ -67,7 +67,7 @@ export const addParticipant = functions.https.onRequest(async (req, res) => {
       res.set('Access-Control-Allow-Origin', '*');
 
       const response = await axios(
-        `https://api.challonge.com/v1/tournaments/11154801/participants.json`,
+        `https://api.challonge.com/v1/tournaments/11154793/participants.json`,
         {
           params: { api_key: process.env.CHALLONGE_API_KEY },
           method: 'POST',

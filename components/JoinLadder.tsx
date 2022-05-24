@@ -48,7 +48,7 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
             const myDocRef = doc(myCollRef);
 
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/addParticipant', {
-                name: `hejmebjbjddig`,
+                name: `${teamDetail.teamName}`,
             })
                 .then(function (response) {
                     console.log(response);
