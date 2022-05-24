@@ -9,7 +9,7 @@ import JoinLadder from "../../components/JoinLadder";
 import axios from "axios";
 import Test from "../../components/Test";
 
-const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
+const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail}) => {
     const {user, logout} = useUser()
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
@@ -18,6 +18,8 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
         const img = document.getElementById('teamlogo');
         img.setAttribute('src', url);
     }
+
+    console.log(tournaments.map((test) => test.tournament.name))
 
     function onReject(error) {
         console.log(error.code);
@@ -173,9 +175,6 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
 
                                             // console.log(teamDetail)
 
-
-
-
                                             return (
                                                 <div className="flex space-x-2 py-2">
                                                     <img className="rounded-full h-16 w-16" id="profileimg" />
@@ -245,42 +244,18 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments}) => {
                                     id={id}
                                 />
 
-                                <Test />
-
-                                {/* {tournaments.map((tournament) => {
-
-                                    console.log(tournaments)
-
-                                    return (
-                                     
-                                    )
-
-
-                                    // if (tournament) {
-
-
-                                    //     return (
-                                    //         <JoinLadder
-                                    //             tournament={tournament}
-                                    //             key={tournament.id}
-                                    //             name={tournament.name}
-                                    //         />
-                                    //     )
-                                    // } else {
-                                    //     return (
-                                    //         <p>No tournaments found</p>
-                                    //     )
-                                    // }
-
-                                })} */}
-
-
                             </div>
                             <div className="border-b-4 border-white mb-2" />
-                            <div className="flex space-x-4 py-2">
-                                <Link href={`/ladders`}>
-                                    <a className="pt-5 px-4">Faceit Level 1-3</a>
-                                </Link>
+                            <div className="">
+                                {tournamentDetail.map((tournament) => (
+                                    <ul className="list-outside hover:list-inside">
+                                        <li>
+                                            <Link href={`/profile/${teamDetail.owner}`}>
+                                                <a className="pt-5 px-4">{tournament.tournamentName}</a>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                ))}
                             </div>
                             <div className="border-b border-white mt-2 mb-2" />
 
@@ -327,8 +302,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const teamDoc = doc(db, "teams", id);
 
-
-
     const teamDetail = await getDoc(teamDoc).then((doc) => {
         if (doc.exists()) {
 
@@ -349,13 +322,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
             const data = doc.data()
 
-
             return data
 
         }
     })
-
-    // const userQ = query(collection(db, "users"), where("team", "!=", context.params.id));
 
     const userQ = query(collection(db, "users"), where("team", "!=", context.params.id));
 
@@ -375,6 +345,20 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const tourneyRes = await fetch(`https://us-central1-ehubladder.cloudfunctions.net/getAllTournaments`);
     const tournaments = await tourneyRes.json();
 
+    const tournamentsCollection = query(collection(db, "tournaments"), where("teamName", "==", teamDetail.teamName));
+
+    const tournamentDocs = await getDocs(tournamentsCollection);
+
+    const tournamentDetail = tournamentDocs.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+
+        }
+    })
+
 
 
     return {
@@ -383,7 +367,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
             userDetail,
             userDetailAll,
             id,
-            tournaments
+            tournaments,
+            tournamentDetail
         },
         revalidate: 60,
     }
