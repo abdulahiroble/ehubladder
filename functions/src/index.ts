@@ -43,15 +43,18 @@ export const addParticipant = functions.https.onRequest(async (req, res) => {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
   try {
-    //   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    //   res.set('Access-Control-Allow-Origin', '*');
+    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    // res.set('Access-Control-Allow-Origin', '*');
 
-    //       const response = await axios(
-    //   `https://api.challonge.com/v1/tournaments/11154801/participants.json`,
+    // const response = await axios(
+    //   `https://api.challonge.com/v1/tournaments/11154793/participants.json`,
     //   {
     //     params: { api_key: process.env.CHALLONGE_API_KEY },
     //     method: 'POST',
-    //     headers: {'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*"},
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Access-Control-Allow-Origin': '*',
+    //     },
     //     data: {
     //       participant: {
     //         name: req.body.name,
