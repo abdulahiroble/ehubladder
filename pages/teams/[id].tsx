@@ -345,7 +345,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const tourneyRes = await fetch(`https://us-central1-ehubladder.cloudfunctions.net/getAllTournaments`);
     const tournaments = await tourneyRes.json();
 
-    const tournamentsCollection = query(collection(db, "tournaments"), where("teamName", "==", teamDetail.teamName));
+    const tournamentsCollection = query(collection(db, "participants"), where("teamName", "==", teamDetail.teamName));
 
     const tournamentDocs = await getDocs(tournamentsCollection);
 
