@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dublicateServer = exports.addParticipant = exports.getAllTournaments = exports.helloWorld = void 0;
+exports.updateServer = exports.dublicateServer = exports.addParticipant = exports.getAllTournaments = exports.helloWorld = void 0;
 const functions = require("firebase-functions");
 const axios_1 = require("axios");
 const cors = require("cors");
@@ -80,7 +80,6 @@ exports.addParticipant = functions.https.onRequest(async (req, res) => {
 });
 // Create a POST request to dublicate server
 exports.dublicateServer = functions.https.onRequest(async (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
     const username = process.env.DATHOST_USERNAME;
     const password = process.env.DATHOST_PASSWORD;
     const baseServerId = process.env.DATHOST_BASE_SERVER_ID;
@@ -99,5 +98,34 @@ exports.dublicateServer = functions.https.onRequest(async (req, res) => {
     catch (err) {
         res.status(500).json({ message: err });
     }
+});
+exports.updateServer = functions.https.onRequest(async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const username = process.env.DATHOST_USERNAME;
+    const password = process.env.DATHOST_PASSWORD;
+    let body = new FormData();
+    body.append('name', 'test');
+    body.append('csgo_settings.rcon', 'test');
+    body.append('csgo_settings.steam_game_server_login_token', 'A332D726F6B28012225D456E3C556D97');
+    // body.append('name', 'ELADDER MATCH SERVER')
+    // body.append('csgo_settings.password', "testpass")
+    // body.append('csgo_settings.rcon', "rcontestpass")
+    // body.append('csgo_settings.steam_game_server_login_token', 'A332D726F6B28012225D456E3C556D97')
+    await (0, axios_1.default)({
+        method: 'PUT',
+        url: "https://dathost.net/api/0.1/game-servers/628b6aac3d8bbdfae0e24308",
+        data: body,
+        headers: {
+            authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`,
+            "Content-Type": "multipart/form-data",
+            Accept: 'application/json',
+        }
+    })
+        .then(function (response) {
+        res.status(200).json(response.data);
+    })
+        .catch(function (error) {
+        res.status(500).json({ message: error });
+    });
 });
 //# sourceMappingURL=index.js.map
