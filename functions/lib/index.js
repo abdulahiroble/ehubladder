@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addParticipant = exports.getAllTournaments = exports.helloWorld = void 0;
+exports.dublicateServer = exports.addParticipant = exports.getAllTournaments = exports.helloWorld = void 0;
 const functions = require("firebase-functions");
 const axios_1 = require("axios");
 const cors = require("cors");
@@ -73,6 +73,28 @@ exports.addParticipant = functions.https.onRequest(async (req, res) => {
             });
             res.status(200).json(response.data);
         });
+    }
+    catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
+// Create a POST request to dublicate server
+exports.dublicateServer = functions.https.onRequest(async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const username = process.env.DATHOST_USERNAME;
+    const password = process.env.DATHOST_PASSWORD;
+    const baseServerId = process.env.DATHOST_BASE_SERVER_ID;
+    const headers = {
+        authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`,
+        Accept: 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
+    };
+    try {
+        const response = await (0, axios_1.default)(`https://dathost.net/api/0.1/game-servers/${baseServerId}/duplicate`, {
+            method: 'POST',
+            headers,
+        });
+        res.status(200).json(response.data);
     }
     catch (err) {
         res.status(500).json({ message: err });

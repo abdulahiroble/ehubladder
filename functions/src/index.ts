@@ -92,3 +92,29 @@ export const addParticipant = functions.https.onRequest(async (req, res) => {
     res.status(500).json({ message: err });
   }
 });
+
+
+// Create a POST request to dublicate server
+
+export const dublicateServer = functions.https.onRequest(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+
+  const username = process.env.DATHOST_USERNAME
+  const password = process.env.DATHOST_PASSWORD
+  const baseServerId = process.env.DATHOST_BASE_SERVER_ID
+  const headers = {
+    authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`,
+    Accept: 'application/json',
+    'Content-Type': 'application/json;charset=UTF-8',
+  }
+
+  try {
+    const response = await axios(`https://dathost.net/api/0.1/game-servers/${baseServerId}/duplicate`, {
+      method: 'POST',
+      headers,
+    })
+    res.status(200).json(response.data);
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+})
