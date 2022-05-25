@@ -132,11 +132,12 @@ export const updateServer = functions.https.onRequest(async (req, res) => {
   const username = process.env.DATHOST_USERNAME
   const password = process.env.DATHOST_PASSWORD
 
+  // let body = {
+  //   name: "hej Abdu",
+  // }
+
   let body = new FormData()
-  body.append('name', 'test')
-  body.append('csgo_settings.rcon', 'test')
-  body.append('csgo_settings.steam_game_server_login_token', 'A332D726F6B28012225D456E3C556D97')
-  // body.append('name', 'ELADDER MATCH SERVER')
+  body.append('name', 'ELADDER MATCH SERVER')
   // body.append('csgo_settings.password', "testpass")
   // body.append('csgo_settings.rcon', "rcontestpass")
   // body.append('csgo_settings.steam_game_server_login_token', 'A332D726F6B28012225D456E3C556D97')
@@ -150,7 +151,6 @@ export const updateServer = functions.https.onRequest(async (req, res) => {
       headers: {
         authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`,
         "Content-Type": "multipart/form-data",
-        Accept: 'application/json',
       }
     })
     .then(function(response) {
