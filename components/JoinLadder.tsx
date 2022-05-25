@@ -47,17 +47,21 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
 
             const myDocRef = doc(myCollRef);
 
+
+
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/addParticipant', {
                 name: `${teamDetail.teamName}`,
+                tournamentId: `${tournamentId}`,
             })
                 .then(function (response) {
                     console.log(response);
+                    console.log(tournamentId);
                 })
 
             await setDoc(myDocRef, {
                 teamName: teamDetail.teamName,
-                tournamentId: tournamentName,
-                tournamentName: tournamentId,
+                tournamentId: tournamentId,
+                tournamentName: tournamentName,
                 id: myDocRef.id,
                 teamId: teamDetail.id,
             }, {merge: true});
@@ -105,8 +109,8 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
     const tournamentHandler = (event) => {
         const value = event.value
         const value2 = event.label
-        setTournamentName(value)
-        setTournamentId(value2)
+        setTournamentName(value2)
+        setTournamentId(value)
     }
 
 
