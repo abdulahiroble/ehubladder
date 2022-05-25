@@ -53,18 +53,23 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
                 name: `${teamDetail.teamName}`,
                 tournamentId: `${tournamentId}`,
             })
-                .then(function (response) {
+                .then(async function (response) {
                     console.log(response);
                     console.log(tournamentId);
+
+
+                    await setDoc(myDocRef, {
+                        teamName: teamDetail.teamName,
+                        tournamentId: tournamentId,
+                        tournamentName: tournamentName,
+                        id: myDocRef.id,
+                        teamId: teamDetail.id,
+                        participantid: response.data.participant.id
+                    }, {merge: true});
+
                 })
 
-            await setDoc(myDocRef, {
-                teamName: teamDetail.teamName,
-                tournamentId: tournamentId,
-                tournamentName: tournamentName,
-                id: myDocRef.id,
-                teamId: teamDetail.id,
-            }, {merge: true});
+
 
             toast({
                 title: "Success!",
