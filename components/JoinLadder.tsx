@@ -47,20 +47,29 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
 
             const myDocRef = doc(myCollRef);
 
+
+
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/addParticipant', {
                 name: `${teamDetail.teamName}`,
+                tournamentId: `${tournamentId}`,
             })
-                .then(function (response) {
+                .then(async function (response) {
                     console.log(response);
+                    console.log(tournamentId);
+
+
+                    await setDoc(myDocRef, {
+                        teamName: teamDetail.teamName,
+                        tournamentId: tournamentId,
+                        tournamentName: tournamentName,
+                        id: myDocRef.id,
+                        teamId: teamDetail.id,
+                        participantid: response.data.participant.id
+                    }, {merge: true});
+
                 })
 
-            await setDoc(myDocRef, {
-                teamName: teamDetail.teamName,
-                tournamentId: tournamentName,
-                tournamentName: tournamentId,
-                id: myDocRef.id,
-                teamId: teamDetail.id,
-            }, {merge: true});
+
 
             toast({
                 title: "Success!",
@@ -105,8 +114,8 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
     const tournamentHandler = (event) => {
         const value = event.value
         const value2 = event.label
-        setTournamentName(value)
-        setTournamentId(value2)
+        setTournamentName(value2)
+        setTournamentId(value)
     }
 
 
