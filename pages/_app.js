@@ -8,6 +8,7 @@ import '../styles/globals.css'
 import '../styles/profile.css'
 import '../styles/login.css'
 import '../styles/team.css'
+import '../styles/tournaments.css'
 import {ChakraProvider} from '@chakra-ui/react'
 
 function MyApp({Component, pageProps}) {
