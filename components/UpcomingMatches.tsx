@@ -28,7 +28,7 @@ const UpcomingMatches = ({upcomingMatch, teamDetail, participantDetail}) => {
                                     <p>BO2</p>
                                     <p>Inferno, Mirage</p>
                                     <p>{participantDetail.map((participant) => {
-                                        if (participant.participantid === match.match.player2_id && upcomingMatch.tournament.id == 11154790) {
+                                        if (participant.participantid === match.match.player2_id) {
                                             return participant.teamName
                                         } else {
                                             return null
