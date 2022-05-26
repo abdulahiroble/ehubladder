@@ -1,16 +1,18 @@
-import {getDocs, collection, doc, getDoc, query, where} from "firebase/firestore";
-import {GetStaticPaths, GetStaticProps} from "next";
-import {getDownloadURL, listAll, ref} from "firebase/storage";
+import { getDocs, collection, doc, getDoc, query, where } from "firebase/firestore";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { getDownloadURL, listAll, ref } from "firebase/storage";
 import Link from "next/link";
 import AddMembers from "../../components/AddMembers";
-import {db, storage} from "../../lib/firebase/initFirebase";
-import {useUser} from "../../lib/firebase/useUser";
+import { db, storage } from "../../lib/firebase/initFirebase";
+import { useUser } from "../../lib/firebase/useUser";
 import JoinLadder from "../../components/JoinLadder";
 import axios from "axios";
 import Test from "../../components/Test";
+import Image from "next/image";
+import DeleteParticipant from "../../components/DeleteParticipant";
 
-const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail}) => {
-    const {user, logout} = useUser()
+const TeamPage = ({ teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail }) => {
+    const { user, logout } = useUser()
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
 
@@ -248,13 +250,18 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                             <div className="border-b-4 border-white mb-2" />
                             <div className="">
                                 {tournamentDetail.map((tournament) => (
-                                    <ul className="list-outside hover:list-inside">
-                                        <li>
-                                            <Link href={`/profile/${teamDetail.owner}`}>
-                                                <a className="pt-5 px-4">{tournament.tournamentName}</a>
-                                            </Link>
-                                        </li>
-                                    </ul>
+                                    <div className="flex space-x-2">
+                                        <ul className="list-outside hover:list-inside">
+                                            <li>
+                                                <Link href={`/profile/${teamDetail.owner}`}>
+                                                    <a className="pt-5 px-4">{tournament.tournamentName}</a>
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                        <DeleteParticipant
+                                        tournament={tournament} />
+
+                                    </div>
                                 ))}
                             </div>
                             <div className="border-b border-white mt-2 mb-2" />

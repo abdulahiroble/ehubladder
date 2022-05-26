@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateServer = exports.dublicateServer = exports.addParticipant = exports.getAllTournaments = exports.helloWorld = void 0;
+exports.updateServer = exports.dublicateServer = exports.deleteParticipant = exports.addParticipant = exports.getAllTournaments = exports.helloWorld = void 0;
 const functions = require("firebase-functions");
 const axios_1 = require("axios");
 const cors = require("cors");
@@ -79,6 +79,28 @@ exports.addParticipant = functions.https.onRequest(async (req, res) => {
         res.status(500).json({ message: err });
     }
 });
+// DELETE participant
+exports.deleteParticipant = functions.https.onRequest(async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    cors()(req, res, async () => {
+        try {
+            process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+            res.set('Access-Control-Allow-Origin', '*');
+            const response = await axios_1.default.delete(`https://api.challonge.com/v1/tournaments/${req.body.tournamentId}/participants/${req.body.participantId}.json`, {
+                params: { api_key: process.env.CHALLONGE_API_KEY },
+                method: 'DELETE',
+                headers: {
+                    Accept: "*/*"
+                },
+            });
+            res.status(200).json(response);
+        }
+        catch (err) {
+            res.status(500).json({ message: err });
+        }
+    });
+});
 // Create a POST request to dublicate server
 exports.dublicateServer = functions.https.onRequest(async (req, res) => {
     const username = process.env.DATHOST_USERNAME;
@@ -100,6 +122,7 @@ exports.dublicateServer = functions.https.onRequest(async (req, res) => {
         res.status(500).json({ message: err });
     }
 });
+// POST reqeust to update server details
 exports.updateServer = functions.https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     const username = process.env.DATHOST_USERNAME;

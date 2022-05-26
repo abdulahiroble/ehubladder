@@ -94,6 +94,38 @@ export const addParticipant = functions.https.onRequest(async (req, res) => {
   }
 });
 
+// DELETE participant
+
+export const deleteParticipant = functions.https.onRequest(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+  cors()(req, res, async () => {
+    try {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+      res.set('Access-Control-Allow-Origin', '*');
+
+      const response = await axios.delete(
+        `https://api.challonge.com/v1/tournaments/${req.body.tournamentId}/participants/${req.body.participantId}.json`,
+        {
+          params: { api_key: process.env.CHALLONGE_API_KEY },
+          method: 'DELETE',
+          headers: {
+            Accept: "*/*"
+          },
+        }
+      );
+      res.status(200).json(response);
+    } catch (err) {
+      res.status(500).json({ message: err });
+
+    }
+  })
+});
+
+
+
+
 // Create a POST request to dublicate server
 
 export const dublicateServer = functions.https.onRequest(async (req, res) => {
@@ -122,6 +154,8 @@ export const dublicateServer = functions.https.onRequest(async (req, res) => {
     res.status(500).json({ message: err });
   }
 });
+
+// POST reqeust to update server details
 
 export const updateServer = functions.https.onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
