@@ -11,7 +11,7 @@ import Image from "next/image";
 import DeleteParticipant from "../../components/DeleteParticipant";
 import UpcomingMatches from "../../components/UpcomingMatches";
 
-const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, upcomingMatch, participantDetail}) => {
+const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, upcomingMatch, participantDetail, teamOneDetail, teamTwoDetail}) => {
     const {user, logout} = useUser()
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
@@ -70,6 +70,8 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
     console.log(participantDetail.map((participant) => participant.participantid))
 
+    console.log(teamTwoDetail)
+
     const ShowInviteMembers = () => {
         if (user) {
             if (user.id == teamDetail.owner) {
@@ -106,7 +108,7 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                     <ShowEditTeam />
 
                     <div className="grid grid-cols-8 my-14">
-                        <UpcomingMatches upcomingMatch={upcomingMatch} teamDetail={teamDetail} participantDetail={participantDetail} />
+                        <UpcomingMatches upcomingMatch={upcomingMatch} teamDetail={teamDetail} participantDetail={participantDetail} teamOneDetail={teamOneDetail} teamTwoDetail={teamTwoDetail} />
                         <div className="col-span-3 bg-gray-800 mx-10">
                             <div className="mx-10">
                                 <div className="flex space-x-6">
@@ -356,6 +358,60 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
+    // const matchDoc = collection(db, "matches")
+
+    // const myDocRef = doc(matchDoc);
+
+    // const myDocRef = await getDocs(collection(db, "matches"));
+
+    // const matchDetail = myDocRef.docs.map((doc) => {
+    //     if (doc.exists()) {
+
+    //         const data = doc.data()
+
+    //         return data
+
+    //     }
+    // })
+
+    const matchDoc = doc(db, "matches", "4QQcf9qjetIrVfFt7oMi")
+    const matchDetail = await getDoc(matchDoc).then((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+        }
+
+    })
+
+
+    const q1 = query(collection(db, "participants"), where("participantid", "==", Number(matchDetail?.player1_id)));
+    const q2 = query(collection(db, "participants"), where("participantid", "==", Number(matchDetail?.player2_id)));
+
+    const teamOneDocs = await getDocs(q1);
+    const teamTwoDocs = await getDocs(q2);
+
+    const teamOneDetail = teamOneDocs.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+
+        }
+    })
+
+    const teamTwoDetail = teamTwoDocs.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+
+        }
+    })
+
 
     return {
         props: {
@@ -366,7 +422,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
             tournaments,
             tournamentDetail,
             upcomingMatch,
-            participantDetail
+            participantDetail,
+            teamOneDetail,
+            teamTwoDetail
         },
         revalidate: 60,
     }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UpcomingMatches = ({upcomingMatch, teamDetail, participantDetail}) => {
+const UpcomingMatches = ({upcomingMatch, teamDetail, participantDetail, teamOneDetail, teamTwoDetail}) => {
 
     return (
         <>
@@ -18,59 +18,15 @@ const UpcomingMatches = ({upcomingMatch, teamDetail, participantDetail}) => {
                         <p>Match Room</p>
                         <div className="col-span-6 -mx-2 border-b py-1 border-inherit" />
                     </div>
-
-                    <div >
-                        {upcomingMatch.tournament?.matches.map((match) => {
-                            return (
-                                <div className="grid grid-cols-6 mx-2 py-2">
-                                    <p>01 May</p>
-                                    <p>20:00</p>
-                                    <p>BO2</p>
-                                    <p>Inferno, Mirage</p>
-                                    <p>{participantDetail.map((participant) => {
-                                        if (participant.participantid === match.match.player2_id) {
-                                            return participant.teamName
-                                        } else {
-                                            return null
-                                        }
-                                    })}</p>
-                                    <p>Link</p>
-                                </div>
-                            )
-                        })}
-
-
-                        {/* {upcomingMatch.map((match, index) => {
-                            return (
-                                <div key={index} className="col-span-1">
-                                    <div className="bg-gray-900 text-white text-center p-2">
-                                        {match.match_date}
-                                    </div>
-                                    <div className="bg-gray-800 text-white text-center p-2">
-                                        {match.match_time}
-                                    </div>
-                                    <div className="bg-gray-700 text-white text-center p-2">
-                                        {match.match_name}
-                                    </div>
-                                    <div className="bg-gray-600 text-white text-center p-2">
-                                        {match.team_a_name}
-                                    </div>
-                                    <div className="bg-gray-600 text-white text-center p-2">
-                                        {match.team_b_name}
-                                    </div>
-                                </div>
-                            )
-
-                        }
-
-                        )} */}
-
-                        {/* <p>01 May</p>
-                        <p>20:00</p>
-                        <p>BO2</p>
-                        <p>Inferno, Mirage</p>
-                        <p>FaZe Clan</p>
-                        <p>Link</p> */}
+                    <div>
+                        <div className="grid grid-cols-6 mx-2 py-2">
+                            <p>01 May</p>
+                            <p>20:00</p>
+                            <p>BO2</p>
+                            <p>Inferno, Mirage</p>
+                            <p>{teamTwoDetail[0].teamName}</p>
+                            <p>Link</p>
+                        </div>
 
                         <div className="col-span-6 -mx-2 border-b py-1 border-inherit" />
                     </div>
