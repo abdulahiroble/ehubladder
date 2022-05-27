@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateServer = exports.dublicateServer = exports.deleteParticipant = exports.startTournament = exports.addParticipant = exports.upcomingMatches = exports.getAllTournaments = exports.helloWorld = void 0;
+exports.updateServer = exports.dublicateServer = exports.deleteParticipant = exports.resetTournament = exports.startTournament = exports.addParticipant = exports.upcomingMatches = exports.getAllTournaments = exports.helloWorld = void 0;
 const functions = require("firebase-functions");
 const axios_1 = require("axios");
 const cors = require("cors");
@@ -86,6 +86,28 @@ exports.startTournament = functions.https.onRequest(async (req, res) => {
             process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
             res.set('Access-Control-Allow-Origin', '*');
             const response = await (0, axios_1.default)(`https://api.challonge.com/v1/tournaments/${req.body.tournamentId}/start.json?include_matches=1`, {
+                params: { api_key: process.env.CHALLONGE_API_KEY },
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+            });
+            res.status(200).json(response.data);
+        });
+    }
+    catch (err) {
+        res.status(500).json({ message: err });
+    }
+});
+exports.resetTournament = functions.https.onRequest(async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    try {
+        cors()(req, res, async () => {
+            process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+            res.set('Access-Control-Allow-Origin', '*');
+            const response = await (0, axios_1.default)(`https://api.challonge.com/v1/tournaments/${req.body.tournamentId}/reset.json`, {
                 params: { api_key: process.env.CHALLONGE_API_KEY },
                 method: 'POST',
                 headers: {
