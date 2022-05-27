@@ -58,9 +58,7 @@ const StartTournament = ({ tournaments }) => {
     const startTournament = async () => {
         const batch = writeBatch(db);
 
-        const myCollRef = collection(db, "matches");
 
-        const myDocRef = doc(myCollRef);
 
 
         try {
@@ -72,9 +70,12 @@ const StartTournament = ({ tournaments }) => {
                     // console.log(response);
                     // console.log(tournamentId);
 
-                    
+
                     response.data.tournament.matches.map(async (match) => {
                         console.log(match);
+                        const myCollRef = collection(db, "matches");
+
+                        const myDocRef = doc(myCollRef);
 
                         await batch.set(myDocRef, {
                             player1_id: match.match.player1_id,
@@ -85,18 +86,18 @@ const StartTournament = ({ tournaments }) => {
                             state: match.match.state,
                             winner_id: match.match.winner_id,
                             loser_id: match.match.loser_id,
-                        }, {merge: true});
+                        });
                     })
 
                     await batch.commit();
-                    
-                    
+
+
 
 
                 })
 
 
-            
+
 
 
 
@@ -149,7 +150,7 @@ const StartTournament = ({ tournaments }) => {
                 onClose={onClose}
             >
                 <ModalOverlay />
-                <ModalContent as="form" onSubmit={handleSubmit(startTournament)}> 
+                <ModalContent as="form" onSubmit={handleSubmit(startTournament)}>
                     <ModalHeader fontWeight="bold">Start Tournament</ModalHeader>
                     <ModalCloseButton />
 
