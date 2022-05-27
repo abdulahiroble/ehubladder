@@ -1,6 +1,11 @@
 import React from 'react'
+import {formatMyDate} from './DateFormatter'
 
-const UpcomingMatches = ({upcomingMatch, teamDetail, participantDetail, teamOneDetail, teamTwoDetail}) => {
+const UpcomingMatches = ({teamDetail, teamOneDetail, teamTwoDetail, matchDetail}) => {
+
+    let d = formatMyDate(matchDetail?.started_at)
+    let date = d.split(' ').splice(0, 2).join(' ')
+    let time = d.split(' ').splice(3, 5).join(' ')
 
     return (
         <>
@@ -20,8 +25,8 @@ const UpcomingMatches = ({upcomingMatch, teamDetail, participantDetail, teamOneD
                     </div>
                     <div>
                         <div className="grid grid-cols-6 mx-2 py-2">
-                            <p>01 May</p>
-                            <p>20:00</p>
+                            <p>{date}</p>
+                            <p>{time}</p>
                             <p>BO2</p>
                             <p>Inferno, Mirage</p>
                             <p>{teamTwoDetail[0].teamName != teamDetail.teamName ? teamTwoDetail[0].teamName : teamOneDetail[0].teamName}</p>

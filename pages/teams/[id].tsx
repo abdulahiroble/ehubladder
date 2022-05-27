@@ -11,7 +11,7 @@ import Image from "next/image";
 import DeleteParticipant from "../../components/DeleteParticipant";
 import UpcomingMatches from "../../components/UpcomingMatches";
 
-const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, upcomingMatch, participantDetail, teamOneDetail, teamTwoDetail}) => {
+const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, teamOneDetail, teamTwoDetail, matchDetail}) => {
     const {user, logout} = useUser()
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
@@ -65,12 +65,7 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
     }
 
-    console.log(upcomingMatch.tournament.id)
-    console.log(upcomingMatch.tournament.matches.map((match) => match.match.player1_id))
-
-    console.log(participantDetail.map((participant) => participant.participantid))
-
-    console.log(teamTwoDetail)
+    console.log(matchDetail)
 
     const ShowInviteMembers = () => {
         if (user) {
@@ -108,7 +103,7 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                     <ShowEditTeam />
 
                     <div className="grid grid-cols-8 my-14">
-                        <UpcomingMatches upcomingMatch={upcomingMatch} teamDetail={teamDetail} participantDetail={participantDetail} teamOneDetail={teamOneDetail} teamTwoDetail={teamTwoDetail} />
+                        <UpcomingMatches teamDetail={teamDetail} teamOneDetail={teamOneDetail} teamTwoDetail={teamTwoDetail} matchDetail={matchDetail} />
                         <div className="col-span-3 bg-gray-800 mx-10">
                             <div className="mx-10">
                                 <div className="flex space-x-6">
@@ -375,6 +370,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     // })
 
     const matchDoc = doc(db, "matches", "4QQcf9qjetIrVfFt7oMi")
+
     const matchDetail = await getDoc(matchDoc).then((doc) => {
         if (doc.exists()) {
 
@@ -424,7 +420,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
             upcomingMatch,
             participantDetail,
             teamOneDetail,
-            teamTwoDetail
+            teamTwoDetail,
+            matchDetail
         },
         revalidate: 60,
     }
