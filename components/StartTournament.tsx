@@ -72,9 +72,7 @@ const StartTournament = ({ tournaments }) => {
 
 
                     response.data.tournament.matches.map(async (match) => {
-                        console.log(match);
                         const myCollRef = collection(db, "matches");
-
                         const myDocRef = doc(myCollRef);
 
                         await batch.set(myDocRef, {
@@ -86,6 +84,7 @@ const StartTournament = ({ tournaments }) => {
                             state: match.match.state,
                             winner_id: match.match.winner_id,
                             loser_id: match.match.loser_id,
+                            tournament_id: match.match.tournament_id,
                         });
                     })
 
