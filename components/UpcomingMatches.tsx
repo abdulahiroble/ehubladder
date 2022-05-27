@@ -4,7 +4,7 @@ import {formatMyDate} from './DateFormatter'
 const UpcomingMatches = ({teamDetail, teamOneDetail, teamTwoDetail, matchDetail}) => {
 
     let d = formatMyDate(matchDetail?.started_at)
-    let date = d.split(' ').splice(0, 2).join(' ')
+    let date = d.split(' ').splice(0, 2).join(' ').replace(/,/g, '');
     let time = d.split(' ').splice(3, 5).join(' ')
 
     return (
