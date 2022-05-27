@@ -94,6 +94,34 @@ export const addParticipant = functions.https.onRequest(async (req, res) => {
   }
 });
 
+export const startTournament = functions.https.onRequest(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+  try {
+    cors()(req, res, async () => {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+      res.set('Access-Control-Allow-Origin', '*');
+
+      const response = await axios(
+        `https://api.challonge.com/v1/tournaments/${req.body.tournamentId}/start.json?include_matches=1`,
+        {
+          params: { api_key: process.env.CHALLONGE_API_KEY },
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      );
+
+      res.status(200).json(response.data);
+    });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+});
+
 // DELETE participant
 
 export const deleteParticipant = functions.https.onRequest(async (req, res) => {
@@ -111,20 +139,16 @@ export const deleteParticipant = functions.https.onRequest(async (req, res) => {
           params: { api_key: process.env.CHALLONGE_API_KEY },
           method: 'DELETE',
           headers: {
-            Accept: "*/*"
+            Accept: '*/*',
           },
         }
       );
       res.status(200).json(response);
     } catch (err) {
       res.status(500).json({ message: err });
-
     }
-  })
+  });
 });
-
-
-
 
 // Create a POST request to dublicate server
 
