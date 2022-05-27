@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useUser } from './../lib/firebase/useUser'
 import { db } from './../lib/firebase/initFirebase'
-import { doc, setDoc, collection, documentId, getDoc, getDocs, query, where } from 'firebase/firestore'
+import { doc, setDoc, collection, documentId, getDoc, getDocs, query, where, writeBatch } from 'firebase/firestore'
 import { getAuth } from '@firebase/auth'
 import {
     Modal,
@@ -25,6 +25,7 @@ import { storage } from "../lib/firebase/initFirebase";
 import Select from 'react-select';
 import axios from 'axios';
 import { GetServerSideProps, GetStaticProps } from 'next'
+import { responseSymbol } from 'next/dist/server/web/spec-compliant/fetch-event'
 
 
 const StartTournament = ({ tournaments }) => {
@@ -55,6 +56,10 @@ const StartTournament = ({ tournaments }) => {
     }
 
     const startTournament = async () => {
+        const batch = writeBatch(db);
+
+
+
 
         try {
 
@@ -62,10 +67,37 @@ const StartTournament = ({ tournaments }) => {
                 tournamentId: `${tournamentId}`,
             })
                 .then(async function (response) {
-                    console.log(response);
-                    console.log(tournamentId);
+                    // console.log(response);
+                    // console.log(tournamentId);
+
+
+                    response.data.tournament.matches.map(async (match) => {
+                        console.log(match);
+                        const myCollRef = collection(db, "matches");
+
+                        const myDocRef = doc(myCollRef);
+
+                        await batch.set(myDocRef, {
+                            player1_id: match.match.player1_id,
+                            player2_id: match.match.player2_id,
+                            round: match.match.round,
+                            id: myDocRef.id,
+                            started_at: match.match.started_at,
+                            state: match.match.state,
+                            winner_id: match.match.winner_id,
+                            loser_id: match.match.loser_id,
+                        });
+                    })
+
+                    await batch.commit();
+
+
+
 
                 })
+
+
+
 
 
 
@@ -118,7 +150,7 @@ const StartTournament = ({ tournaments }) => {
                 onClose={onClose}
             >
                 <ModalOverlay />
-                <ModalContent as="form" onSubmit={handleSubmit(startTournament)}> 
+                <ModalContent as="form" onSubmit={handleSubmit(startTournament)}>
                     <ModalHeader fontWeight="bold">Start Tournament</ModalHeader>
                     <ModalCloseButton />
 
