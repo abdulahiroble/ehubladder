@@ -14,20 +14,18 @@ const UpcomingMatches = ({teamDetail, teamOneDetail, teamTwoDetail, matchDetail}
                 <div className="col-span-8 border-b-4 border-white mb-2" />
 
                 <div className="text-center">
-                    <div className="grid grid-cols-6 mx-2">
+                    <div className="grid grid-cols-5 mx-2">
                         <p>Date</p>
                         <p>Starttime</p>
-                        <p>Type</p>
                         <p>Maps</p>
                         <p>Opponent</p>
                         <p>Match Room</p>
                         <div className="col-span-6 -mx-2 border-b py-1 border-inherit" />
                     </div>
                     <div>
-                        <div className="grid grid-cols-6 mx-2 py-2">
+                        <div className="grid grid-cols-5 mx-2 py-2">
                             <p>{date}</p>
                             <p>{time}</p>
-                            <p>BO2</p>
                             <p>Inferno, Mirage</p>
                             <p>{teamTwoDetail[0].teamName != teamDetail.teamName ? teamTwoDetail[0].teamName : teamOneDetail[0].teamName}</p>
                             <p>Link</p>

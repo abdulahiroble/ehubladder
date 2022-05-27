@@ -336,23 +336,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
-
-    const upcomingMatches = await fetch(`https://us-central1-ehubladder.cloudfunctions.net/upcomingMatches`);
-    const upcomingMatch = await upcomingMatches.json();
-
-
-    const participantDocs = await getDocs(collection(db, "participants"));
-
-    const participantDetail = participantDocs.docs.map((doc) => {
-        if (doc.exists()) {
-
-            const data = doc.data()
-
-            return data
-
-        }
-    })
-
     // const matchDoc = collection(db, "matches")
 
     // const myDocRef = doc(matchDoc);
@@ -417,8 +400,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
             id,
             tournaments,
             tournamentDetail,
-            upcomingMatch,
-            participantDetail,
             teamOneDetail,
             teamTwoDetail,
             matchDetail
