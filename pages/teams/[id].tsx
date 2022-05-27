@@ -66,6 +66,8 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
     }
 
     console.log(matchDetail)
+    console.log(teamOneDetail)
+    console.log(teamTwoDetail)
 
     const ShowInviteMembers = () => {
         if (user) {
@@ -340,7 +342,19 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     // const myDocRef = doc(matchDoc);
 
-    // const myDocRef = await getDocs(collection(db, "matches"));
+    const myDocRef = query(collection(db, "matches"), where("id", "==", "4QQcf9qjetIrVfFt7oMi"));
+
+    const s1 = await getDocs(myDocRef)
+
+    const matchDetail = s1.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+
+        }
+    })
 
     // const matchDetail = myDocRef.docs.map((doc) => {
     //     if (doc.exists()) {
@@ -352,21 +366,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
     //     }
     // })
 
-    const matchDoc = doc(db, "matches", "4QQcf9qjetIrVfFt7oMi")
+    // const matchDoc = doc(db, "matches", "4QQcf9qjetIrVfFt7oMi")
 
-    const matchDetail = await getDoc(matchDoc).then((doc) => {
-        if (doc.exists()) {
+    // const matchDetail = await getDoc(matchDoc).then((doc) => {
+    //     if (doc.exists()) {
 
-            const data = doc.data()
+    //         const data = doc.data()
 
-            return data
-        }
+    //         return data
+    //     }
 
-    })
+    // })
 
 
-    const q1 = query(collection(db, "participants"), where("participantid", "==", Number(matchDetail?.player1_id)));
-    const q2 = query(collection(db, "participants"), where("participantid", "==", Number(matchDetail?.player2_id)));
+    const q1 = query(collection(db, "participants"), where("participantid", "==", Number(matchDetail?.map((match) => match.player1_id))));
+    const q2 = query(collection(db, "participants"), where("participantid", "==", Number(matchDetail?.map((match) => match.player2_id))));
 
     const teamOneDocs = await getDocs(q1);
     const teamTwoDocs = await getDocs(q2);

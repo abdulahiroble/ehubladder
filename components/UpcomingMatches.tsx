@@ -24,10 +24,25 @@ const UpcomingMatches = ({teamDetail, teamOneDetail, teamTwoDetail, matchDetail}
                     </div>
                     <div>
                         <div className="grid grid-cols-5 mx-2 py-2">
+                            {/* {
+                                matchDetail.map((match, index) => {
+                                    return (
+                                        <div key={index}>
+                                            <p>{date}</p>
+                                            <p>{time}</p>
+                                            <p>{match.map}</p>
+                                            <p>{match.opponent}</p>
+                                            <p>{match.match_room}</p>
+                                        </div>
+                                    )
+                                }
+                                )
+                            } */}
+
                             <p>{date}</p>
                             <p>{time}</p>
                             <p>Inferno, Mirage</p>
-                            <p>{teamTwoDetail[0].teamName != teamDetail.teamName ? teamTwoDetail[0].teamName : teamOneDetail[0].teamName}</p>
+                            <p>{teamTwoDetail[0]?.teamName != teamDetail?.teamName ? teamTwoDetail[0]?.teamName : teamOneDetail[0]?.teamName}</p>
                             <p>Link</p>
                         </div>
 
