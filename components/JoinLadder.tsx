@@ -100,7 +100,7 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
     }
 
 
-    const tourneys = tournaments.map((tournament) => {
+    const tourneys = tournaments?.map((tournament) => {
         return {
             value: tournament.tournament.id,
             label: tournament.tournament.name

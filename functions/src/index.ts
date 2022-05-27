@@ -45,7 +45,7 @@ export const upcomingMatches = functions.https.onRequest(async (req, res) => {
   try {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const response = await axios(
-      `https://api.challonge.com/v1/tournaments/11202884.json?include_matches=1`,
+      `https://api.challonge.com/v1/tournaments/11154790.json?include_matches=1`,
       {
         params: { api_key: process.env.CHALLONGE_API_KEY },
         method: 'GET',
@@ -66,28 +66,6 @@ export const addParticipant = functions.https.onRequest(async (req, res) => {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
   try {
-    // process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-    // res.set('Access-Control-Allow-Origin', '*');
-
-    // const response = await axios(
-    //   `https://api.challonge.com/v1/tournaments/11154793/participants.json`,
-    //   {
-    //     params: { api_key: process.env.CHALLONGE_API_KEY },
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Access-Control-Allow-Origin': '*',
-    //     },
-    //     data: {
-    //       participant: {
-    //         name: req.body.name,
-    //       },
-    //     },
-    //   }
-    // );
-
-    // res.status(200).json(response.data);
-
     cors()(req, res, async () => {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
       res.set('Access-Control-Allow-Origin', '*');

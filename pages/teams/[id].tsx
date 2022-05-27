@@ -1,18 +1,19 @@
-import { getDocs, collection, doc, getDoc, query, where } from "firebase/firestore";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
+import {getDocs, collection, doc, getDoc, query, where} from "firebase/firestore";
+import {GetStaticPaths, GetStaticProps} from "next";
+import {getDownloadURL, listAll, ref} from "firebase/storage";
 import Link from "next/link";
 import AddMembers from "../../components/AddMembers";
-import { db, storage } from "../../lib/firebase/initFirebase";
-import { useUser } from "../../lib/firebase/useUser";
+import {db, storage} from "../../lib/firebase/initFirebase";
+import {useUser} from "../../lib/firebase/useUser";
 import JoinLadder from "../../components/JoinLadder";
 import axios from "axios";
 import Test from "../../components/Test";
 import Image from "next/image";
 import DeleteParticipant from "../../components/DeleteParticipant";
+import UpcomingMatches from "../../components/upcomingMatches";
 
-const TeamPage = ({ teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail }) => {
-    const { user, logout } = useUser()
+const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, upcomingMatch, participantDetail}) => {
+    const {user, logout} = useUser()
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
 
@@ -20,8 +21,6 @@ const TeamPage = ({ teamDetail, userDetail, userDetailAll, id, tournaments, tour
         const img = document.getElementById('teamlogo');
         img.setAttribute('src', url);
     }
-
-    console.log(tournaments.map((test) => test.tournament.name))
 
     function onReject(error) {
         console.log(error.code);
@@ -67,6 +66,11 @@ const TeamPage = ({ teamDetail, userDetail, userDetailAll, id, tournaments, tour
 
     }
 
+    console.log(upcomingMatch.tournament.id)
+    console.log(upcomingMatch.tournament.matches.map((match) => match.match.player1_id))
+
+    console.log(participantDetail.map((participant) => participant.participantid))
+
     const ShowInviteMembers = () => {
         if (user) {
             if (user.id == teamDetail.owner) {
@@ -103,37 +107,7 @@ const TeamPage = ({ teamDetail, userDetail, userDetailAll, id, tournaments, tour
                     <ShowEditTeam />
 
                     <div className="grid grid-cols-8 my-14">
-                        <div className="col-span-5 bg-gray-800 mx-20">
-                            <h2 className="text-3xl mx-10 mt-5 mb-3">Upcoming Matches</h2>
-                            <div className="col-span-8 border-b-4 border-white mb-2" />
-
-                            <div className="text-center">
-                                <div className="grid grid-cols-6 mx-2">
-
-                                    <p>Date</p>
-                                    <p>Starttime</p>
-                                    <p>Type</p>
-                                    <p>Maps</p>
-                                    <p>Opponent</p>
-                                    <p>Match Room</p>
-                                    <div className="col-span-6 -mx-2 border-b py-1 border-inherit" />
-                                </div>
-
-                                <div className="grid grid-cols-6 mx-2 py-2">
-
-                                    <p>01 May</p>
-                                    <p>20:00</p>
-                                    <p>BO2</p>
-                                    <p>Inferno, Mirage</p>
-                                    <p>FaZe Clan</p>
-                                    <p>Link</p>
-                                    <div className="col-span-6 -mx-2 border-b py-1 border-inherit" />
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                        <UpcomingMatches upcomingMatch={upcomingMatch} teamDetail={teamDetail} participantDetail={participantDetail} />
                         <div className="col-span-3 bg-gray-800 mx-10">
                             <div className="mx-10">
                                 <div className="flex space-x-6">
@@ -259,7 +233,7 @@ const TeamPage = ({ teamDetail, userDetail, userDetailAll, id, tournaments, tour
                                             </li>
                                         </ul>
                                         <DeleteParticipant
-                                        tournament={tournament} />
+                                            tournament={tournament} />
 
                                     </div>
                                 ))}
@@ -352,11 +326,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const tourneyRes = await fetch(`https://us-central1-ehubladder.cloudfunctions.net/getAllTournaments`);
     const tournaments = await tourneyRes.json();
 
-    const tournamentsCollection = query(collection(db, "participants"), where("teamName", "==", teamDetail.teamName));
+    const participantsCollection = query(collection(db, "participants"), where("teamName", "==", teamDetail.teamName));
 
-    const tournamentDocs = await getDocs(tournamentsCollection);
+    const participantsDocs = await getDocs(participantsCollection);
 
-    const tournamentDetail = tournamentDocs.docs.map((doc) => {
+    const tournamentDetail = participantsDocs.docs.map((doc) => {
         if (doc.exists()) {
 
             const data = doc.data()
@@ -367,6 +341,22 @@ export const getStaticProps: GetStaticProps = async (context) => {
     })
 
 
+    const upcomingMatches = await fetch(`https://us-central1-ehubladder.cloudfunctions.net/upcomingMatches`);
+    const upcomingMatch = await upcomingMatches.json();
+
+
+    const participantDocs = await getDocs(collection(db, "participants"));
+
+    const participantDetail = participantDocs.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+
+        }
+    })
+
 
     return {
         props: {
@@ -375,7 +365,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
             userDetailAll,
             id,
             tournaments,
-            tournamentDetail
+            tournamentDetail,
+            upcomingMatch,
+            participantDetail
         },
         revalidate: 60,
     }
