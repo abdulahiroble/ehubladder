@@ -7,10 +7,9 @@ import {db, storage} from "../../lib/firebase/initFirebase";
 import {useUser} from "../../lib/firebase/useUser";
 import JoinLadder from "../../components/JoinLadder";
 import axios from "axios";
-import Test from "../../components/Test";
 import Image from "next/image";
 import DeleteParticipant from "../../components/DeleteParticipant";
-import UpcomingMatches from "../../components/upcomingMatches";
+import UpcomingMatches from "../../components/UpcomingMatches";
 
 const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, upcomingMatch, participantDetail}) => {
     const {user, logout} = useUser()
