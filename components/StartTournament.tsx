@@ -54,6 +54,49 @@ const StartTournament = ({ tournaments }) => {
         setTournamentId(value)
     }
 
+    const startTournament = async () => {
+
+        try {
+
+            axios.post('https://us-central1-ehubladder.cloudfunctions.net/startTournament', {
+                tournamentId: `${tournamentId}`,
+            })
+                .then(async function (response) {
+                    console.log(response);
+                    console.log(tournamentId);
+
+                })
+
+
+
+            toast({
+                title: "Success!",
+                description: "You successfully started the tournament",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            })
+
+            onClose()
+
+        } catch (error) {
+
+            console.log(error)
+
+            toast({
+                title: "Error!",
+                description: "Something went wrong :(",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            })
+
+            onClose()
+
+        }
+
+    }
+
     return (
         <>
             <Button
@@ -75,7 +118,7 @@ const StartTournament = ({ tournaments }) => {
                 onClose={onClose}
             >
                 <ModalOverlay />
-                <ModalContent as="form" >
+                <ModalContent as="form" onSubmit={handleSubmit(startTournament)}> 
                     <ModalHeader fontWeight="bold">Start Tournament</ModalHeader>
                     <ModalCloseButton />
 
