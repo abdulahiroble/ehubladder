@@ -24,7 +24,7 @@ const UpcomingMatches = ({upcomingMatch, teamDetail, participantDetail, teamOneD
                             <p>20:00</p>
                             <p>BO2</p>
                             <p>Inferno, Mirage</p>
-                            <p>{teamTwoDetail[0].teamName}</p>
+                            <p>{teamTwoDetail[0].teamName != teamDetail.teamName ? teamTwoDetail[0].teamName : teamOneDetail[0].teamName}</p>
                             <p>Link</p>
                         </div>
 
