@@ -221,7 +221,7 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
                             </div>
                             <div className="border-b-4 border-white mb-2" />
-                            <div className="">
+                            <div>
                                 {tournamentDetail.map((tournament) => (
                                     <div className="flex space-x-2">
                                         <ul className="list-outside hover:list-inside">

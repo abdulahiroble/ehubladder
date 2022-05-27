@@ -105,9 +105,7 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
             value: tournament.tournament.id,
             label: tournament.tournament.name
         }
-    }
-
-    )
+    })
 
 
 
