@@ -54,6 +54,49 @@ const ResetTournament = ({ tournaments }) => {
         setTournamentId(value)
     }
 
+    const resetTournament = async () => {
+
+        try {
+
+            axios.post('https://us-central1-ehubladder.cloudfunctions.net/resetTournament', {
+                tournamentId: `${tournamentId}`,
+            })
+                .then(async function (response) {
+                    console.log(response);
+                    console.log(tournamentId);
+
+                })
+
+
+
+            toast({
+                title: "Success!",
+                description: "You successfully resetted the tournament",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+            })
+
+            onClose()
+
+        } catch (error) {
+
+            console.log(error)
+
+            toast({
+                title: "Error!",
+                description: "Something went wrong :(",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            })
+
+            onClose()
+
+        }
+
+    }
+
     return (
         <>
             <Button
@@ -75,7 +118,7 @@ const ResetTournament = ({ tournaments }) => {
                 onClose={onClose}
             >
                 <ModalOverlay />
-                <ModalContent as="form" >
+                <ModalContent as="form" onSubmit={handleSubmit(resetTournament)}>
                     <ModalHeader fontWeight="bold">Reset Tournament</ModalHeader>
                     <ModalCloseButton />
 
@@ -97,7 +140,7 @@ const ResetTournament = ({ tournaments }) => {
                     <ModalFooter>
                         <Button onClick={onClose} mr={3}>Cancel</Button>
                         <Button backgroundColor="#99FFFE" fontWeight="medium" type="submit">
-                            Join Ladder
+                            Reset Tournament
                         </Button>
                     </ModalFooter>
                 </ModalContent>

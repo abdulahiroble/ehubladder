@@ -140,7 +140,7 @@ const StartTournament = ({ tournaments }) => {
                     <ModalFooter>
                         <Button onClick={onClose} mr={3}>Cancel</Button>
                         <Button backgroundColor="#99FFFE" fontWeight="medium" type="submit">
-                            Join Ladder
+                            Start Tournament
                         </Button>
                     </ModalFooter>
                 </ModalContent>
