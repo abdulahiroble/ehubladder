@@ -65,9 +65,10 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
     }
 
-    console.log(matchDetail)
-    console.log(teamOneDetail)
-    console.log(teamTwoDetail)
+    // console.log(matchDetail)
+    // console.log(teamOneDetail)
+    // console.log(teamTwoDetail)
+    // console.log(tournamentDetail.map((tournament) => tournament.tournamentId))
 
     const ShowInviteMembers = () => {
         if (user) {
@@ -131,7 +132,7 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
                                                 getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
                                                     const profileImg = document.getElementById('profileimg');
-                                                    profileImg.setAttribute('src', url);
+                                                    profileImg?.setAttribute('src', url);
                                                 });
 
 
@@ -342,7 +343,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     // const myDocRef = doc(matchDoc);
 
-    const myDocRef = query(collection(db, "matches"), where("id", "==", "4QQcf9qjetIrVfFt7oMi"));
+    const myDocRef = query(collection(db, "matches"), where("tournament_id", "==", tournamentDetail[0]?.tournamentId || ""));
 
     const s1 = await getDocs(myDocRef)
 

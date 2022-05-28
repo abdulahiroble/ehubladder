@@ -45,7 +45,7 @@ export const upcomingMatches = functions.https.onRequest(async (req, res) => {
   try {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     const response = await axios(
-      `https://api.challonge.com/v1/tournaments/11154790.json?include_matches=1`,
+      `https://api.challonge.com/v1/tournaments/11154803.json?include_matches=1`,
       {
         params: { api_key: process.env.CHALLONGE_API_KEY },
         method: 'GET',
