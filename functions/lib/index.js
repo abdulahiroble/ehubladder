@@ -37,7 +37,7 @@ exports.upcomingMatches = functions.https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     try {
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-        const response = await (0, axios_1.default)(`https://api.challonge.com/v1/tournaments/11154790.json?include_matches=1`, {
+        const response = await (0, axios_1.default)(`https://api.challonge.com/v1/tournaments/11154803.json?include_matches=1`, {
             params: { api_key: process.env.CHALLONGE_API_KEY },
             method: 'GET',
             headers: {
