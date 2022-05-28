@@ -132,7 +132,7 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
                                                 getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
                                                     const profileImg = document.getElementById('profileimg');
-                                                    profileImg.setAttribute('src', url);
+                                                    profileImg?.setAttribute('src', url);
                                                 });
 
 
