@@ -221,7 +221,6 @@ export const updateServer = functions.https.onRequest(async (req, res) => {
 
   let formData = new FormData();
   formData.append('name', 'ELADDER MATCH SERVER');
-  formData.append('csgo_settings.password', 'testpass');
   formData.append('csgo_settings.rcon', 'rcontestpass');
   formData.append('csgo_settings.steam_game_server_login_token','606001CE75961E5E95736D96AF3AC196');
 
@@ -268,7 +267,8 @@ export const startMatchSeries = functions.https.onRequest(async (req, res) => {
   formData.append('map1_start_ct', req.body.startCTMapOne);
   formData.append('map2', req.body.mapTwo);
   formData.append('map1_start_ct', req.body.startCTMapTwo);
-  formData.append('message_prefix', "ELadder Bot");
+  formData.append('message_prefix', "LADDER BOT");
+  formData.append('round_end_webhook_url', "https://webhook.site/c4f36389-e55e-492a-b478-fb38e4507b42")
 
 
   await axios({
