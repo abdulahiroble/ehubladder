@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react'
 import {formatMyDate} from './DateFormatter'
 
@@ -43,7 +44,7 @@ const UpcomingMatches = ({teamDetail, teamOneDetail, teamTwoDetail, matchDetail}
                             <p>{time}</p>
                             <p>Inferno, Mirage</p>
                             <p>{teamTwoDetail[0]?.teamName != teamDetail?.teamName ? teamTwoDetail[0]?.teamName : teamOneDetail[0]?.teamName}</p>
-                            <p>Link</p>
+                            <p>{matchDetail?.map((match) => <Link href={`/match/${match.id}`}>Link</Link>)}</p>
                         </div>
 
                         <div className="col-span-6 -mx-2 border-b py-1 border-inherit" />
