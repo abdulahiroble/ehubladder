@@ -3,8 +3,25 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { db } from "../../lib/firebase/initFirebase";
 import { formatMyDate } from "../../components/DateFormatter";
 import { Button } from "react-bootstrap";
+import StartServer from "../../components/StartServer";
 
-const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail }) => {
+
+const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, teamOneUserDetail, teamTwoUserDetail }) => {
+
+  
+
+    const ServerInformation = () => {
+        if (matchDetail.id == serverDetail[0]?.matchid) {
+            return (
+                <div className="py-5">
+                    <p>connect {serverDetail[0].ip}:{serverDetail[0].port}</p>
+                    <p>GOTV: connect {serverDetail[0].ip}:{serverDetail[0].gotv}</p>
+                </div>
+            )
+        } else return (
+            null
+        )
+    }
 
     return (
         <>
@@ -15,7 +32,13 @@ const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail }) => {
                             <h3 className="text-4xl pt-10">{teamOneDetail[0].teamName}</h3>
                         </div>
                         <div>
-                            <Button>Start Server</Button>
+                            <StartServer
+                                teamOneDetail={teamOneDetail}
+                                teamTwoDetail={teamTwoDetail}
+                                matchDetail={matchDetail}
+                                teamOneUserDetail={teamOneUserDetail}
+                                teamTwoUserDetail={teamTwoUserDetail} />
+                            <ServerInformation />
                             <h3 className="py-3 text-5xl">Versus</h3>
                             <p className="text-white pr-1">
                                 {`${formatMyDate(matchDetail.started_at)}`}
@@ -95,12 +118,54 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
+    const q4 = query(collection(db, "users"), where("team", "==", teamOneDetail[0].teamId));
+    const q5 = query(collection(db, "users"), where("team", "==", teamTwoDetail[0].teamId));
+    const teamOneUserDocs = await getDocs(q4);
+    const teamTwoUserDocs = await getDocs(q5);
+
+    const teamOneUserDetail = teamOneUserDocs.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+
+        }
+    })
+
+    const teamTwoUserDetail = teamTwoUserDocs.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+
+        }
+    })
+
+    const q3 = query(collection(db, "game-servers"), where("matchid", "==", matchDetail.id));
+    const serverDocs = await getDocs(q3);
+
+    const serverDetail = serverDocs.docs.map((doc) => {
+        if (doc.exists()) {
+
+            const data = doc.data()
+
+            return data
+
+        }
+    })
+
 
     return {
         props: {
             matchDetail,
             teamOneDetail,
-            teamTwoDetail
+            teamTwoDetail,
+            serverDetail,
+            teamOneUserDetail,
+            teamTwoUserDetail,
+
         },
         revalidate: 60,
     }
