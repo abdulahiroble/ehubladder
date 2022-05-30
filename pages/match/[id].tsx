@@ -3,6 +3,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import { db } from "../../lib/firebase/initFirebase";
 import { formatMyDate } from "../../components/DateFormatter";
 import { Button } from "react-bootstrap";
+import StartServer from "../../components/StartServer";
+
 
 const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail }) => {
 
@@ -15,7 +17,9 @@ const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail }) => {
                             <h3 className="text-4xl pt-10">{teamOneDetail[0].teamName}</h3>
                         </div>
                         <div>
-                            <Button>Start Server</Button>
+                            <StartServer 
+                            teamOneDetail={teamOneDetail}
+                            teamTwoDetail={teamTwoDetail} />
                             <h3 className="py-3 text-5xl">Versus</h3>
                             <p className="text-white pr-1">
                                 {`${formatMyDate(matchDetail.started_at)}`}
