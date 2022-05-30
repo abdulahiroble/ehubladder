@@ -138,18 +138,6 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
                                             }
 
-                                            // const userRef = ref(storage, 'images/profilepic');
-                                            // const imgRef = ref(userRef.parent, userDetail.id);
-
-                                            // listAll(userRef).then((res) => {
-                                            //     res.items.forEach((itemRef) => {
-                                            //         const profileImg = document.getElementById('profileimg');
-                                            //         profileImg.setAttribute('src', url)
-                                            //     })
-                                            // })
-
-                                            // console.log(teamDetail)
-
                                             return (
                                                 <div className="flex space-x-2 py-2">
                                                     <img className="rounded-full h-16 w-16" id="profileimg" />
@@ -159,11 +147,11 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                                                                 <a className="pt-5 px-4">{user.gamerTag}</a>
                                                             </Link>
                                                         </li>
-                                                        <li>
+                                                        {/* <li>
                                                             <Link href={`/profile/${teamDetail.owner}`}>
                                                                 <a className="pt-5 px-4">{teamDetail.player1}</a>
                                                             </Link>
-                                                        </li>
+                                                        </li> */}
                                                     </ul>
                                                 </div>
                                             )
@@ -357,28 +345,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
-    // const matchDetail = myDocRef.docs.map((doc) => {
-    //     if (doc.exists()) {
-
-    //         const data = doc.data()
-
-    //         return data
-
-    //     }
-    // })
-
-    // const matchDoc = doc(db, "matches", "4QQcf9qjetIrVfFt7oMi")
-
-    // const matchDetail = await getDoc(matchDoc).then((doc) => {
-    //     if (doc.exists()) {
-
-    //         const data = doc.data()
-
-    //         return data
-    //     }
-
-    // })
-
 
     const q1 = query(collection(db, "participants"), where("participantid", "==", Number(matchDetail?.map((match) => match.player1_id))));
     const q2 = query(collection(db, "participants"), where("participantid", "==", Number(matchDetail?.map((match) => match.player2_id))));
@@ -405,6 +371,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
         }
     })
+
 
 
     return {
