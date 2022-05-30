@@ -212,15 +212,16 @@ exports.startMatchSeries = functions.https.onRequest(async (req, res) => {
             let formData = new FormData();
             formData.append('game_server_id', req.body.serverId);
             formData.append('team1_name', req.body.teamOneName);
-            formData.append('team1_steam_ids', 'STEAM_1:0:21977583');
+            formData.append('team1_steam_ids', req.body.team1_steam_ids);
             formData.append('team2_name', req.body.teamTwoName);
-            formData.append('team2_steam_ids', 'STEAM_1:1:21977580');
+            formData.append('team2_steam_ids', req.body.team2_steam_ids);
             formData.append('warmup_time', '60');
             formData.append('number_of_maps', '2');
             formData.append('map1', req.body.mapOne);
             formData.append('map1_start_ct', req.body.startCTMapOne);
             formData.append('map2', req.body.mapTwo);
             formData.append('map1_start_ct', req.body.startCTMapTwo);
+            formData.append('message_prefix', "ELadder Bot");
             await (0, axios_1.default)({
                 method: 'POST',
                 url: `https://dathost.net/api/0.1/match-series`,

@@ -21,9 +21,11 @@ import { useState, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { db } from "../lib/firebase/initFirebase"
 import FormData from 'form-data';
+import { useRouter } from 'next/router'
 
-const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
+const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDetail, teamTwoUserDetail }) => {
     const auth = getAuth()
+    const router = useRouter()
     const [mapOneName, setMapOneName] = useState<string>('')
     const [MapTwoName, setMapTwoName] = useState<string>('')
     const [mapOneStartingSide, setMapOneStartingSide] = useState<string>('')
@@ -35,6 +37,8 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
     const initialRef = useRef()
     const { register, handleSubmit } = useForm();
 
+
+
     const startServer = async () => {
 
         try {
@@ -42,8 +46,7 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
             const myCollRef = collection(db, "game-servers");
 
             const myDocRef = doc(myCollRef);
-
-
+            
 
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/dublicateServer')
                 .then(async function (response) {
@@ -54,32 +57,41 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
                         gotv: response.data.ports.gotv,
                         id: myDocRef.id,
                         port: response.data.ports.game,
+                        matchid: matchDetail.id,
                     }, { merge: true });
 
 
                     axios.put('https://us-central1-ehubladder.cloudfunctions.net/updateServer', {
                         serverId: `${response.data.id}`,
-                    }).then(async function(res) {
+                    }).then(async function (res) {
                         console.log(res);
+                    })
+
+                    const userTeamOneSteamIds = teamOneUserDetail?.map((user) => {
+                        return user.steamId.toString().replace("STEAM_0", "STEAM_1")
+                    })
+                
+                    const userTeamTwoSteamIds = teamTwoUserDetail?.map((user) => {
+                        return user.steamId.toString().replace("STEAM_0", "STEAM_1")
                     })
 
                     axios.post('https://us-central1-ehubladder.cloudfunctions.net/startMatchSeries', {
                         serverId: `${response.data.id}`,
                         teamOneName: `${teamOneDetail[0].teamName}`,
-                        teamTwoName: `${teamTwoDetail[0].teamName}`,                        
+                        teamTwoName: `${teamTwoDetail[0].teamName}`,
                         mapOne: `${mapOneName}`,
                         startCTMapOne: `${mapOneStartingSide}`,
                         mapTwo: `${MapTwoName}`,
                         startCTMapTwo: `${MapTwoStartingSide}`,
+                        team1_steam_ids: `${userTeamOneSteamIds.toString()}`,
+                        team2_steam_ids: `${userTeamTwoSteamIds.toString()}`,
+
 
                     }).then(async function (response) {
                         console.log(response);
                     })
 
                 })
-
-
-
 
             toast({
                 title: "Success!",
@@ -90,6 +102,8 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
             })
 
             onClose()
+
+            router.push(`/match/${matchDetail.id}`)
 
         } catch (error) {
 
@@ -111,7 +125,6 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
 
     }
 
-
     const mapOneOptions = [
         { value: 'de_dust2', label: 'Dust 2' },
         { value: 'de_inferno', label: 'Inferno' },
@@ -132,13 +145,10 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
         { value: 'de_ancient', label: 'Ancient' }
     ]
 
-
     const teamStartOptions = [
         { value: 'team1', label: teamOneDetail[0].teamName },
         { value: 'team2', label: teamTwoDetail[0].teamName },
     ]
-
-
 
     const mapOneHandler = (event) => {
         const mapOneValue = event.value
@@ -150,21 +160,15 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
         setMapTwoName(mapTwoValue)
     }
 
-    
     const mapOneStartingSideHandler = (event) => {
         const mapOneStartingSide = event.value
         setMapOneStartingSide(mapOneStartingSide)
     }
-    
+
     const mapTwoStartingSideHandler = (event) => {
         const mapTwoStartingSide = event.value
         setMapTwoStartingSide(mapTwoStartingSide)
     }
-
-    
-  
-
-
 
 
 
@@ -172,7 +176,6 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
         <>
             <Button
                 onClick={onOpen}
-                disabled={disabled}
                 backgroundColor="gray.900"
                 color="white"
                 fontWeight="medium"
@@ -224,7 +227,7 @@ const StartServer = ({ teamOneDetail, teamTwoDetail }) => {
 
                     <ModalFooter>
                         <Button onClick={onClose} mr={3}>Cancel</Button>
-                        <Button backgroundColor="#99FFFE" fontWeight="medium" type="submit">
+                        <Button backgroundColor="#99FFFE" fontWeight="medium" type="submit" disabled={disabled}>
                             Start Server
                         </Button>
                     </ModalFooter>
