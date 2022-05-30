@@ -31,13 +31,15 @@ const AddMembers = ({userDetailAll, id}) => {
     const initialRef = useRef()
     const {register, handleSubmit} = useForm();
     const [member, setMember] = useState<string>("")
+    const [memberId, setMemberId] = useState<string>("")
 
     const addTeamMember = async () => {
 
         try {
+
             const myCollRefTeams = doc(db, "teams", id);
 
-            const myUserRef = doc(db, 'users', auth.currentUser.uid)
+            const myUserRef = doc(db, 'users', memberId);
 
             await setDoc(myCollRefTeams, {
                 player1: member,
@@ -75,20 +77,20 @@ const AddMembers = ({userDetailAll, id}) => {
 
     }
 
-    // console.log(userDetailAll)
-
-
     const members = userDetailAll.map((user) => {
         return {
-            value: user.gamerTag,
-            label: user.steamId
+            value: user.id,
+            label: user.gamerTag
         }
     }
     )
 
     const memberHandler = (event) => {
-        const value = event.value
+        const value = event.label
         setMember(value)
+
+        const value2 = event.value
+        setMemberId(value2)
     }
 
     return (
@@ -121,7 +123,7 @@ const AddMembers = ({userDetailAll, id}) => {
                             <FormLabel>Members</FormLabel>
                             <Select options={members} onChange={memberHandler}
                                 formatOptionLabel={member => (
-                                    <div>{member.value}</div>
+                                    <div>{member.label}</div>
                                 )}
                             />
                         </FormControl>
