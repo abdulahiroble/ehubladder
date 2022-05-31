@@ -179,8 +179,8 @@ exports.updateServer = functions.https.onRequest(async (req, res) => {
             const username = process.env.DATHOST_USERNAME;
             const password = process.env.DATHOST_PASSWORD;
             let formData = new FormData();
-            formData.append('name', 'ELADDER MATCH SERVER');
-            formData.append('csgo_settings.rcon', 'rcontestpass');
+            formData.append('name', `ELADDER MATCH #${req.body.serverNo}`);
+            formData.append('csgo_settings.rcon', `${req.body.csgoRcon}`);
             formData.append('csgo_settings.steam_game_server_login_token', '606001CE75961E5E95736D96AF3AC196');
             await (0, axios_1.default)({
                 method: 'PUT',
