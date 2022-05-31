@@ -22,6 +22,7 @@ import { useForm } from "react-hook-form"
 import { db } from "../lib/firebase/initFirebase"
 import FormData from 'form-data';
 import { useRouter } from 'next/router'
+import cryptoRandomString from 'crypto-random-string';
 
 const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDetail, teamTwoUserDetail }) => {
     const auth = getAuth()
@@ -46,7 +47,7 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
             const myCollRef = collection(db, "game-servers");
 
             const myDocRef = doc(myCollRef);
-            
+
 
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/dublicateServer')
                 .then(async function (response) {
@@ -61,8 +62,14 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
                     }, { merge: true });
 
 
+                    const serverNo = cryptoRandomString({ length: 3, type: 'numeric' });
+                    const rconPass = cryptoRandomString({ length: 10 })
+
                     axios.put('https://us-central1-ehubladder.cloudfunctions.net/updateServer', {
                         serverId: `${response.data.id}`,
+                        csgoRcon: `${rconPass}`,
+                        serverNo: `${serverNo}`
+
                     }).then(async function (res) {
                         console.log(res);
                     })
@@ -70,7 +77,7 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
                     const userTeamOneSteamIds = teamOneUserDetail?.map((user) => {
                         return user.steamId.toString().replace("STEAM_0", "STEAM_1")
                     })
-                
+
                     const userTeamTwoSteamIds = teamTwoUserDetail?.map((user) => {
                         return user.steamId.toString().replace("STEAM_0", "STEAM_1")
                     })
