@@ -8,8 +8,6 @@ import StartServer from "../../components/StartServer";
 
 const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, teamOneUserDetail, teamTwoUserDetail }) => {
 
-  
-
     const ServerInformation = () => {
         if (matchDetail.id == serverDetail[0]?.matchid) {
             return (
@@ -123,6 +121,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const teamOneUserDocs = await getDocs(q4);
     const teamTwoUserDocs = await getDocs(q5);
 
+    
+
     const teamOneUserDetail = teamOneUserDocs.docs.map((doc) => {
         if (doc.exists()) {
 
@@ -132,6 +132,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
         }
     })
+
 
     const teamTwoUserDetail = teamTwoUserDocs.docs.map((doc) => {
         if (doc.exists()) {

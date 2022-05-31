@@ -52,6 +52,9 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/dublicateServer')
                 .then(async function (response) {
 
+                    const serverNo = cryptoRandomString({ length: 3, type: 'numeric' });
+                    const rconPass = cryptoRandomString({ length: 10 })
+
                     await setDoc(myDocRef, {
                         serverId: response.data.id,
                         ip: response.data.raw_ip,
@@ -59,13 +62,14 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
                         id: myDocRef.id,
                         port: response.data.ports.game,
                         matchid: matchDetail.id,
+                        rcon: rconPass,
+                        serverName: `EHUB LADDER #${serverNo}`
                     }, { merge: true });
 
 
-                    const serverNo = cryptoRandomString({ length: 3, type: 'numeric' });
-                    const rconPass = cryptoRandomString({ length: 10 })
 
-                    axios.put('https://us-central1-ehubladder.cloudfunctions.net/updateServer', {
+
+                    await axios.put('https://us-central1-ehubladder.cloudfunctions.net/updateServer', {
                         serverId: `${response.data.id}`,
                         csgoRcon: `${rconPass}`,
                         serverNo: `${serverNo}`
@@ -82,7 +86,7 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
                         return user.steamId.toString().replace("STEAM_0", "STEAM_1")
                     })
 
-                    axios.post('https://us-central1-ehubladder.cloudfunctions.net/startMatchSeries', {
+                    await axios.post('https://us-central1-ehubladder.cloudfunctions.net/startMatchSeries', {
                         serverId: `${response.data.id}`,
                         teamOneName: `${teamOneDetail[0].teamName}`,
                         teamTwoName: `${teamTwoDetail[0].teamName}`,
