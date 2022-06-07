@@ -57,9 +57,6 @@ const myProfile = ({userDetail, teamDetail}) => {
             for (let i = 0; i < 10; i++) {
                 const img = document.getElementById('myimg');
                 img.setAttribute('src', url);
-
-                console.log(img)
-
             }
 
         })
