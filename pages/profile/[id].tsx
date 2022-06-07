@@ -47,31 +47,31 @@ const myProfile = ({userDetail, teamDetail}) => {
 
     }
 
-    // const storage = getStorage();
+    const storage = getStorage();
 
-    // getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`))
-    //     .then((url) => {
-    //         // `url` is the download URL for 'images/stars.jpg'
+    getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`))
+        .then((url) => {
+            // `url` is the download URL for 'images/stars.jpg'
 
-    //         // Or inserted into an <img> element
-    //         for (let i = 0; i < 10; i++) {
-    //             const img = document.getElementById('teamlogo');
-    //             img.setAttribute('src', url);
+            // Or inserted into an <img> element
+            for (let i = 0; i < 10; i++) {
+                const img = document.getElementById('myimg');
+                img.setAttribute('src', url);
 
-    //             console.log(img)
+                console.log(img)
 
-    //         }
+            }
 
-    //     })
-    //     .catch((error) => {
-    //         // Handle any errors
-    //         console.log(error)
+        })
+        .catch((error) => {
+            // Handle any errors
+            console.log(error)
 
-    //         getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
-    //             const teamImg = document.getElementById('teamlogo');
-    //             teamImg.setAttribute('src', url);
-    //         });
-    //     });
+            getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
+                const teamImg = document.getElementById('teamlogo');
+                teamImg.setAttribute('src', url);
+            });
+        });
 
 
 
