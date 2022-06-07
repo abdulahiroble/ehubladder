@@ -90,13 +90,6 @@ const CreateTeam = () => {
 
   }
 
-  getDownloadURL(ref(storage, `/images/ranks/faceit10.png`)).then(url => {
-    console.log(url)
-
-    return url
-  });
-
-
   const ranks = [
     {value: "faceit1.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit1.png?alt=media&token=0ab5dd1a-5833-46d7-8b2e-29d5fba193d3"},
     {value: "faceit2.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit2.png?alt=media&token=00b9e38e-4467-42f4-a880-41854c1fceae"},

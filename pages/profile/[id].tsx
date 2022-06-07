@@ -1,20 +1,20 @@
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
-import { GetStaticProps, GetStaticPaths } from 'next'
+import {collection, doc, getDoc, getDocs, query, where} from "firebase/firestore";
+import {GetStaticProps, GetStaticPaths} from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { useUser } from '../../lib/firebase/useUser'
+import React, {useEffect, useState} from 'react'
+import {useUser} from '../../lib/firebase/useUser'
 import CreateTeam from "../../components/CreateTeam";
-import { db } from '../../lib/firebase/initFirebase'
+import {db} from '../../lib/firebase/initFirebase'
 import "firebase/storage";
-import { storage } from "../../lib/firebase/initFirebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { v4 } from "uuid";
+import {storage} from "../../lib/firebase/initFirebase";
+import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import {v4} from "uuid";
 
 
-const myProfile = ({ userDetail, teamDetail }) => {
-    const { user, logout } = useUser()
+const myProfile = ({userDetail, teamDetail}) => {
+    const {user, logout} = useUser()
     const [imageUpload, setImageUpload] = useState(null);
 
     const ShowEditProfile = () => {
@@ -47,34 +47,34 @@ const myProfile = ({ userDetail, teamDetail }) => {
 
     }
 
+    const storage = getStorage();
 
+    getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`))
+        .then((url) => {
+            // `url` is the download URL for 'images/stars.jpg'
 
+            // Or inserted into an <img> element
+            for (let i = 0; i < 10; i++) {
+                const img = document.getElementById('myimg');
+                img.setAttribute('src', url);
+            }
 
-    getDownloadURL(ref(storage, `/images/profilepic/${userDetail.id}`)).then(onResolve, onReject);
+        })
+        .catch((error) => {
+            // Handle any errors
+            console.log(error)
 
-    function onResolve(url) {
-        if (typeof window !== "undefined") {
-            const img = document.getElementById('myimg');
-            img.setAttribute('src', url);
-        }
-    }
-
-    function onReject(error) {
-        console.log(error.code);
-
-        getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
-            const img = document.getElementById('myimg');
-            img.setAttribute('src', url);
+            getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
+                const teamImg = document.getElementById('teamlogo');
+                teamImg.setAttribute('src', url);
+            });
         });
 
-
-    }
 
 
     return (
         <>
             <Head>{userDetail.gamerTag}</Head>
-
             <div className='text-white bg-black'>
                 <div className='profile-background'>
                     <div className='pt-32 flex justify-start mx-96'>
@@ -126,37 +126,45 @@ const myProfile = ({ userDetail, teamDetail }) => {
                             <div className='flex space-x-7 mx-20'>
                                 <div className='pt-4'>
                                     <div>
+
                                         {teamDetail.map((team) => {
 
+                                            const storage = getStorage();
 
-                                            getDownloadURL(ref(storage, `/images/teams/logo/${team.id}`)).then(onResolve, onReject);
+                                            getDownloadURL(ref(storage, `/images/teams/logo/${team.id}`))
+                                                .then((url) => {
+                                                    // `url` is the download URL for 'images/stars.jpg'
 
-                                            function onResolve(url) {
-                                                if (typeof window !== "undefined") {
-                                                    const teamImg = document.getElementById('teamlogo');
-                                                    teamImg.setAttribute('src', url);
-                                                }
-                                            }
+                                                    // Or inserted into an <img> element
+                                                    const img = document.getElementById('teamlogo');
+                                                    img.setAttribute('src', url);
 
-                                            function onReject(error) {
-                                                console.log(error.code);
+                                                    console.log(img)
 
-                                                getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
-                                                    const teamImg = document.getElementById('teamlogo');
-                                                    teamImg.setAttribute('src', url);
+                                                })
+                                                .catch((error) => {
+                                                    // Handle any errors
+                                                    console.log(error)
+
+                                                    getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
+                                                        const teamImg = document.getElementById('teamlogo');
+                                                        teamImg.setAttribute('src', url);
+                                                    });
                                                 });
 
 
-                                            }
+
+
                                             return (
                                                 <div className="flex space-x-5 py-2">
                                                     <img className="rounded-full h-16 w-16" id="teamlogo" />
                                                     <Link href={`/teams/${team.id}`}>
                                                         <a className="pt-5">{team.teamName}</a>
-                                                        </Link>
+                                                    </Link>
                                                 </div>
                                             )
                                         })}
+
                                     </div>
                                 </div>
 

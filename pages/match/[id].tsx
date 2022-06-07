@@ -1,12 +1,12 @@
-import { doc, getDoc, query, collection, where, getDocs } from "firebase/firestore";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { db } from "../../lib/firebase/initFirebase";
-import { formatMyDate } from "../../components/DateFormatter";
-import { Button } from "react-bootstrap";
+import {doc, getDoc, query, collection, where, getDocs} from "firebase/firestore";
+import {GetStaticPaths, GetStaticProps} from "next";
+import {db} from "../../lib/firebase/initFirebase";
+import {formatMyDate} from "../../components/DateFormatter";
+import {Button} from "react-bootstrap";
 import StartServer from "../../components/StartServer";
 
 
-const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, teamOneUserDetail, teamTwoUserDetail }) => {
+const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, teamOneUserDetail, teamTwoUserDetail}) => {
 
     const ServerInformation = () => {
         if (matchDetail.id == serverDetail[0]?.matchid) {
@@ -78,7 +78,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
-    const matchDoc = doc(db, "matches", context.params.id)
+    const matchDoc = doc(db, "matches", context.params.id as string);
     const matchDetail = await getDoc(matchDoc).then((doc) => {
         if (doc.exists()) {
 
@@ -121,7 +121,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const teamOneUserDocs = await getDocs(q4);
     const teamTwoUserDocs = await getDocs(q5);
 
-    
+
 
     const teamOneUserDetail = teamOneUserDocs.docs.map((doc) => {
         if (doc.exists()) {
