@@ -89,7 +89,7 @@ const editProfile = (userDetail) => {
 
     function onResolve(url) {
         const img = document.getElementById('myimg');
-        img.setAttribute('src', url);
+        img?.setAttribute('src', url);
     }
 
     function onReject(error) {
