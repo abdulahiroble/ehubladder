@@ -203,9 +203,9 @@ export const dublicateServer = functions.https.onRequest(async (req, res) => {
         .then(function (response) {
           res.status(200).json(response.data);
         })
-      } catch(err) {
-          res.status(500).json({ message: err });
-        };
+    } catch (err) {
+      res.status(500).json({ message: err });
+    };
   });
 });
 
@@ -216,32 +216,32 @@ export const updateServer = functions.https.onRequest(async (req, res) => {
     try {
       res.set('Access-Control-Allow-Origin', '*');
 
-  const username = process.env.DATHOST_USERNAME;
-  const password = process.env.DATHOST_PASSWORD;
+      const username = process.env.DATHOST_USERNAME;
+      const password = process.env.DATHOST_PASSWORD;
 
-  let formData = new FormData();
-  formData.append('name', `ELADDER MATCH #${req.body.serverNo}`);
-  formData.append('csgo_settings.rcon', `${req.body.csgoRcon}`);
-  formData.append('csgo_settings.steam_game_server_login_token','606001CE75961E5E95736D96AF3AC196');
+      let formData = new FormData();
+      formData.append('name', `ELADDER MATCH #${req.body.serverNo}`);
+      formData.append('csgo_settings.rcon', `${req.body.csgoRcon}`);
+      formData.append('csgo_settings.steam_game_server_login_token', '606001CE75961E5E95736D96AF3AC196');
 
-  await axios({
-    method: 'PUT',
-    url: `https://dathost.net/api/0.1/game-servers/${req.body.serverId}`,
-    data: formData,
-    headers: {
-      authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
-        'base64'
-      )}`,
-      'Content-Type': 'multipart/form-data',
-    },
-  })
-    .then(function (response) {
-      res.status(200).json(response.data);
-    })
-  } catch(err) {
+      await axios({
+        method: 'PUT',
+        url: `https://dathost.net/api/0.1/game-servers/${req.body.serverId}`,
+        data: formData,
+        headers: {
+          authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
+            'base64'
+          )}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then(function (response) {
+          res.status(200).json(response.data);
+        })
+    } catch (err) {
       res.status(500).json({ message: err });
     };
-});
+  });
 });
 
 
@@ -252,41 +252,77 @@ export const startMatchSeries = functions.https.onRequest(async (req, res) => {
     try {
       res.set('Access-Control-Allow-Origin', '*');
 
-  const username = process.env.DATHOST_USERNAME;
-  const password = process.env.DATHOST_PASSWORD;
+      const username = process.env.DATHOST_USERNAME;
+      const password = process.env.DATHOST_PASSWORD;
 
-  let formData = new FormData();
-  formData.append('game_server_id', req.body.serverId);
-  formData.append('team1_name', req.body.teamOneName);
-  formData.append('team1_steam_ids', req.body.team1_steam_ids);
-  formData.append('team2_name', req.body.teamTwoName);
-  formData.append('team2_steam_ids', req.body.team2_steam_ids);
-  formData.append('warmup_time','60');
-  formData.append('number_of_maps','2');
-  formData.append('map1', req.body.mapOne);
-  formData.append('map1_start_ct', req.body.startCTMapOne);
-  formData.append('map2', req.body.mapTwo);
-  formData.append('map1_start_ct', req.body.startCTMapTwo);
-  formData.append('message_prefix', "LADDER BOT");
-  formData.append('round_end_webhook_url', "https://webhook.site/c4f36389-e55e-492a-b478-fb38e4507b42")
+      let formData = new FormData();
+      formData.append('game_server_id', req.body.serverId);
+      formData.append('team1_name', req.body.teamOneName);
+      formData.append('team1_steam_ids', req.body.team1_steam_ids);
+      formData.append('team2_name', req.body.teamTwoName);
+      formData.append('team2_steam_ids', req.body.team2_steam_ids);
+      formData.append('warmup_time', '60');
+      formData.append('number_of_maps', '2');
+      formData.append('map1', req.body.mapOne);
+      formData.append('map1_start_ct', req.body.startCTMapOne);
+      formData.append('map2', req.body.mapTwo);
+      formData.append('map1_start_ct', req.body.startCTMapTwo);
+      formData.append('message_prefix', "LADDER BOT");
+      formData.append('round_end_webhook_url', "https://webhook.site/c4f36389-e55e-492a-b478-fb38e4507b42")
 
 
-  await axios({
-    method: 'POST',
-    url: `https://dathost.net/api/0.1/match-series`,
-    data: formData,
-    headers: {
-      authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
-        'base64'
-      )}`,
-      'Content-Type': 'multipart/form-data',
-    },
-  })
-    .then(function (response) {
-      res.status(200).json(response.data);
-    })
-  } catch(err) {
+      await axios({
+        method: 'POST',
+        url: `https://dathost.net/api/0.1/match-series`,
+        data: formData,
+        headers: {
+          authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
+            'base64'
+          )}`,
+          'Content-Type': 'application/x-www-form-urlencoded', 
+        },
+      })
+        .then(function (response) {
+          res.status(200).json(response.data);
+        })
+    } catch (err) {
       res.status(500).json({ message: err });
     };
+  });
 });
+
+// PUT Request for Challonge submit match result 
+
+export const matchResult = functions.https.onRequest(async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+  try {
+    cors()(req, res, async () => {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+      res.set('Access-Control-Allow-Origin', '*');
+
+      const response = await axios(
+        `https://api.challonge.com/v1/tournaments/${req.body.tournamentId}/matches/${req.body.match_id}.json`,
+        {
+          params: { api_key: process.env.CHALLONGE_API_KEY },
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+          data: {
+            match: {
+              scores_csv: req.body.scores,
+              winner_id: req.body.winner_id,
+            },
+          },
+        }
+      );
+
+      res.status(200).json(response.data);
+    });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
 });

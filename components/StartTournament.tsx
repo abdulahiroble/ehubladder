@@ -80,6 +80,7 @@ const StartTournament = ({ tournaments }) => {
                             player2_id: match.match.player2_id,
                             round: match.match.round,
                             id: myDocRef.id,
+                            matchid: match.match.id,
                             started_at: match.match.started_at,
                             state: match.match.state,
                             winner_id: match.match.winner_id,

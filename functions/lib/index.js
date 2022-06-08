@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startMatchSeries = exports.updateServer = exports.dublicateServer = exports.deleteParticipant = exports.resetTournament = exports.startTournament = exports.addParticipant = exports.upcomingMatches = exports.getAllTournaments = exports.helloWorld = void 0;
+exports.matchResult = exports.startMatchSeries = exports.updateServer = exports.dublicateServer = exports.deleteParticipant = exports.resetTournament = exports.startTournament = exports.addParticipant = exports.upcomingMatches = exports.getAllTournaments = exports.helloWorld = void 0;
 const functions = require("firebase-functions");
 const axios_1 = require("axios");
 const cors = require("cors");
@@ -228,7 +228,7 @@ exports.startMatchSeries = functions.https.onRequest(async (req, res) => {
                 data: formData,
                 headers: {
                     authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`,
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
             })
                 .then(function (response) {
@@ -240,5 +240,34 @@ exports.startMatchSeries = functions.https.onRequest(async (req, res) => {
         }
         ;
     });
+});
+// PUT Request for Challonge submit match result 
+exports.matchResult = functions.https.onRequest(async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    try {
+        cors()(req, res, async () => {
+            process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+            res.set('Access-Control-Allow-Origin', '*');
+            const response = await (0, axios_1.default)(`https://api.challonge.com/v1/tournaments/${req.body.tournamentId}/matches/${req.body.match_id}.json`, {
+                params: { api_key: process.env.CHALLONGE_API_KEY },
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                data: {
+                    match: {
+                        scores_csv: req.body.scores,
+                        winner_id: req.body.winner_id,
+                    },
+                },
+            });
+            res.status(200).json(response.data);
+        });
+    }
+    catch (err) {
+        res.status(500).json({ message: err });
+    }
 });
 //# sourceMappingURL=index.js.map
