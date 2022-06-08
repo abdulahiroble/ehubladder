@@ -1,6 +1,6 @@
 import {getDocs, collection, doc, getDoc, query, where} from "firebase/firestore";
 import {GetStaticPaths, GetStaticProps} from "next";
-import {getDownloadURL, listAll, ref} from "firebase/storage";
+import {getDownloadURL, getStorage, listAll, ref} from "firebase/storage";
 import Link from "next/link";
 import AddMembers from "../../components/AddMembers";
 import {db, storage} from "../../lib/firebase/initFirebase";
@@ -15,20 +15,54 @@ import {User} from "firebase/auth";
 const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, teamOneDetail, teamTwoDetail, matchDetail}) => {
     const {user, logout} = useUser()
 
-    getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
+    // getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
 
-    function onResolve(url) {
-        const img = document.getElementById('teamlogo');
-        img.setAttribute('src', url);
-    }
+    // function onResolve(url) {
+    //     const img = document.getElementById('teamlogo');
+    //     img.setAttribute('src', url);
+    // }
 
-    function onReject(error) {
-        console.log(error.code);
+    // function onReject(error) {
+    //     console.log(error.code);
 
-        getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
-            const img = document.getElementById('teamlogo');
-            img.setAttribute('src', url);
+    //     getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
+    //         const img = document.getElementById('teamlogo');
+    //         img.setAttribute('src', url);
+    //     });
+    // }
+
+
+    const storage = getStorage();
+
+    getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`))
+        .then((url) => {
+            // `url` is the download URL for 'images/stars.jpg'
+
+            // Or inserted into an <img> element
+            for (let i = 0; i < 10; i++) {
+                const img = document.getElementById('teamlogo');
+                img.setAttribute('src', url);
+            }
+
+        })
+        .catch((error) => {
+            // Handle any errors
+            console.log(error)
+
+            getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
+                const teamImg = document.getElementById('teamlogo');
+                teamImg.setAttribute('src', url);
+            });
         });
+
+
+    if (teamDetail.highRank) {
+        getDownloadURL(ref(storage, `/images/ranks/${teamDetail.highRank}`)).then(url => {
+            const highRankImg = document.getElementById('highfaceit')
+            highRankImg.setAttribute('src', url)
+
+        })
+
     }
 
     if (teamDetail.lowRank) {
@@ -115,25 +149,25 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                                     <div className="py-5">
                                         {userDetail.map((user) => {
 
-                                            getDownloadURL(ref(storage, `/images/profilepic/${user.id}`)).then(onResolve, onReject);
+                                            // getDownloadURL(ref(storage, `/images/profilepic/${user.id}`)).then(onResolve, onReject);
 
-                                            function onResolve(url) {
-                                                if (typeof window !== "undefined") {
-                                                    const profileImg = document.getElementById('profileimg');
-                                                    profileImg.setAttribute('src', url);
-                                                }
-                                            }
+                                            // function onResolve(url) {
+                                            //     if (typeof window !== "undefined") {
+                                            //         const profileImg = document.getElementById('profileimg');
+                                            //         profileImg.setAttribute('src', url);
+                                            //     }
+                                            // }
 
-                                            function onReject(error) {
-                                                console.log(error.code);
+                                            // function onReject(error) {
+                                            //     console.log(error.code);
 
-                                                getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
-                                                    const profileImg = document.getElementById('profileimg');
-                                                    profileImg?.setAttribute('src', url);
-                                                });
+                                            //     getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
+                                            //         const profileImg = document.getElementById('profileimg');
+                                            //         profileImg?.setAttribute('src', url);
+                                            //     });
 
 
-                                            }
+                                            // }
 
                                             return (
                                                 <div className="flex space-x-2 py-2">
@@ -144,11 +178,6 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                                                                 <a className="pt-5 px-4">{user.gamerTag}</a>
                                                             </Link>
                                                         </li>
-                                                        {/* <li>
-                                                            <Link href={`/profile/${teamDetail.owner}`}>
-                                                                <a className="pt-5 px-4">{teamDetail.player1}</a>
-                                                            </Link>
-                                                        </li> */}
                                                     </ul>
                                                 </div>
                                             )

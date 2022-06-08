@@ -1,18 +1,18 @@
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { useUser } from '../../../lib/firebase/useUser'
-import { db, storage } from "../../../lib/firebase/initFirebase";
+import {collection, doc, getDoc, getDocs, setDoc} from "firebase/firestore";
+import {GetStaticPaths, GetStaticProps} from "next";
+import {useUser} from '../../../lib/firebase/useUser'
+import {db, storage} from "../../../lib/firebase/initFirebase";
 import "firebase/storage";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import EditUserProfile from "../../../components/EditUserProfile";
-import { useState } from "react";
+import {useState} from "react";
 import EditUserInformation from "../../../components/EditUserInformation";
 
 
 
 
 const editProfile = (userDetail) => {
-    const { user, logout } = useUser()
+    const {user, logout} = useUser()
     const [imageUpload, setImageUpload] = useState(null);
 
 
@@ -54,9 +54,30 @@ const editProfile = (userDetail) => {
 
         if (imageUpload == null) return;
 
-        const imageRef = ref(storage, `images/profilepic/${userDetail.userDetail.id}`);
-        uploadBytes(imageRef, imageUpload).then(() => {
-            alert("image uploaded")
+        const imageRef = ref(storage, `/images/teams/logo/${userDetail.userDetail.id}`);
+        uploadBytes(imageRef, imageUpload).then(async () => {
+
+            getDownloadURL(ref(storage, `/images/teams/logo/${userDetail.userDetail.id}`))
+                .then(async (url) => {
+                    // `url` is the download URL for 'images/stars.jpg'
+                    const userDoc = doc(db, "users", userDetail.userDetail.id)
+                    await setDoc(userDoc, {
+                        profilePic: url
+                    }, {merge: true})
+
+                    alert("image uploaded")
+
+                })
+                .catch((error) => {
+                    // Handle any errors
+                    console.log(error)
+
+                    getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
+                        const teamImg = document.getElementById('teamlogo');
+                        teamImg?.setAttribute('src', url);
+                    });
+                });
+
 
         })
     };
@@ -97,7 +118,7 @@ const editProfile = (userDetail) => {
                                     </div>
                                     <div className="grid grid-cols-3 mx-8">
                                         <p className="col-span-3 pb-2 text-sm">User image:</p>
-                                        <input className="col-span-2 form-label inline-block mb-2 text-white" type="file" onChange={(event) => { setImageUpload(event.target.files[0]) }} />
+                                        <input className="col-span-2 form-label inline-block mb-2 text-white" type="file" onChange={(event) => {setImageUpload(event.target.files[0])}} />
                                         <button className="col-span-1 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1 px-4 border border-gray-400 rounded shadow" onClick={handleUpload}>Upload </button>
                                     </div>
                                 </div>
