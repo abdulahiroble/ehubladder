@@ -65,8 +65,8 @@ const myProfile = ({userDetail, teamDetail}) => {
             console.log(error)
 
             getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
-                const teamImg = document.getElementById('teamlogo');
-                teamImg.setAttribute('src', url);
+                const teamImg = document.getElementById('myimg');
+                teamImg?.setAttribute('src', url);
             });
         });
 

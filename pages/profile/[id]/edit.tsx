@@ -54,10 +54,10 @@ const editProfile = (userDetail) => {
 
         if (imageUpload == null) return;
 
-        const imageRef = ref(storage, `/images/teams/logo/${userDetail.userDetail.id}`);
+        const imageRef = ref(storage, `/images/profilepic/${userDetail.userDetail.id}`);
         uploadBytes(imageRef, imageUpload).then(async () => {
 
-            getDownloadURL(ref(storage, `/images/teams/logo/${userDetail.userDetail.id}`))
+            getDownloadURL(ref(storage, `/images/profilepic/${userDetail.userDetail.id}`))
                 .then(async (url) => {
                     // `url` is the download URL for 'images/stars.jpg'
                     const userDoc = doc(db, "users", userDetail.userDetail.id)

@@ -15,23 +15,6 @@ import {User} from "firebase/auth";
 const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, teamOneDetail, teamTwoDetail, matchDetail}) => {
     const {user, logout} = useUser()
 
-    // getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`)).then(onResolve, onReject);
-
-    // function onResolve(url) {
-    //     const img = document.getElementById('teamlogo');
-    //     img.setAttribute('src', url);
-    // }
-
-    // function onReject(error) {
-    //     console.log(error.code);
-
-    //     getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
-    //         const img = document.getElementById('teamlogo');
-    //         img.setAttribute('src', url);
-    //     });
-    // }
-
-
     const storage = getStorage();
 
     getDownloadURL(ref(storage, `/images/teams/logo/${teamDetail.id}`))
