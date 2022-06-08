@@ -141,7 +141,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
-    const teamDoc = doc(db, "teams", context.params.id)
+    const teamDoc = doc(db, "teams", context.params.id as string);
     const teamDetail = await getDoc(teamDoc).then((doc) => {
         if (doc.exists()) {
 

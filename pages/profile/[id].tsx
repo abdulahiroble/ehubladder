@@ -131,7 +131,7 @@ const myProfile = ({userDetail, teamDetail}) => {
 
                                             const storage = getStorage();
 
-                                            getDownloadURL(ref(storage, `/images/teams/logo/${team.id}`))
+                                            getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`))
                                                 .then((url) => {
                                                     // `url` is the download URL for 'images/stars.jpg'
 
@@ -148,7 +148,7 @@ const myProfile = ({userDetail, teamDetail}) => {
 
                                                     getDownloadURL(ref(storage, `/images/teams/logo/logo-placeholder.webp`)).then(url => {
                                                         const teamImg = document.getElementById('teamlogo');
-                                                        teamImg.setAttribute('src', url);
+                                                        teamImg?.setAttribute('src', url);
                                                     });
                                                 });
 
@@ -157,7 +157,7 @@ const myProfile = ({userDetail, teamDetail}) => {
 
                                             return (
                                                 <div className="flex space-x-5 py-2">
-                                                    <img className="rounded-full h-16 w-16" id="teamlogo" />
+                                                    {team.logo ? (<img className="rounded-full h-16 w-16" src={team.logo} />) : (<img className="rounded-full h-16 w-16" id="teamlogo" />)}
                                                     <Link href={`/teams/${team.id}`}>
                                                         <a className="pt-5">{team.teamName}</a>
                                                     </Link>
@@ -207,7 +207,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
 
-    const userDoc = doc(db, "users", context.params.id)
+    const userDoc = doc(db, "users", context.params.id as string);
     const userDetail = await getDoc(userDoc).then((doc) => {
         if (doc.exists()) {
 
