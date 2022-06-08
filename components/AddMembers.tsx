@@ -41,9 +41,9 @@ const AddMembers = ({userDetailAll, id}) => {
 
             const myUserRef = doc(db, 'users', memberId);
 
-            await setDoc(myCollRefTeams, {
-                player1: member,
-            }, {merge: true});
+            // await setDoc(myCollRefTeams, {
+            //     player1: member,
+            // }, {merge: true});
 
             await setDoc(myUserRef, {
                 team: myCollRefTeams.id
