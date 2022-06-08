@@ -169,6 +169,7 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
                                             // }
 
+
                                             return (
                                                 <div className="flex space-x-2 py-2">
                                                     <img className="rounded-full h-16 w-16" id="profileimg" />
