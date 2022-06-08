@@ -149,37 +149,35 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                                     <div className="py-5">
                                         {userDetail.map((user) => {
 
-                                            // getDownloadURL(ref(storage, `/images/profilepic/${user.id}`)).then(onResolve, onReject);
+                                            getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`))
+                                                .then((url) => {
+                                                    // `url` is the download URL for 'images/stars.jpg'
 
-                                            // function onResolve(url) {
-                                            //     if (typeof window !== "undefined") {
-                                            //         const profileImg = document.getElementById('profileimg');
-                                            //         profileImg.setAttribute('src', url);
-                                            //     }
-                                            // }
+                                                    // Or inserted into an <img> element
+                                                    const img = document.getElementById('myimg');
+                                                    img.setAttribute('src', url);
 
-                                            // function onReject(error) {
-                                            //     console.log(error.code);
+                                                    console.log(img)
 
-                                            //     getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
-                                            //         const profileImg = document.getElementById('profileimg');
-                                            //         profileImg?.setAttribute('src', url);
-                                            //     });
+                                                })
+                                                .catch((error) => {
+                                                    // Handle any errors
+                                                    console.log(error)
 
-
-                                            // }
+                                                    getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
+                                                        const teamImg = document.getElementById('myimg');
+                                                        teamImg?.setAttribute('src', url);
+                                                    });
+                                                });
 
 
                                             return (
-                                                <div className="flex space-x-2 py-2">
-                                                    <img className="rounded-full h-16 w-16" id="profileimg" />
-                                                    <ul className="list-outside hover:list-inside">
-                                                        <li>
-                                                            <Link href={`/profile/${user.id}`}>
-                                                                <a className="pt-5 px-4">{user.gamerTag}</a>
-                                                            </Link>
-                                                        </li>
-                                                    </ul>
+                                                <div className="flex space-x-5 py-2">
+                                                    <img className="rounded-full h-16 w-16" src={user.profilePic} />
+                                                    {/* {team.logo ? (<img className="rounded-full h-16 w-16" src={team.logo} />) : (<img className="rounded-full h-16 w-16" id="teamlogo" />)} */}
+                                                    <Link href={`/teams/${user.id}`}>
+                                                        <a className="pt-5">{user.gamerTag}</a>
+                                                    </Link>
                                                 </div>
                                             )
                                         })}
