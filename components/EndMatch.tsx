@@ -69,8 +69,28 @@ const EndMatch = ({ matchResult, matchDetail }) => {
             console.log(error)
 
         }
+    }
 
-
+    const ShowSubmitResult = () => {
+        if (matchResult.finished != true) {
+            return (
+                <div>
+                    <Button
+                        onClick={submitScore}
+                        backgroundColor="gray.900"
+                        color="white"
+                        fontWeight="medium"
+                        _hover={{ bg: 'gray.700' }}
+                        _active={{
+                            bg: 'gray.800',
+                            transform: 'scale(0.95)'
+                        }}
+                    >
+                        End Match
+                    </Button>
+                </div>
+            )
+        } else return null;
     }
 
     return (
@@ -97,24 +117,13 @@ const EndMatch = ({ matchResult, matchDetail }) => {
                         <h3>{matchResult.team2_stats.matches_won}</h3>
                     </div>
                 }
-
+                
+                <ShowSubmitResult />
 
 
             </div>
 
-            <Button
-                onClick={submitScore}
-                backgroundColor="gray.900"
-                color="white"
-                fontWeight="medium"
-                _hover={{ bg: 'gray.700' }}
-                _active={{
-                    bg: 'gray.800',
-                    transform: 'scale(0.95)'
-                }}
-            >
-                End Match
-            </Button>
+
         </>
     )
 }
