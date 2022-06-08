@@ -105,7 +105,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const id = context.params.id;
 
-    const tournamentDoc = doc(db, "tournaments", id);
+    const tournamentDoc = doc(db, "tournaments", id as string);
 
     const tournamentDetail = await getDoc(tournamentDoc).then((doc) => {
         if (doc.exists()) {

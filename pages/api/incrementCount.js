@@ -1,6 +1,6 @@
 import firebase from 'firebase/app'
 import { ref, runTransaction } from 'firebase/database'
-import { realDB } from '@/lib/firebase/initFirebase'
+import { realDB } from '/lib/firebase/initFirebase'
 
 const incrementCount = async (req, res) => {
     const dbRef = ref(realDB, "counts/" + req.query.id)
