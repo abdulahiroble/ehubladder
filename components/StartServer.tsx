@@ -98,6 +98,7 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
                         await setDoc(myMatchesRef, {
                             match_series_id: response.data.matches[0].match_series_id,
                             dathost_match_id: response.data.id,
+                            finished: false,
                         }, { merge: true });
 
                         console.log(response);

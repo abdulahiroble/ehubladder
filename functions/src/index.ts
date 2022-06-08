@@ -6,8 +6,16 @@ import * as FormData from 'form-data';
 
 const app = express();
 
+const corsOptions ={
+  origin:'http://localhost:3000', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
+}
+
 // Automatically allow cross-origin requests
-app.use(cors({ origin: true }));
+app.use(cors(corsOptions));
+
+
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
@@ -295,25 +303,41 @@ export const startMatchSeries = functions.https.onRequest(async (req, res) => {
 
 export const matchResult = functions.https.onRequest(async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*');
+  res.set("Access-Control-Allow-Credentials", "true");
+  res.set("Access-Control-Max-Age", "1800");
+  res.set("Access-Control-Allow-Headers", "content-type");
+  res.set( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
   try {
     cors()(req, res, async () => {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
       res.set('Access-Control-Allow-Origin', '*');
+      res.set("Access-Control-Allow-Credentials", "true");
+      res.set("Access-Control-Max-Age", "1800");
+      res.set("Access-Control-Allow-Headers", "content-type");
+      res.set( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
 
       const response = await axios(
         `https://api.challonge.com/v1/tournaments/${req.body.tournamentId}/matches/${req.body.match_id}.json`,
         {
-          params: { api_key: process.env.CHALLONGE_API_KEY },
+          params: { 
+            api_key: process.env.CHALLONGE_API_KEY, 
+          },
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Max-Age": "1800",
+            "Access-Control-Allow-Headers": "content-type",
+            "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH, OPTIONS"
+
+
           },
           data: {
             match: {
-              scores_csv: req.body.scores,
+              scores_csv: req.body.scores_csv,
               winner_id: req.body.winner_id,
             },
           },

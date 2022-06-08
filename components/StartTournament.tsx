@@ -83,8 +83,6 @@ const StartTournament = ({ tournaments }) => {
                             matchid: match.match.id,
                             started_at: match.match.started_at,
                             state: match.match.state,
-                            winner_id: match.match.winner_id,
-                            loser_id: match.match.loser_id,
                             tournament_id: match.match.tournament_id,
                         });
                     })
