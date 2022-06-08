@@ -10,6 +10,7 @@ import axios from "axios";
 import Image from "next/image";
 import DeleteParticipant from "../../components/DeleteParticipant";
 import UpcomingMatches from "../../components/UpcomingMatches";
+import {User} from "firebase/auth";
 
 const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, teamOneDetail, teamTwoDetail, matchDetail}) => {
     const {user, logout} = useUser()
@@ -48,22 +49,6 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
     }
 
 
-
-
-    // getDownloadURL(ref(storage, `/images/ranks/${teamDetail.lowRank}`)).then(url => {
-    //     const lowRankImg = document.getElementById('lowfaceit')
-    //     lowRankImg.setAttribute('src', url)
-
-    // })
-
-    // getDownloadURL(ref(storage, `/images/ranks/${teamDetail.highRank}`)).then(url => {
-    //     const highRankImg = document.getElementById('highfaceit')
-    //     highRankImg.setAttribute('src', url)
-
-    // })
-
-
-
     const ShowEditTeam = () => {
         if (user) {
             if (user.id == teamDetail.owner) {
@@ -81,11 +66,6 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
         return null
 
     }
-
-    // console.log(matchDetail)
-    // console.log(teamOneDetail)
-    // console.log(teamTwoDetail)
-    // console.log(tournamentDetail.map((tournament) => tournament.tournamentId))
 
     const ShowInviteMembers = () => {
         if (user) {
@@ -285,7 +265,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
     const id = context.params.id;
 
-    const teamDoc = doc(db, "teams", id);
+    const teamDoc = doc(db, "teams", id as string);
 
     const teamDetail = await getDoc(teamDoc).then((doc) => {
         if (doc.exists()) {
