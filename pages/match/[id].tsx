@@ -4,16 +4,53 @@ import {db} from "../../lib/firebase/initFirebase";
 import {formatMyDate} from "../../components/DateFormatter";
 import {Button} from "react-bootstrap";
 import StartServer from "../../components/StartServer";
+import EndMatch from "../../components/EndMatch";
+import axios from "axios";
 
 
-const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, teamOneUserDetail, teamTwoUserDetail}) => {
+const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, teamOneUserDetail, teamTwoUserDetail, matchResult}) => {
 
     const ServerInformation = () => {
-        if (matchDetail.id == serverDetail[0]?.matchid) {
+        if (matchResult.finished == true) {
             return (
+                null
+            )
+
+        } else if (matchDetail.id == serverDetail[0]?.matchid)
+            return (
+
                 <div className="py-5">
                     <p>connect {serverDetail[0].ip}:{serverDetail[0].port}</p>
                     <p>GOTV: connect {serverDetail[0].ip}:{serverDetail[0].gotv}</p>
+                </div>
+            )
+    }
+
+    const ShowStartServerButton = () => {
+        if (matchResult.finished == false) {
+            return (
+                <div>
+                    <StartServer
+                        teamOneDetail={teamOneDetail}
+                        teamTwoDetail={teamTwoDetail}
+                        matchDetail={matchDetail}
+                        teamOneUserDetail={teamOneUserDetail}
+                        teamTwoUserDetail={teamTwoUserDetail} />
+                </div>
+            )
+        } else return (
+            null
+        )
+    }
+
+    const ShowMatchResult = () => {
+        if (matchResult) {
+            return (
+                <div>
+                    <EndMatch
+                        matchResult={matchResult}
+                        matchDetail={matchDetail}
+                    />
                 </div>
             )
         } else return (
@@ -30,13 +67,10 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
                             <h3 className="text-4xl pt-10">{teamOneDetail[0].teamName}</h3>
                         </div>
                         <div>
-                            <StartServer
-                                teamOneDetail={teamOneDetail}
-                                teamTwoDetail={teamTwoDetail}
-                                matchDetail={matchDetail}
-                                teamOneUserDetail={teamOneUserDetail}
-                                teamTwoUserDetail={teamTwoUserDetail} />
+                            <ShowStartServerButton />
                             <ServerInformation />
+                            <ShowMatchResult />
+
                             <h3 className="py-3 text-5xl">Versus</h3>
                             <p className="text-white pr-1">
                                 {`${formatMyDate(matchDetail.started_at)}`}
@@ -157,6 +191,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
+    const username = process.env.DATHOST_USERNAME;
+    const password = process.env.DATHOST_PASSWORD;
+
+    const matchRes = await axios.get(`https://dathost.net/api/0.1/match-series/${matchDetail.match_series_id}`, {
+        headers: {
+            authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
+                'base64'
+            )}`,
+        },
+    })
 
     return {
         props: {
@@ -166,7 +210,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
             serverDetail,
             teamOneUserDetail,
             teamTwoUserDetail,
-
+            matchResult: matchRes.data,
         },
         revalidate: 60,
     }

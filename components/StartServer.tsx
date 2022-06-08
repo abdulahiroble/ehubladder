@@ -43,17 +43,14 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
     const startServer = async () => {
 
         try {
-
-            const myCollRef = collection(db, "game-servers");
-
-            const myDocRef = doc(myCollRef);
-
-
             axios.post('https://us-central1-ehubladder.cloudfunctions.net/dublicateServer')
                 .then(async function (response) {
 
                     const serverNo = cryptoRandomString({ length: 3, type: 'numeric' });
                     const rconPass = cryptoRandomString({ length: 10 })
+                    
+                    const myCollRef = collection(db, "game-servers");
+                    const myDocRef = doc(myCollRef);
 
                     await setDoc(myDocRef, {
                         serverId: response.data.id,
@@ -66,16 +63,13 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
                         serverName: `EHUB LADDER #${serverNo}`
                     }, { merge: true });
 
-
-
-
                     await axios.put('https://us-central1-ehubladder.cloudfunctions.net/updateServer', {
                         serverId: `${response.data.id}`,
                         csgoRcon: `${rconPass}`,
                         serverNo: `${serverNo}`
 
                     }).then(async function (res) {
-                        console.log(res);
+                        //console.log(res);
                     })
 
                     const userTeamOneSteamIds = teamOneUserDetail?.map((user) => {
@@ -98,7 +92,15 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
                         team2_steam_ids: `${userTeamTwoSteamIds.toString()}`,
 
 
-                    }).then(async function (response) {
+                    } ).then(async function (response) {
+                        const myMatchesRef = doc(db, "matches", matchDetail.id);
+    
+                        await setDoc(myMatchesRef, {
+                            match_series_id: response.data.matches[0].match_series_id,
+                            dathost_match_id: response.data.id,
+                            finished: false,
+                        }, { merge: true });
+
                         console.log(response);
                     })
 
