@@ -97,7 +97,7 @@ const editProfile = (userDetail) => {
 
         getDownloadURL(ref(storage, `/images/profilepic/user-placeholder.png`)).then(url => {
             const img = document.getElementById('myimg');
-            img.setAttribute('src', url);
+            img?.setAttribute('src', url);
         });
     }
 
