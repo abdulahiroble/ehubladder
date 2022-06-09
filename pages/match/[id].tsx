@@ -14,6 +14,8 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
     const username = process.env.NEXT_PUBLIC_DATHOST_USERNAME;
     const password = process.env.NEXT_PUBLIC_DATHOST_PASSWORD;
 
+    console.log(matchDetail.finished)
+
     const downloadDemoMap1 = async () => {
         await axios({
             url: `https://dathost.net/api/0.1/game-servers/${serverDetail[0].serverId}/files/${matchResult.matches[0].id}.dem`, //your url
@@ -69,23 +71,26 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
 
 
     const ServerInformation = () => {
-        if (matchResult?.finished == true) {
+
+        if (matchResult?.finished) {
             return (
                 null
             )
 
-        } else if (matchDetail.id == serverDetail[0]?.matchid)
+        } else if (matchDetail?.id == serverDetail[0]?.matchid)
             return (
 
                 <div className="py-5">
-                    <p>connect {serverDetail[0].ip}:{serverDetail[0].port}</p>
-                    <p>GOTV: connect {serverDetail[0].ip}:{serverDetail[0].gotv}</p>
+                    <p>connect {serverDetail[0]?.ip}:{serverDetail[0]?.port}</p>
+                    <p>GOTV: connect {serverDetail[0]?.ip}:{serverDetail[0]?.gotv}</p>
                 </div>
             )
+
+        return null
     }
 
     const ShowDownloadDemo = () => {
-        if (matchDetail.finished = true) {
+        if (matchDetail.finished == false) {
             return (
                 <div className="flex justify-center space-x-6 py-6">
                     <Button
@@ -117,7 +122,10 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
     }
 
     const ShowStartServerButton = () => {
-        if (matchResult?.finished == false) {
+        if (serverDetail[0]?.ip) {
+            return null
+
+        } else {
             return (
                 <div>
                     <StartServer
@@ -128,23 +136,24 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
                         teamTwoUserDetail={teamTwoUserDetail} />
                 </div>
             )
-        } else return null
+        }
+
     }
 
-    const ShowMatchResult = () => {
-        if (matchResult) {
-            return (
-                <div>
-                    <EndMatch
-                        matchResult={matchResult}
-                        matchDetail={matchDetail}
-                    />
-                </div>
-            )
-        } else return (
-            null
-        )
-    }
+    // const ShowMatchResult = () => {
+    //     if (matchDetail.finished == true) {
+    //         return (
+    //             <div>
+    //                 <EndMatch
+    //                     matchResult={matchResult}
+    //                     matchDetail={matchDetail}
+    //                 />
+    //             </div>
+    //         )
+    //     } else return (
+    //         null
+    //     )
+    // }
 
     return (
         <>
@@ -156,9 +165,11 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
                             <h3 className="text-4xl pt-10">{teamOneDetail[0].teamName}</h3>
                         </div>
                         <div>
+
                             <ShowStartServerButton />
-                            {/* <ServerInformation /> */}
-                            <ShowMatchResult />
+                            <ServerInformation />
+                            <EndMatch matchResult={matchResult} matchDetail={matchDetail} />
+                            {/* <ShowMatchResult /> */}
                             <h3 className="py-3 text-5xl">Versus</h3>
                             <p className="text-white pr-1">
                                 {`${formatMyDate(matchDetail.started_at)}`}
@@ -277,16 +288,25 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
-    // const username = process.env.NEXT_PUBLIC_DATHOST_USERNAME;
-    // const password = process.env.NEXT_PUBLIC_DATHOST_PASSWORD;
+    const username = process.env.NEXT_PUBLIC_DATHOST_USERNAME;
+    const password = process.env.NEXT_PUBLIC_DATHOST_PASSWORD;
 
-    // const matchRes = await axios.get(`https://dathost.net/api/0.1/match-series/${matchDetail.match_series_id}`, {
-    //     headers: {
-    //         authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
-    //             'base64'
-    //         )}`,
-    //     },
-    // })
+    const matchHest = async () => {
+        if (matchDetail.match_series_id != "") {
+            const matchRes = await axios.get(`https://dathost.net/api/0.1/match-series/${matchDetail.match_series_id}`, {
+                headers: {
+                    authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
+                        'base64'
+                    )}`,
+                },
+            })
+
+            return matchRes.data
+        } else return null
+
+
+    }
+
 
 
 
@@ -298,7 +318,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
             serverDetail,
             teamOneUserDetail,
             teamTwoUserDetail,
-            // matchResult: matchRes.data,
+            matchResult: await matchHest()
         },
         revalidate: 60,
     }
