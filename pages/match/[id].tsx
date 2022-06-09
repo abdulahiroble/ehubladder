@@ -17,56 +17,62 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
     console.log(matchDetail.finished)
 
     const downloadDemoMap1 = async () => {
-        await axios({
-            url: `https://dathost.net/api/0.1/game-servers/${serverDetail[0].serverId}/files/${matchResult.matches[0].id}.dem`, //your url
-            method: 'GET',
-            responseType: 'blob', // important
-            headers: {
-                authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
-                    'base64'
-                )}`,
-                'Access-Control-Allow-Origin': '*',
-                "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Max-Age": "1800",
-                "Access-Control-Allow-Headers": "content-type",
-                "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH, OPTIONS"
-            },
+        if (serverDetail[0]?.serverId && matchResult?.matches[0].id) {
+            await axios({
+                url: `https://dathost.net/api/0.1/game-servers/${serverDetail[0].serverId}/files/${matchResult.matches[0].id}.dem`, //your url
+                method: 'GET',
+                responseType: 'blob', // important
+                headers: {
+                    authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
+                        'base64'
+                    )}`,
+                    'Access-Control-Allow-Origin': '*',
+                    "Access-Control-Allow-Credentials": "true",
+                    "Access-Control-Max-Age": "1800",
+                    "Access-Control-Allow-Headers": "content-type",
+                    "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH, OPTIONS"
+                },
 
-        }).then((response) => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `${matchResult.matches[0].id}.dem`); //or any other extension
-            document.body.appendChild(link);
-            link.click();
-        });
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `${matchResult.matches[0].id}.dem`); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+            });
+        } else {
+            alert("No demo found")
+        }
     }
 
     const downloadDemoMap2 = async () => {
 
-        await axios({
-            url: `https://dathost.net/api/0.1/game-servers/${serverDetail[0].serverId}/files/${matchResult.matches[1].id}.dem`, //your url
-            method: 'GET',
-            responseType: 'blob', // important
-            headers: {
-                authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
-                    'base64'
-                )}`,
-                'Access-Control-Allow-Origin': '*',
-                "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Max-Age": "1800",
-                "Access-Control-Allow-Headers": "content-type",
-                "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH, OPTIONS"
-            },
+        if (serverDetail[0]?.serverId && matchResult?.matches[1].id) {
+            await axios({
+                url: `https://dathost.net/api/0.1/game-servers/${serverDetail[0].serverId}/files/${matchResult.matches[1].id}.dem`, //your url
+                method: 'GET',
+                responseType: 'blob', // important
+                headers: {
+                    authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
+                        'base64'
+                    )}`,
+                    'Access-Control-Allow-Origin': '*',
+                    "Access-Control-Allow-Credentials": "true",
+                    "Access-Control-Max-Age": "1800",
+                    "Access-Control-Allow-Headers": "content-type",
+                    "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH, OPTIONS"
+                },
 
-        }).then((response) => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', `${matchResult.matches[1].id}.dem`); //or any other extension
-            document.body.appendChild(link);
-            link.click();
-        });
+            }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', `${matchResult.matches[1].id}.dem`); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+            });
+        }
     }
 
 
@@ -94,7 +100,7 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
             return (
                 <div className="flex justify-center space-x-6 py-6">
                     <Button
-                        onClick={downloadDemoMap1}
+
                         backgroundColor="gray.900"
                         color="white"
                         fontWeight="medium"
@@ -105,7 +111,7 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
                         }} >
                         Download Map Demo 1
                     </Button>
-                    <Button onClick={downloadDemoMap2}
+                    <Button
                         backgroundColor="gray.900"
                         color="white"
                         fontWeight="medium"
@@ -292,7 +298,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const password = process.env.NEXT_PUBLIC_DATHOST_PASSWORD;
 
     const matchHest = async () => {
-        if (matchDetail.match_series_id != "") {
+        if (matchDetail?.match_series_id !== "") {
             const matchRes = await axios.get(`https://dathost.net/api/0.1/match-series/${matchDetail.match_series_id}`, {
                 headers: {
                     authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
