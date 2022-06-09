@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps = async () => {
             tournaments,
 
         },
-        revalidate: 60,
+        revalidate: 10,
     }
 
 }

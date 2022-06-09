@@ -395,7 +395,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
             teamTwoDetail,
             matchDetail
         },
-        revalidate: 60,
+        revalidate: 10,
     }
 
 }

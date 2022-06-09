@@ -326,7 +326,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
             teamTwoUserDetail,
             matchResult: await matchHest()
         },
-        revalidate: 60,
+        revalidate: 10,
     }
 
 }

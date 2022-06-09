@@ -157,7 +157,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         props: {
             teamDetail,
         },
-        revalidate: 60,
+        revalidate: 10,
     }
 
 }
