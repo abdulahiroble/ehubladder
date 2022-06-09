@@ -49,7 +49,7 @@ const StartServer = ({ teamOneDetail, teamTwoDetail, matchDetail, teamOneUserDet
                     const serverNo = cryptoRandomString({ length: 3, type: 'numeric' });
                     const rconPass = cryptoRandomString({ length: 10 })
                     
-                    const myCollRef = collection(db, "game-servers");
+                    const myCollRef = collection(db, "gameservers");
                     const myDocRef = doc(myCollRef);
 
                     await setDoc(myDocRef, {

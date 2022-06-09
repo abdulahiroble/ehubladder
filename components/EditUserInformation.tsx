@@ -50,7 +50,6 @@ const EditUserInformation = (userDetail) => {
 
             onClose()
 
-
         }
 
     }

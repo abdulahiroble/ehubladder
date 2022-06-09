@@ -262,7 +262,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
-    const q3 = query(collection(db, "game-servers"), where("matchid", "==", matchDetail.id));
+    const q3 = query(collection(db, "gameservers"), where("matchid", "==", matchDetail.id));
     const serverDocs = await getDocs(q3);
 
     const serverDetail = serverDocs.docs.map((doc) => {
