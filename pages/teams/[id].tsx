@@ -13,6 +13,7 @@ import UpcomingMatches from "../../components/UpcomingMatches";
 import {User} from "firebase/auth";
 
 const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tournamentDetail, teamOneDetail, teamTwoDetail, matchDetail}) => {
+    console.log(tournamentDetail)
     const {user, logout} = useUser()
 
     const storage = getStorage();
@@ -219,11 +220,11 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                             </div>
                             <div className="border-b-4 border-white mb-2" />
                             <div>
-                                {tournamentDetail.map((tournament) => (
+                                {tournamentDetail.map((tournament) => ( 
                                     <div className="flex space-x-2">
                                         <ul className="list-outside hover:list-inside">
                                             <li>
-                                                <Link href={`/tournament/${tournament.id}`}>
+                                                <Link href={`/tournament/${tournament.tournamentId}`}>
                                                     <a className="pt-5 px-4">{tournament.tournamentName}</a>
                                                 </Link>
                                             </li>
