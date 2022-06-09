@@ -1,14 +1,14 @@
-import { Button } from '@chakra-ui/react'
+import {Button} from '@chakra-ui/react'
 import axios from "axios"
 import cors from 'cors';
 import express from 'express';
-import { doc, setDoc } from 'firebase/firestore';
-import { promises } from 'form-data';
-import { db } from '../lib/firebase/initFirebase';
+import {doc, setDoc} from 'firebase/firestore';
+import {promises} from 'form-data';
+import {db} from '../lib/firebase/initFirebase';
 
 
 
-const EndMatch = ({ matchResult, matchDetail }) => {
+const EndMatch = ({matchResult, matchDetail}) => {
 
     const submitScore = async () => {
         try {
@@ -60,7 +60,7 @@ const EndMatch = ({ matchResult, matchDetail }) => {
                     team1_score: matchResult.team1_stats.matches_won,
                     team2_score: matchResult.team2_stats.matches_won,
                     finished: matchResult.finished,
-                }, { merge: true });
+                }, {merge: true});
 
                 console.log(response);
             })
@@ -72,7 +72,11 @@ const EndMatch = ({ matchResult, matchDetail }) => {
     }
 
     const ShowSubmitResult = () => {
-        if (matchResult.finished != true) {
+        if (matchDetail.finished == true) {
+            return (
+                null
+            )
+        } else if (matchResult.finished == true) {
             return (
                 <div>
                     <Button
@@ -80,7 +84,7 @@ const EndMatch = ({ matchResult, matchDetail }) => {
                         backgroundColor="gray.900"
                         color="white"
                         fontWeight="medium"
-                        _hover={{ bg: 'gray.700' }}
+                        _hover={{bg: 'gray.700'}}
                         _active={{
                             bg: 'gray.800',
                             transform: 'scale(0.95)'
@@ -90,7 +94,9 @@ const EndMatch = ({ matchResult, matchDetail }) => {
                     </Button>
                 </div>
             )
-        } else return null;
+        }
+
+        return null
     }
 
     return (
@@ -117,7 +123,7 @@ const EndMatch = ({ matchResult, matchDetail }) => {
                         <h3>{matchResult.team2_stats.matches_won}</h3>
                     </div>
                 }
-                
+
                 <ShowSubmitResult />
 
 

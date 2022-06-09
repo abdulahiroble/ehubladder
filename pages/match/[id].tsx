@@ -14,7 +14,7 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
     const username = process.env.NEXT_PUBLIC_DATHOST_USERNAME;
     const password = process.env.NEXT_PUBLIC_DATHOST_PASSWORD;
 
-    console.log(serverDetail)
+    console.log(matchDetail.finished)
 
     const downloadDemoMap1 = async () => {
         await axios({
@@ -72,7 +72,7 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
 
     const ServerInformation = () => {
 
-        if (matchDetail?.finished) {
+        if (matchResult?.finished) {
             return (
                 null
             )
@@ -90,7 +90,7 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
     }
 
     const ShowDownloadDemo = () => {
-        if (matchDetail.finished = false) {
+        if (matchDetail.finished == false) {
             return (
                 <div className="flex justify-center space-x-6 py-6">
                     <Button
@@ -140,20 +140,20 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
 
     }
 
-    const ShowMatchResult = () => {
-        if (matchResult) {
-            return (
-                <div>
-                    <EndMatch
-                        matchResult={matchResult}
-                        matchDetail={matchDetail}
-                    />
-                </div>
-            )
-        } else return (
-            null
-        )
-    }
+    // const ShowMatchResult = () => {
+    //     if (matchDetail.finished == true) {
+    //         return (
+    //             <div>
+    //                 <EndMatch
+    //                     matchResult={matchResult}
+    //                     matchDetail={matchDetail}
+    //                 />
+    //             </div>
+    //         )
+    //     } else return (
+    //         null
+    //     )
+    // }
 
     return (
         <>
@@ -168,7 +168,8 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
 
                             <ShowStartServerButton />
                             <ServerInformation />
-                            <ShowMatchResult />
+                            <EndMatch matchResult={matchResult} matchDetail={matchDetail} />
+                            {/* <ShowMatchResult /> */}
                             <h3 className="py-3 text-5xl">Versus</h3>
                             <p className="text-white pr-1">
                                 {`${formatMyDate(matchDetail.started_at)}`}
