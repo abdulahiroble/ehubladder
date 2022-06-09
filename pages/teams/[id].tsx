@@ -223,7 +223,7 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
                                     <div className="flex space-x-2">
                                         <ul className="list-outside hover:list-inside">
                                             <li>
-                                                <Link href={`/profile/${teamDetail.owner}`}>
+                                                <Link href={`/tournament/${tournament.id}`}>
                                                     <a className="pt-5 px-4">{tournament.tournamentName}</a>
                                                 </Link>
                                             </li>
