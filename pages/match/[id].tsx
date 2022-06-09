@@ -90,7 +90,7 @@ const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, tea
     }
 
     const ShowDownloadDemo = () => {
-        if (matchDetail.finished == false) {
+        if (matchResult?.finished) {
             return (
                 <div className="flex justify-center space-x-6 py-6">
                     <Button
