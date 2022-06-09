@@ -60,6 +60,7 @@ const JoinLadder = ({tournaments, teamDetail, userDetailAll, id}) => {
 
                     await setDoc(myDocRef, {
                         teamName: teamDetail.teamName,
+                        teamLogo: teamDetail.logo,
                         tournamentId: tournamentId,
                         tournamentName: tournamentName,
                         id: myDocRef.id,

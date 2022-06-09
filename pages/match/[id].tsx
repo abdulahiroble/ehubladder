@@ -1,8 +1,8 @@
-import { doc, getDoc, query, collection, where, getDocs } from "firebase/firestore";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { db } from "../../lib/firebase/initFirebase";
-import { formatMyDate } from "../../components/DateFormatter";
-import { Button } from '@chakra-ui/react'
+import {doc, getDoc, query, collection, where, getDocs} from "firebase/firestore";
+import {GetStaticPaths, GetStaticProps} from "next";
+import {db} from "../../lib/firebase/initFirebase";
+import {formatMyDate} from "../../components/DateFormatter";
+import {Button} from '@chakra-ui/react'
 import StartServer from "../../components/StartServer";
 import EndMatch from "../../components/EndMatch";
 import axios from "axios";
@@ -10,7 +10,7 @@ import axios from "axios";
 
 
 
-const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, teamOneUserDetail, teamTwoUserDetail, matchResult }) => {
+const Matchroom = ({matchDetail, teamOneDetail, teamTwoDetail, serverDetail, teamOneUserDetail, teamTwoUserDetail, matchResult}) => {
     const username = process.env.NEXT_PUBLIC_DATHOST_USERNAME;
     const password = process.env.NEXT_PUBLIC_DATHOST_PASSWORD;
 
@@ -69,7 +69,7 @@ const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, te
 
 
     const ServerInformation = () => {
-        if (matchResult.finished == true) {
+        if (matchResult?.finished == true) {
             return (
                 null
             )
@@ -93,7 +93,7 @@ const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, te
                         backgroundColor="gray.900"
                         color="white"
                         fontWeight="medium"
-                        _hover={{ bg: 'gray.700' }}
+                        _hover={{bg: 'gray.700'}}
                         _active={{
                             bg: 'gray.800',
                             transform: 'scale(0.95)'
@@ -104,7 +104,7 @@ const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, te
                         backgroundColor="gray.900"
                         color="white"
                         fontWeight="medium"
-                        _hover={{ bg: 'gray.700' }}
+                        _hover={{bg: 'gray.700'}}
                         _active={{
                             bg: 'gray.800',
                             transform: 'scale(0.95)'
@@ -117,7 +117,7 @@ const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, te
     }
 
     const ShowStartServerButton = () => {
-        if (matchResult.finished == false) {
+        if (matchResult?.finished == false) {
             return (
                 <div>
                     <StartServer
@@ -152,11 +152,12 @@ const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, te
                 <div className="tourney-background">
                     <div className="grid grid-cols-3 gap-4 pt-20 mx-32">
                         <div>
+                            <img src={teamOneDetail[0].teamLogo} alt="" className="rounded-full h-52 w-full mx-auto" />
                             <h3 className="text-4xl pt-10">{teamOneDetail[0].teamName}</h3>
                         </div>
                         <div>
                             <ShowStartServerButton />
-                            <ServerInformation />
+                            {/* <ServerInformation /> */}
                             <ShowMatchResult />
                             <h3 className="py-3 text-5xl">Versus</h3>
                             <p className="text-white pr-1">
@@ -165,6 +166,7 @@ const Matchroom = ({ matchDetail, teamOneDetail, teamTwoDetail, serverDetail, te
                             <ShowDownloadDemo />
                         </div>
                         <div>
+                            <img src={teamTwoDetail[0].teamLogo} alt="" className="rounded-full h-52 w-full mx-auto" />
                             <h3 className="text-4xl pt-10">{teamTwoDetail[0].teamName}</h3>
                         </div>
 
@@ -275,16 +277,16 @@ export const getStaticProps: GetStaticProps = async (context) => {
         }
     })
 
-    const username = process.env.NEXT_PUBLIC_DATHOST_USERNAME;
-    const password = process.env.NEXT_PUBLIC_DATHOST_PASSWORD;
+    // const username = process.env.NEXT_PUBLIC_DATHOST_USERNAME;
+    // const password = process.env.NEXT_PUBLIC_DATHOST_PASSWORD;
 
-    const matchRes = await axios.get(`https://dathost.net/api/0.1/match-series/${matchDetail.match_series_id}`, {
-        headers: {
-            authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
-                'base64'
-            )}`,
-        },
-    })
+    // const matchRes = await axios.get(`https://dathost.net/api/0.1/match-series/${matchDetail.match_series_id}`, {
+    //     headers: {
+    //         authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
+    //             'base64'
+    //         )}`,
+    //     },
+    // })
 
 
 
@@ -296,7 +298,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
             serverDetail,
             teamOneUserDetail,
             teamTwoUserDetail,
-            matchResult: matchRes.data,
+            // matchResult: matchRes.data,
         },
         revalidate: 60,
     }
