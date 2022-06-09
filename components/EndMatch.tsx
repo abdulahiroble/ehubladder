@@ -1,6 +1,5 @@
 import {Button} from '@chakra-ui/react'
 import axios from "axios"
-import cors from 'cors';
 import express from 'express';
 import {doc, setDoc} from 'firebase/firestore';
 import {promises} from 'form-data';
