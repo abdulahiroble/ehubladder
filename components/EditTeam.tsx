@@ -1,31 +1,31 @@
-import { useDisclosure, useToast } from "@chakra-ui/react"
-import { doc, setDoc, deleteDoc, collection, getDocs, query, where, deleteField, updateDoc } from "firebase/firestore"
-import { getDownloadURL, ref } from "firebase/storage"
-import { useState } from "react"
-import { db, storage } from "../lib/firebase/initFirebase"
+import {useDisclosure, useToast} from "@chakra-ui/react"
+import {doc, setDoc, deleteDoc, collection, getDocs, query, where, deleteField, updateDoc} from "firebase/firestore"
+import {getDownloadURL, ref} from "firebase/storage"
+import {useState} from "react"
+import {db, storage} from "../lib/firebase/initFirebase"
 import Select from 'react-select';
-import { useRouter } from "next/router"
+import {useRouter} from "next/router"
 import context from "react-bootstrap/esm/AccordionContext"
-import { QuerySnapshot } from "firebase-admin/firestore"
-import { getAuth } from "firebase/auth"
+import {QuerySnapshot} from "firebase-admin/firestore"
+import {getAuth} from "firebase/auth"
 
 
-const EditTeamInformation = ({ teamDetail }) => {
+const EditTeamInformation = ({teamDetail}) => {
     const router = useRouter();
     const auth = getAuth()
-    const [country, setCountry] = useState<string>('')
-    const [game, setGame] = useState<string>('')
-    const [highRank, setHighRank] = useState<string>('')
-    const [lowRank, setLowRank] = useState<string>('')
-    const [teamName, setTeamName] = useState<string>('')
+    const [country, setCountry] = useState(teamDetail.country || "");
+    const [game, setGame] = useState(teamDetail.game || "");
+    const [highRank, setHighRank] = useState(teamDetail.highRank || "");
+    const [lowRank, setLowRank] = useState(teamDetail.lowRank || "");
+    const [teamName, setTeamName] = useState(teamDetail.teamName || "");
     const toast = useToast()
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const {isOpen, onOpen, onClose} = useDisclosure()
 
     const editTeamDoc = async (user: any) => {
 
         try {
             const TeamDoc = doc(db, "teams", teamDetail.id)
-            await setDoc(TeamDoc, {
+            await updateDoc(TeamDoc, {
                 country: country,
                 game: game,
                 highRank: highRank,
@@ -74,16 +74,16 @@ const EditTeamInformation = ({ teamDetail }) => {
 
 
     const ranks = [
-        { value: "faceit1.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit1.png?alt=media&token=0ab5dd1a-5833-46d7-8b2e-29d5fba193d3" },
-        { value: "faceit2.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit2.png?alt=media&token=00b9e38e-4467-42f4-a880-41854c1fceae" },
-        { value: "faceit3.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit3.png?alt=media&token=a20b8bab-e961-46e2-ac57-a55a2b5a5e0b" },
-        { value: "faceit4.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit4.png?alt=media&token=e4b220b9-f881-426d-8be4-942872b2a9d6" },
-        { value: "faceit5.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit5.png?alt=media&token=40cedbd1-2bb9-4ad3-9e4e-0b05ede1abf5" },
-        { value: "faceit6.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit6.png?alt=media&token=7213062c-2db9-47a6-84af-ca0aa20d0782" },
-        { value: "faceit7.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit7.png?alt=media&token=c8dfd06d-d083-4798-984e-e28f1a0b5335" },
-        { value: "faceit8.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit8.png?alt=media&token=1fd2dce3-7261-46c2-8a6d-2ee0963f9595" },
-        { value: "faceit9.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit9.png?alt=media&token=952626a6-4e7d-4bc5-87b2-4d67985a4b3c" },
-        { value: "faceit10.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit10.png?alt=media&token=27ca1c97-0758-489e-8e2d-023bef010874" },
+        {value: "faceit1.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit1.png?alt=media&token=0ab5dd1a-5833-46d7-8b2e-29d5fba193d3"},
+        {value: "faceit2.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit2.png?alt=media&token=00b9e38e-4467-42f4-a880-41854c1fceae"},
+        {value: "faceit3.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit3.png?alt=media&token=a20b8bab-e961-46e2-ac57-a55a2b5a5e0b"},
+        {value: "faceit4.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit4.png?alt=media&token=e4b220b9-f881-426d-8be4-942872b2a9d6"},
+        {value: "faceit5.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit5.png?alt=media&token=40cedbd1-2bb9-4ad3-9e4e-0b05ede1abf5"},
+        {value: "faceit6.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit6.png?alt=media&token=7213062c-2db9-47a6-84af-ca0aa20d0782"},
+        {value: "faceit7.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit7.png?alt=media&token=c8dfd06d-d083-4798-984e-e28f1a0b5335"},
+        {value: "faceit8.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit8.png?alt=media&token=1fd2dce3-7261-46c2-8a6d-2ee0963f9595"},
+        {value: "faceit9.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit9.png?alt=media&token=952626a6-4e7d-4bc5-87b2-4d67985a4b3c"},
+        {value: "faceit10.png", image: "https://firebasestorage.googleapis.com/v0/b/ehubladder.appspot.com/o/images%2Franks%2Ffaceit10.png?alt=media&token=27ca1c97-0758-489e-8e2d-023bef010874"},
 
     ];
 
@@ -156,7 +156,9 @@ const EditTeamInformation = ({ teamDetail }) => {
                         className="col-span-2 appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
                         type="text" placeholder={teamDetail.teamName}
                         aria-label="Full name"
-                        onChange={(e) => setTeamName(e.target.value)} />
+                        onChange={(e) => setTeamName(e.target.value)}
+                        defaultValue={teamDetail.teamName}
+                    />
                 </div>
                 <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
                     <label className="col-span-2 text-left">Country:</label>
@@ -165,7 +167,9 @@ const EditTeamInformation = ({ teamDetail }) => {
                         type="text"
                         placeholder={teamDetail.country}
                         aria-label="Full name"
-                        onChange={(e) => setCountry(e.target.value)} />
+                        onChange={(e) => setCountry(e.target.value)}
+                        defaultValue={teamDetail.country}
+                    />
                 </div>
                 <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
                     <label className="col-span-2 text-left">Game:</label>
@@ -174,7 +178,9 @@ const EditTeamInformation = ({ teamDetail }) => {
                         type="text"
                         placeholder={teamDetail.game}
                         aria-label="Full name"
-                        onChange={(e) => setGame(e.target.value)} />
+                        onChange={(e) => setGame(e.target.value)}
+                        defaultValue={teamDetail.game}
+                    />
                 </div>
                 <div className="flex items-center border-b border-white py-2 mx-10 grid grid-cols-4">
                     <label className="col-span-2 text-left">Lowest Rank:</label>
