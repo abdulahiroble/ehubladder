@@ -34,32 +34,32 @@ const EndMatch = ({matchResult, matchDetail}) => {
 
             // console.log(totalMapResults)
 
-            const mapResults = `${matchResult.matches[0].team1_stats.score}-${matchResult.matches[0].team2_stats.score},${matchResult.matches[1].team1_stats.score}-${matchResult.matches[1].team2_stats.score}`
+            const mapResults = `${matchResult?.matches[0].team1_stats.score}-${matchResult?.matches[0].team2_stats.score},${matchResult?.matches[1].team1_stats.score}-${matchResult?.matches[1].team2_stats.score}`
 
             const winnerTeamID = () => {
 
-                if (matchResult.team1_stats.matches_won > matchResult.team2_stats.matches_won) {
+                if (matchResult?.team1_stats.matches_won > matchResult?.team2_stats.matches_won) {
                     return matchDetail.player1_id;
-                } else if (matchResult.team1_stats.matches_won < matchResult.team2_stats.matches_won) {
+                } else if (matchResult?.team1_stats.matches_won < matchResult?.team2_stats.matches_won) {
                     return matchDetail.player2_id;
                 }
             }
 
             await axios.put('https://us-central1-ehubladder.cloudfunctions.net/matchResult', {
-                tournamentId: `${matchDetail.tournament_id}`,
-                match_id: `${matchDetail.matchid}`,
+                tournamentId: `${matchDetail?.tournament_id}`,
+                match_id: `${matchDetail?.matchid}`,
                 scores_csv: `${mapResults}`,
                 winner_id: `${winnerTeamID()}`,
 
             }).then(async function (response) {
-                const myMatchesRef = doc(db, "matches", matchDetail.id);
+                const myMatchesRef = doc(db, "matches", matchDetail?.id);
 
                 await setDoc(myMatchesRef, {
-                    map1_score: `${matchResult.matches[0].team1_stats.score}-${matchResult.matches[0].team2_stats.score}`,
-                    map2_score: `${matchResult.matches[1].team1_stats.score}-${matchResult.matches[1].team2_stats.score}`,
-                    team1_score: matchResult.team1_stats.matches_won,
-                    team2_score: matchResult.team2_stats.matches_won,
-                    finished: matchResult.finished,
+                    map1_score: `${matchResult?.matches[0].team1_stats.score}-${matchResult?.matches[0].team2_stats.score}`,
+                    map2_score: `${matchResult?.matches[1].team1_stats.score}-${matchResult?.matches[1].team2_stats.score}`,
+                    team1_score: matchResult?.team1_stats.matches_won,
+                    team2_score: matchResult?.team2_stats.matches_won,
+                    finished: matchResult?.finished,
                 }, {merge: true});
 
                 console.log(response);
@@ -72,11 +72,11 @@ const EndMatch = ({matchResult, matchDetail}) => {
     }
 
     const ShowSubmitResult = () => {
-        if (matchDetail.finished == true) {
+        if (matchDetail?.finished == true) {
             return (
                 null
             )
-        } else if (matchResult.finished == true) {
+        } else if (matchResult?.finished == true) {
             return (
                 <div>
                     <Button
@@ -103,24 +103,24 @@ const EndMatch = ({matchResult, matchDetail}) => {
         <>
             <div className='text-5xl'>
 
-                {matchResult.team1_stats.matches_won > matchResult.team2_stats.matches_won &&
+                {matchResult?.team1_stats.matches_won > matchResult?.team2_stats.matches_won &&
                     <div className='flex justify-between'>
-                        <h3 className='text-green-500'>{matchResult.team1_stats.matches_won}</h3>
-                        <h3 className='text-red-600'>{matchResult.team2_stats.matches_won}</h3>
+                        <h3 className='text-green-500'>{matchResult?.team1_stats.matches_won}</h3>
+                        <h3 className='text-red-600'>{matchResult?.team2_stats.matches_won}</h3>
                     </div>
                 }
 
-                {matchResult.team1_stats.matches_won < matchResult.team2_stats.matches_won &&
+                {matchResult?.team1_stats.matches_won < matchResult?.team2_stats.matches_won &&
                     <div className='flex justify-between'>
-                        <h3 className='text-red-600'>{matchResult.team1_stats.matches_won}</h3>
-                        <h3 className=' text-green-500'>{matchResult.team2_stats.matches_won}</h3>
+                        <h3 className='text-red-600'>{matchResult?.team1_stats.matches_won}</h3>
+                        <h3 className=' text-green-500'>{matchResult?.team2_stats.matches_won}</h3>
                     </div>
                 }
 
-                {matchResult.team1_stats.matches_won == matchResult.team2_stats.matches_won &&
+                {matchResult?.team1_stats.matches_won == matchResult?.team2_stats.matches_won &&
                     <div className='flex justify-between'>
-                        <h3>{matchResult.team1_stats.matches_won}</h3>
-                        <h3>{matchResult.team2_stats.matches_won}</h3>
+                        <h3>{matchResult?.team1_stats.matches_won}</h3>
+                        <h3>{matchResult?.team2_stats.matches_won}</h3>
                     </div>
                 }
 
