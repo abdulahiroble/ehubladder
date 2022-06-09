@@ -156,7 +156,8 @@ const TeamPage = ({teamDetail, userDetail, userDetailAll, id, tournaments, tourn
 
                                             return (
                                                 <div className="flex space-x-5 py-2">
-                                                    <img className="rounded-full h-16 w-16" src={user.profilePic} />
+                                                    {user.profilePic ? (<img className="rounded-full h-16 w-16" src={user.profilePic} />) : (<img className="rounded-full h-16 w-16" id="myimg" />)}
+                                                    {/* <img className="rounded-full h-16 w-16" src={user.profilePic} /> */}
                                                     {/* {team.logo ? (<img className="rounded-full h-16 w-16" src={team.logo} />) : (<img className="rounded-full h-16 w-16" id="teamlogo" />)} */}
                                                     <Link href={`/profile/${user.id}`}>
                                                         <a className="pt-5">{user.gamerTag}</a>
