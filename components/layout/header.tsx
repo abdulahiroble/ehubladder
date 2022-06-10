@@ -30,15 +30,9 @@ const Header = (props: any) => {
                         <Link href="/" passHref>
                             <a className="inline-block mt-0 hover:text-white mr-10 font-bold">Home</a>
                         </Link>
-                        <Link href="/about" passHref>
-                            <a className="inline-block mt-0 hover:text-white mr-10 font-bold">Ladders</a>
-                        </Link>
-                        <Link href="/academy" passHref>
-                            <a className="inline-block mt-0 hover:text-white mr-10 font-bold">Cups</a>
-                        </Link>
                         {user ? <>
                             <Link href={`/profile/${auth.currentUser.uid}`} passHref>
-                                <a className="inline-block mt-0 hover:text-white font-bold">Profile</a>
+                                <a className="inline-block mt-0 hover:text-white font-bold">My Profile</a>
                             </Link>
                         </> : null}
 
@@ -60,9 +54,7 @@ const Header = (props: any) => {
                                 </a>
                             </Link> */}
 
-                            <Link href={`/profile/${auth.currentUser.uid}`}>
-                                <a> Username </a>
-                            </Link>
+
                             <button onClick={signOut}> Signout</button>
 
                         </> : null}
@@ -134,16 +126,8 @@ const Header = (props: any) => {
                                 <Link href="/" passHref >
                                     <a onClick={() => setIsOpen(!isOpen)} className="text-white cursor-pointer hover:bg-white hover:text-black block px-3 py-2 rounded-md text-base font-semibold">Home</a>
                                 </Link>
-
-                                <Link href="/about" passHref>
-                                    <a onClick={() => setIsOpen(!isOpen)} className="text-white cursor-pointer hover:bg-white hover:text-black block px-3 py-2 rounded-md text-base font-semibold">Ladders</a>
-                                </Link>
-
-                                <Link href="/academy" passHref>
-                                    <a onClick={() => setIsOpen(!isOpen)} className="text-white cursor-pointer hover:text-black hover:bg-white block px-3 py-2 rounded-md text-base font-semibold">Cups</a>
-                                </Link>
-                                <Link href="/academy" passHref>
-                                    <a onClick={() => setIsOpen(!isOpen)} className="text-white cursor-pointer hover:text-black hover:bg-white block px-3 py-2 rounded-md text-base font-semibold">Profile</a>
+                                <Link href={`/profile/${auth.currentUser.uid}`}>
+                                    <a onClick={() => setIsOpen(!isOpen)} className="text-white cursor-pointer hover:text-black hover:bg-white block px-3 py-2 rounded-md text-base font-semibold">My Profile</a>
                                 </Link>
                                 <Link href="/signin" passHref>
                                     <a onClick={() => setIsOpen(!isOpen)} className="inline-block text-sm px-8 py-3 leading-none border rounded text-white text-center border-white mt-6 w-full">Sign in</a>
