@@ -1,32 +1,28 @@
-# Next.JS With Firebase Boiler Plate
+## Setup
 
-![image of app](/public/readme-img.png)
+Getting started:
 
-This repo is a sample [next.js](https://nextjs.org/) project with [Firebase](https://firebase.google.com/) integration. I used `yarn create next-app` to bootstrap the project and I did not remove any of the starter files. Feel free to follow along with the YouTube tutorial [here](TODO) and check out the live website hosted on [Vercel](https://vercel.com/) [here](TODO).
+- "git clone" the project to your computer.
+- Run "yarn" in your project terminal to install packages
 
+### Create .env file
 
-This repo contains the followng actions implemented:
+Create an env inside the root of the project and add credidentials which have been added as a document inside our rapport.
 
-- Authentication
-  - popup auth flow
-  - email + password
-  - Google OAuth
-  - Twitter OAuth
-  - GitHub OAuth
-- Cloud Firestore
-  - read (examples for all availible data types)
-  - write
-- Realtime Database
-  - read
-  - write
-- Storage
-  - Uploade a file (video, image, etc)
-- React Bootstrap
-  - React Bootstrap installed with minimal styling
+## Run application locally
 
-This is not meant to be a tutorial on how to use next.js or Firebase, but simply how to connect the two and perform common actions. As always, refer to the docs whenever you might have questions: 
+```
+npm run dev
+```
 
-- [next.js](https://nextjs.org/docs/getting-started)
-- [Firebase](https://firebase.google.com/docs/build)
+Random user login:
 
-This is compatable with next.js v10+ and Firebase JavaScript v8+, which are currently the newest versions. May work with older versions.
+```
+email: abdulahi_2610@hotmail6.com
+Password: naruto123
+```
+
+Developers involved:
+
+* Abdulahi Roble
+* Thomas West
